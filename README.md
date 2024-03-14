@@ -1,11 +1,11 @@
 # EcoRevive
- -Our application focuses on facilitating the recycling of various items (for example, electronic waste), serving as a means of communication between the owner of the equipment and the interested party.
+- Our application focuses on facilitating the recycling of various items (for example, electronic waste), serving as a means of communication between the owner of the equipment and the interested party.
 
 - Features:
--- Product listing;
--- Filtering of products;
--- Login registration;
--- Chat between users.
+--Product listing;
+--Filtering of products;
+--Login registration;
+--Chat between users.
   
 2leic12T3
 
