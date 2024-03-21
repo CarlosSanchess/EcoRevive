@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:register/Auth/LoginOrRegister.dart';
 
 import 'package:register/Pages/Login.dart';
+import 'package:register/Pages/Register.dart';
 
 
 void main() {
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'EcoRevive',
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      home: const Login(),
+      home: const LoginOrRegister(),
     );
   }
 }

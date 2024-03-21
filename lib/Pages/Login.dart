@@ -6,14 +6,12 @@ class Login extends StatelessWidget {
   //final ScreenWidht;
   //final ScreenHeight;
 
-  //final void Function() switchPages;
+  final void Function() switchPages;
 
-  const Login({Key? key}) : super(key: key);
+  const Login({Key? key, required this.switchPages}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-        print(getScreenSize(context).height);
-        print(getScreenSize(context).width);
         return Scaffold(
           backgroundColor: Colors.white,
           body: Padding(
@@ -147,7 +145,7 @@ class Login extends StatelessWidget {
                               ),
                           ),
                           GestureDetector(
-
+                            onTap: switchPages,
                             child: Text("Register",
                               style: TextStyle(
                                   color: Colors.lightGreen[800],

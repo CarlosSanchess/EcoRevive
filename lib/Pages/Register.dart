@@ -6,23 +6,23 @@ class Register extends StatelessWidget {
   //final ScreenHeight;
 
   //final void Function() switchPages;
-  const Register({super.key});
+  final void Function() switchPages;
+  const Register({Key? key, required this.switchPages}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     print(getScreenSize(context).height);
     print(getScreenSize(context).width);
     return Scaffold(
-      /*
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: switchPages,
           icon: Icon(Icons.arrow_back_ios_new),
           color: Colors.black, // Optionally, set the color of the icon
         ),
       ),
-      */
+
       backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.all(20),
@@ -30,6 +30,7 @@ class Register extends StatelessWidget {
             child:SingleChildScrollView(
               child: Column(
                   children:[
+                    /*
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -39,6 +40,7 @@ class Register extends StatelessWidget {
                         ),
                       ],
                     ),
+                     */
                     Icon(
                         Icons.person_outlined,
                         size: 100,

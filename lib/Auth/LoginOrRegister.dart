@@ -22,9 +22,13 @@ class LoginOrRegisterState extends State<LoginOrRegister>{
   @override
   Widget build(BuildContext context){
     if(showLoginPage){
-      return const Login();
+      return Login(
+          switchPages: switchPages,
+      );
     }else{
-      return const Register();
+      return Register(
+          switchPages: switchPages,
+      );
     }
   }
 }
