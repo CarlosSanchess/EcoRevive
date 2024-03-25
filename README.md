@@ -22,10 +22,10 @@ Please contact us!
 
 Thank you!
 
-Carlos Sanches up202107694@up.pt
-Afonso Fernandes up202207987@up.pt
-João Rebelo up202107209@up.pt
-João Lamas up202208948@up.pt
+- Carlos Sanches up202107694@up.pt
+- Afonso Fernandes up202207987@up.pt
+- João Rebelo up202107209@up.pt
+- João Lamas up202208948@up.pt
 
 ---
 ## Business Modelling
@@ -141,7 +141,7 @@ The logical architecture of EcoRevive outlines its core components and their int
 - Logic interacts with the Database for data.
 - Logic also communicates with Firebase for external services.
 
-![LogicalView](logical_arch.png)
+![LogicalView](docs/logical_arch.png)
 
 ### Physical architecture
 The physical architecture section provides an overview of the high-level physical structure of the software system, including physical components, connections, software, and their dependencies. It also discusses the technologies considered for the implementation and justifies the selections made.
@@ -150,7 +150,7 @@ The physical architecture section provides an overview of the high-level physica
 - **Flutter**: A cross-platform framework for building mobile applications.
 - **Firebase**: A Backend-as-a-Service (BaaS) platform providing services like authentication, database, and storage.
 
-![DeploymentView](physical_arch.png)
+![DeploymentView](docs/physical_arch.png)
 
 ### Vertical prototype
 To help on validating all the architectural, design and technological decisions made, we usually implement a vertical prototype, a thin vertical slice of the system integrating as much technologies we can.
