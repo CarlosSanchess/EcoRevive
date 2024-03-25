@@ -127,7 +127,7 @@ In the development of the EcoRevive app, we're considering the utilization of va
 The logical architecture of EcoRevive outlines its core components and their interactions. It depicts the user interface (GUI), the logic handling core functionality, and the database for data management within the system (e.g user settings like the app color theme etc). Additionally, it integrates with Firebase for external services such as authentication or data storage. The diagram illustrates how user interactions flow. This logical architecture provides a high-level understanding of how EcoRevive's components work together to fulfill its functionalities.
 
 
-## Components
+### Components
 #### EcoRevive
 - **GUI**: User interface for interacting with the system.
 - **Logic**: Core functionality and processing.
