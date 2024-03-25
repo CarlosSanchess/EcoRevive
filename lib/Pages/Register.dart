@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:register/Controllers/RegisterLoginControllers.dart';
 import "package:register/Functions/Functions.dart";
 
 class Register extends StatelessWidget {
@@ -6,8 +7,13 @@ class Register extends StatelessWidget {
   //final ScreenHeight;
 
   //final void Function() switchPages;
+
   final void Function() switchPages;
-  const Register({Key? key, required this.switchPages}) : super(key: key);
+
+  Register({Key? key, required this.switchPages}) : super(key: key);
+
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -62,17 +68,16 @@ class Register extends StatelessWidget {
                     ),
                     const SizedBox(height: 50),
 
-                    const TextContainer(hintText: "E-mail", obscureText: false, icon: Icon(Icons.mail)),
+                    TextContainer(hintText: "E-mail", obscureText: false, icon: const Icon(Icons.mail), textEditingController: usernameController),
                     const SizedBox(height: 15),
-
-                    const TextContainer(hintText: "Password", obscureText: true,icon: Icon(Icons.key)),
+                    TextContainer(hintText: "Password", obscureText: true,icon: const Icon(Icons.key), textEditingController: passwordController),
 
 
                     const SizedBox(height: 30),
 
                     GestureDetector(
                       onTap:(){
-
+                        RegisterLoginControllers(usernameController: usernameController, passwordController: passwordController).signUp();
                       },
                       child: Container(
                         padding: const EdgeInsets.all(25),

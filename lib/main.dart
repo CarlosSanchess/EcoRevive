@@ -1,9 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:register/Auth/LoginOrRegister.dart';
 import 'package:register/Pages/Entry.dart';
+import 'package:register/firebase_options.dart';
 
 
-void main() {
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform); // MUdar para Android??
   runApp(const MyApp());
 }
 

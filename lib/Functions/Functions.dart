@@ -4,12 +4,14 @@ class TextContainer extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final Icon icon;
+  final TextEditingController textEditingController;
 
   const TextContainer({
     super.key,
     required this.hintText,
     required this.obscureText,
-    required this.icon
+    required this.icon,
+    required this.textEditingController
   });
 
   Size getScreenSize(BuildContext context) {
@@ -23,6 +25,7 @@ class TextContainer extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 27.5),
       child:
       TextFormField(
+        controller: textEditingController,
         obscureText: obscureText,
         decoration: InputDecoration(
             prefixIcon: icon,
@@ -73,4 +76,20 @@ class Logos extends StatelessWidget {
       ),
     );
   }
+}
+void createPopUp(Future<String> alert, BuildContext context) async {
+  String message =  await alert;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: Text(message),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'OK'),
+          child: const Text('OK'),
+        )
+      ],
+    ),
+  );
 }
