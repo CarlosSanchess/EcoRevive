@@ -142,16 +142,16 @@ To provide a visual representation of the app's navigation flow, we have include
 Please find below the prototype in motion:
 
 #### Login
-![Login](docs/vertical-prototype/gifs/Login.gif)
+![Login](docs/vertical-prototype/imgs/gifs/Login.gif)
 
 #### Login Failure
-![Login Failure](docs/vertical-prototype/gifs/LoginFail.gif)
+![Login Failure](docs/vertical-prototype/imgs/gifs/LoginFail.gif)
 
 #### Register Failure
-![Register Failure](docs/vertical-prototype/gifs/RegisterFail.gif)
+![Register Failure](docs/vertical-prototype/imgs/gifs/RegisterFail.gif)
 
 #### Transition
-![Transition](docs/vertical-prototype/gifs/Transition.gif)
+![Transition](docs/vertical-prototype/imgs/gifs/Transition.gif)
 
 
 ## Project Management
