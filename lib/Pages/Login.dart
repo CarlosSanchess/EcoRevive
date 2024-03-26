@@ -86,6 +86,11 @@ class LoginState extends State<Login> {
                 GestureDetector(
                   onTap: () {
                         createPopUp(RegisterLoginControllers(usernameController: usernameController, passwordController: passwordController).signIn(), context);
+                        if(checkLoggedIn() == true){
+                          print("LOGGED IN");
+                        }else{
+                          print("Failed");
+                        }
                   },
                   child: Container(
                     padding: const EdgeInsets.all(25),
@@ -137,9 +142,9 @@ class LoginState extends State<Login> {
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Logos(path: '../Imgs/Google.png'),
+                    Logos(icone: Icons.facebook,),
                     SizedBox(width: 25),
-                    Logos(path: '../Imgs/Google.png'),
+                    Logos(icone: Icons.apple),
                   ],
                 ),
                 const SizedBox(height: 20),

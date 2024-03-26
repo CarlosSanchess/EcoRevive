@@ -66,7 +66,7 @@ class Register extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 100),
 
                     TextContainer(hintText: "E-mail", obscureText: false, icon: const Icon(Icons.mail), textEditingController: usernameController),
                     const SizedBox(height: 15),
@@ -77,7 +77,7 @@ class Register extends StatelessWidget {
 
                     GestureDetector(
                       onTap:(){
-                        RegisterLoginControllers(usernameController: usernameController, passwordController: passwordController).signUp();
+                        createPopUp( RegisterLoginControllers(usernameController: usernameController, passwordController: passwordController).signUp(), context);
                       },
                       child: Container(
                         padding: const EdgeInsets.all(25),
@@ -99,7 +99,7 @@ class Register extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 40),
 
                   ]
               ),
@@ -113,6 +113,5 @@ Size getScreenSize(BuildContext context) {
   MediaQueryData mediaQuery = MediaQuery.of(context);
   return mediaQuery.size;
 }
-
 
 

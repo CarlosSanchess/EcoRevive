@@ -47,10 +47,10 @@ class TextContainer extends StatelessWidget {
 
 
 class Logos extends StatelessWidget {
-  final String path;
+  final IconData icone;
   const Logos({
     super.key,
-    required this.path,
+    required this.icone,
   });
 
   @override
@@ -72,7 +72,7 @@ class Logos extends StatelessWidget {
           //  path,
           //  fit:BoxFit.fill,
           //),
-          Icon(Icons.apple)
+          Icon(icone),
       ),
     );
   }

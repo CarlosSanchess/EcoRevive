@@ -40,10 +40,15 @@ class RegisterLoginControllers {
     }
     return "Registered !!";
   }
-  Future<String> signIn() async{
-    var email = usernameController.text;
-    var password = passwordController.text;
 
+
+  Future<String> signIn() async{
+
+    String email = usernameController.text;
+    String password = passwordController.text;
+    if(email.isEmpty || password.isEmpty){
+      return 'Need to provide all info!';
+    }
     usernameController.clear();
     passwordController.clear();
 
@@ -52,19 +57,30 @@ class RegisterLoginControllers {
           email: email,
           password: password
       );
+    } catch (e) {
+      // Sign in fails
+      return 'Invalid Credentials!';
+    }
+      /*
     } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
-        return 'No user found for that email.';
+            print("asdad");
+            return 'No user found for that email.';
       } else if (e.code == 'wrong-password') {
-        return 'Wrong password provided for that user.';
+            print("asdad");
+            return 'Wrong password provided for that user.';
       }
-    }
-
+    }catch (e) {
+      print('Sign in error: $e');
+    }*/
     return 'Logged In!!';
   }
-
 }
 
+Future<bool> checkLoggedIn() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  return user != null;
+}
 
 String acceptablePassword(String str) {
     bool containsUppercase = str.contains(RegExp(r'[A-Z]'));
