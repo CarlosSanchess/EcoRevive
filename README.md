@@ -50,12 +50,14 @@ You can find here details about our implementation, from a high-level vision to 
 
 ### Domain model
 
-To better understand the context of the software system, it is very useful to have a simple UML class diagram with all the key concepts (names, attributes) and relationships involved of the problem domain addressed by your module. 
-Also provide a short textual description of each concept (domain class). 
+Each user can list multiple products of various categories on the application.
+Whenever a user sees a product that he's interested in, he can start a chat with the owner of said product, where they can message each other.
+The application will send notifications to the user whenever a new message is received.
+After chatting and acquiring the product, the chat participants can rate each other and leave feedback to improve user experience.
+The application has moderatores that unsure guidelines are being respected, being able to ban user that don't respect them.
 
-Example:
  <p align="center" justify="center">
-  <img src="domain_model.png"/>
+  <img src="docs/diagrams/domain_model.png"/>
 </p>
 
 
