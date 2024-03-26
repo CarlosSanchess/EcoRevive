@@ -122,11 +122,16 @@ At this phase, instead of a complete user story, you can simply implement a smal
 
 Welcome to our project management system! This system serves as a central hub for organizing and tracking our project's tasks and goals. We use a two-tiered approach, consisting of the Product Backlog and the Sprint Backlog, to effectively manage our project's development.
 
-## Product Backlog
+### Product Backlog
 The Product Backlog contains a comprehensive list of all features, tasks, and user stories that need to be addressed throughout the project. Each item is prioritized based on its importance and estimated effort required for completion.
 
-## Sprint Backlog
-During sprint planning, we select items from the Product Backlog and move them into the Sprint Backlog, where they are actively worked on by our team. Progress on these tasks is tracked throughout the sprint, with tasks moving from "In Progress" to "Done" as they are completed and reviewed.
+- The following image is our backlog at the start of the project development :
+
+![Product Backlog Sprint#0](docs/diagrams/backlog.png/)
+
+
+### Sprint Backlog
+During sprint planning, we select items from the Product Backlog and move them into the Sprint Backlog, where they are actively worked on by our team throughtout the sprint. 
 
 By utilizing this project management system, we ensure clear communication and efficient task allocation which facilitates the development of EcoRevive.
 
