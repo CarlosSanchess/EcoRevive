@@ -4,6 +4,20 @@ Welcome to the documentation pages of the EcoRevive!
 
 You can find here details about our implementation, from a high-level vision to low-level implementation decisions, a kind of Software Development Report, organized by type of activities: 
 
+* [Business modeling](#Business-Modelling) 
+  * [Product Vision](#Product-Vision)
+  * [Features and Assumptions](#Features-and-Assumptions)
+  * [Elevator Pitch](#Elevator-pitch)
+* [Requirements](#Requirements)
+  * [Domain model](#Domain-model)
+* [Architecture and Design](#Architecture-And-Design)
+  * [MVC Architectural Pattern](#mvc-architectural-pattern)
+  * [Design Patterns](#design-patterns-consideration)
+  * [Logical architecture](#Logical-Architecture)
+  * [Physical architecture](#Physical-Architecture)
+  * [Vertical prototype](#Vertical-Prototype)
+* [Project management](#Project-Management)
+
 ## Business Modelling
 
 ### Product Vision
@@ -22,6 +36,8 @@ You can find here details about our implementation, from a high-level vision to 
 
 4. Interactive User Chat: Foster meaningful connections and facilitate smooth transactions through our integrated chat feature. Engage in real-time conversations with fellow users to negotiate terms, ask questions, and coordinate exchanges, all within the convenience of our platform.
 
+5. User-Friendly App: ensuring inclusivity for individuals with disabilities that still want to take part on this community.
+
 #### Assumptions
 - Firebase database to store the users credentials aswell as products listing and others...
 
@@ -31,37 +47,6 @@ You can find here details about our implementation, from a high-level vision to 
 
 
 ## Requirements
-
-### Functional :
-**User Registration and Authentication:**
-   - Secure registration and login process.
-
-**Product Listing and Management:**
-   - Ability to list, edit, and remove recyclable items.
-
-**Advanced Product Filtering and Search:**
-   - Robust filtering options for efficient item search.
-   - Fast and accurate search functionality.
-
-**Interactive User Chat:**
-   - Real-time chat for negotiating exchanges.
-
-### Non-Functional :
-**Security:**
-   - Data integrity.
-   - Robust user authentication mechanisms.
-
-**Performance:**
-
-   - Minimal response times for key actions.
-
-**Scalability:**
-   - Scalable architecture for growing user base and data volumes.
-
-**User-friendly:**
-
-   - Accessibility features for users with disabilities.
-
 
 ### Domain model
 
@@ -133,19 +118,16 @@ In this subsection please describe which feature, or part of it, you have implem
 
 At this phase, instead of a complete user story, you can simply implement a small part of a feature that demonstrates thay you can use the technology, for example, show a screen with the app credits (name and authors).
 
-## Project management
+## Project Management
 
-Software project management is the art and science of planning and leading software projects, in which software projects are planned, implemented, monitored and controlled.
+Welcome to our project management system! This system serves as a central hub for organizing and tracking our project's tasks and goals. We use a two-tiered approach, consisting of the Product Backlog and the Sprint Backlog, to effectively manage our project's development.
 
-In the context of ESOF, we recommend each team to adopt a set of project management practices and tools capable of registering tasks, assigning tasks to team members, adding estimations to tasks, monitor tasks progress, and therefore being able to track their projects.
+## Product Backlog
+The Product Backlog contains a comprehensive list of all features, tasks, and user stories that need to be addressed throughout the project. Each item is prioritized based on its importance and estimated effort required for completion.
 
-Common practices of managing iterative software development are: backlog management, release management, estimation, iteration planning, iteration development, acceptance tests, and retrospectives.
+## Sprint Backlog
+During sprint planning, we select items from the Product Backlog and move them into the Sprint Backlog, where they are actively worked on by our team. Progress on these tasks is tracked throughout the sprint, with tasks moving from "In Progress" to "Done" as they are completed and reviewed.
 
-You can find below information and references related with the project management in our team: 
+By utilizing this project management system, we ensure clear communication and efficient task allocation which facilitates the development of EcoRevive.
 
-* Backlog management: Product backlog and Sprint backlog in a [Github Projects board](https://github.com/orgs/FEUP-LEIC-ES-2023-24/projects/64);
-* Release management: [v0](#), v1, v2, v3, ...;
-* Sprint planning and retrospectives: 
-  * plans: screenshots of Github Projects board at begin and end of each iteration;
-  * retrospectives: meeting notes in a document in the repository;
- 
+[Link to Project Board](https://github.com/orgs/FEUP-LEIC-ES-2023-24/projects/43/)
