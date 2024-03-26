@@ -114,11 +114,45 @@ The physical architecture section provides an overview of the high-level physica
 ![DeploymentView](docs/diagrams/physical_arch.png)
 
 ### Vertical prototype
-To help on validating all the architectural, design and technological decisions made, we usually implement a vertical prototype, a thin vertical slice of the system integrating as much technologies we can.
+For this initial prototype, we've implemented a basic entry page that serves as the starting point for users accessing the EcoRevive app. Additionally, the entry page offers links to the registration and login pages, enabling users to create accounts or sign in to access EcoRevive's functionalities. These registration and login functionalities are connected to Firebase, ensuring secure user authentication and data management.
 
-In this subsection please describe which feature, or part of it, you have implemented, and how, together with a snapshot of the user interface, if applicable.
+#### Entry Page
+![Entry Page](docs/vertical-prototype/imgs/EntryPage.png)
 
-At this phase, instead of a complete user story, you can simply implement a small part of a feature that demonstrates thay you can use the technology, for example, show a screen with the app credits (name and authors).
+#### Registration Page
+![Registration Page](docs/vertical-prototype/imgs/RegisterPage.png)
+
+#### Login Page
+![Login Page](docs/vertical-prototype/imgs/LoginPage.png)
+
+#### Firebase Interface
+![Firebase Interface](docs/vertical-prototype/imgs/FirebaseInterface.png)
+
+
+To provide a visual representation of the app's navigation flow, we have included several GIFs showcasing different scenarios. 
+
+- **Login**: Demonstrates the successful login process, where a user enters their credentials and accesses the EcoRevive platform.
+  
+- **Login Failure**: We depict a scenario where the login attempt fails, typically due to incorrect credentials.
+
+- **Register Failure**: This illustrates the process of registering for an account, highlighting a scenario where registration fails, possibly due to existing account conflicts.
+
+- **Transition**: The Transition GIF provides an overview of transition between different pages within the app, showcasing the user experience of navigating through the platform.
+
+Please find below the prototype in motion:
+
+#### Login
+![Login](docs/vertical-prototype/gifs/Login.gif)
+
+#### Login Failure
+![Login Failure](docs/vertical-prototype/gifs/LoginFail.gif)
+
+#### Register Failure
+![Register Failure](docs/vertical-prototype/gifs/RegisterFail.gif)
+
+#### Transition
+![Transition](docs/vertical-prototype/gifs/Transition.gif)
+
 
 ## Project Management
 
