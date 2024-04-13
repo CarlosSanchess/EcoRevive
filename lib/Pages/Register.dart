@@ -31,7 +31,7 @@ class Register extends StatelessWidget {
 
       backgroundColor: Colors.white,
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Center(
             child:SingleChildScrollView(
               child: Column(
