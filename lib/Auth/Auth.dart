@@ -42,5 +42,7 @@ class Auth{
   Future<String> getUid() async{
     return  currentUser!.uid;
   }
-
+  Future<void> updatePhotoURL(String? url) async{
+    currentUser?.updatePhotoURL(url);
+  }
 }
