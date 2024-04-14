@@ -79,7 +79,6 @@ class Logos extends StatelessWidget {
 }
 void createPopUp(Future<String> alert, BuildContext context) async {
   String message =  await alert;
-
   showDialog(
     context: context,
     builder: (BuildContext context) => AlertDialog(

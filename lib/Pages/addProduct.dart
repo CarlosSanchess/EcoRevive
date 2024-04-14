@@ -4,6 +4,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:register/Controllers/AddProductController.dart';
+import 'package:register/Functions/Functions.dart';
+import 'package:register/Controllers/FireStoreController.dart';
+
 
 //Max Width and Max Height for image
 class addProduct extends StatefulWidget{
@@ -82,14 +86,15 @@ class _addProductState extends State<addProduct> {
                     const SizedBox(height: 30),
                     Card(
                         color: Colors.grey.shade200,
-                        child: const Padding(
-                          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                           child: TextField(
+                            controller: productNameController,
                             maxLines: 1,
-                            decoration: InputDecoration.collapsed(hintText: "Product Name..."),
-                            style: TextStyle(
+                            decoration: const InputDecoration.collapsed(hintText: "Product Name..."),
+                            style: const TextStyle(
                               fontSize: 20,
-                              color: Colors.black12,
+                              color: Colors.black87,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -98,12 +103,13 @@ class _addProductState extends State<addProduct> {
                     const SizedBox(height: 10),
                     Card(
                       color: Colors.grey.shade200,
-                      child: const Padding(
-                        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                         child: TextField(
-                          maxLines: 4, //or null
-                          decoration: InputDecoration.collapsed(hintText: "Description..."),
-                          style: TextStyle(
+                          controller: descriptionController,
+                          maxLines: 4,
+                          decoration: const InputDecoration.collapsed(hintText: "Description..."),
+                          style: const TextStyle(
                             fontSize: 20,
                             color: Colors.black87,
                             fontWeight: FontWeight.bold,
@@ -112,23 +118,29 @@ class _addProductState extends State<addProduct> {
                       ),
                     ),
                     const SizedBox(height: 50),
-                    Container(
-                          padding: const EdgeInsets.all(25),
-                          decoration: BoxDecoration(
+                    GestureDetector(
+                      onTap: () {
+                        print(AddProductController(productNameController: productNameController, descriptionController: descriptionController).addProduct());
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(25),
+                        decoration: BoxDecoration(
                           color: Colors.lightGreen[800],
                           borderRadius: BorderRadius.circular(8),
                         ),
-                          child: const Center(
+                        child: const Center(
                           child: Text(
                             "Post Product",
                             style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 100)
                   ],
               ),
