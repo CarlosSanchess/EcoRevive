@@ -120,7 +120,7 @@ class _addProductState extends State<addProduct> {
                     const SizedBox(height: 50),
                     GestureDetector(
                       onTap: () {
-                        print(AddProductController(productNameController: productNameController, descriptionController: descriptionController).addProduct());
+                        AddProductController(productNameController: productNameController, descriptionController: descriptionController).addProduct();
                       },
                       child: Container(
                         padding: const EdgeInsets.all(25),

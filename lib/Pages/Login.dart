@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:register/Functions/Functions.dart';
 import 'package:register/Controllers/RegisterLoginControllers.dart';
+import 'package:register/Auth/Auth.dart';
+
 
 //Needs to me
 class Login extends StatefulWidget {
@@ -84,13 +86,16 @@ class LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 25),
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                         createPopUp(RegisterLoginControllers(usernameController: usernameController, passwordController: passwordController).signIn(), context);
                         if(checkLoggedIn() == true){
                           print("LOGGED IN");
                         }else{
                           print("Failed");
                         }
+                         if(await Auth().isLoggedIn()){
+                              print("asdas");
+                         };
                   },
                   child: Container(
                     padding: const EdgeInsets.all(25),

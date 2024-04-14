@@ -3,8 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth{
 
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  User? get currentUser => firebaseAuth.currentUser;
+  final FirebaseAuth firebaseAuth;
+  late User? currentUser;
+
+  Auth() : firebaseAuth = FirebaseAuth.instance {
+    currentUser = firebaseAuth.currentUser;
+  }
 
   Stream<User?> get authStateChanges => firebaseAuth.authStateChanges();
 
@@ -20,4 +24,23 @@ class Auth{
       print('User creation failed: $e');
     }
   }
+
+  Future<bool> isLoggedIn() async {
+    if (currentUser != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> updateUserEmail(String email) async{
+    currentUser?.verifyBeforeUpdateEmail(email);
+  }
+  Future<void> updateUserPassWord(String password) async{
+    currentUser?.updatePassword(password);
+  }
+  Future<String> getUid() async{
+    return  currentUser!.uid;
+  }
+
 }
