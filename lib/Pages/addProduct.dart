@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:register/Controllers/AddProductController.dart';
+import 'package:register/Controllers/CloudStorageController.dart';
 import 'package:register/Functions/CategorySelector.dart';
 
 
@@ -126,8 +127,11 @@ class _addProductState extends State<addProduct> {
                                                 descriptionController: descriptionController,
                                                 category: const CategorySelector().getCategory()).addProduct() == "Added Successfully!"){
                               const CategorySelector().resetCategory();
-                        }
 
+                        }
+                        //if (selectedImage != null) {
+                        //  CloudStorageController().uploadImage(selectedImage!);
+                        //}
                       },
                       child: Container(
                         padding: const EdgeInsets.all(25),
