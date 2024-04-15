@@ -9,6 +9,10 @@ class CategorySelector extends StatefulWidget {
   String? getCategory() {
     return _CategorySelectionWidgetState.selectedCategory;
   }
+
+  void resetCategory() {
+    _CategorySelectionWidgetState.resetState();
+  }
 }
 
 class _CategorySelectionWidgetState extends State<CategorySelector> {
@@ -21,6 +25,7 @@ class _CategorySelectionWidgetState extends State<CategorySelector> {
     'Telemóvel',
     'Outro'
   ];
+
 
   @override
   Widget build(BuildContext context) {
