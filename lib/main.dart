@@ -12,7 +12,7 @@ import 'package:register/firebase_options.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform); // MUdar para Android??
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform); // MUdar para Android??
   runApp(const MyApp());
 }
 
