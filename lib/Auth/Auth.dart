@@ -48,4 +48,7 @@ class Auth{
   Future<String?> getEmail() async{
     return currentUser?.email;
   }
+  Future<void> signOut() async {
+    await firebaseAuth.signOut();
+  }
 }
