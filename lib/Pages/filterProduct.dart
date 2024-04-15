@@ -30,11 +30,18 @@ class _filterProductState extends State<filterProduct> {
               children: [
                 Expanded(
                   child: TextField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'Search for your item...',
                       prefixIcon: Icon(Icons.search),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                     ),
-                  ),
+                  )
                 ),
                 const SizedBox(width: 10),
                 ElevatedButton(
@@ -153,13 +160,5 @@ class _filterProductState extends State<filterProduct> {
     );
   }
 }
-
-
-
-
-
-
-
-
 
 
