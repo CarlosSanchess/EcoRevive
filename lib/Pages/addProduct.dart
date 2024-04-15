@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:register/Controllers/AddProductController.dart';
-import 'package:register/Controllers/CloudStorageController.dart';
 import 'package:register/Functions/CategorySelector.dart';
 
 
@@ -125,9 +124,9 @@ class _addProductState extends State<addProduct> {
                       onTap: () {
                         if(AddProductController(productNameController: productNameController,
                                                 descriptionController: descriptionController,
-                                                category: const CategorySelector().getCategory()).addProduct() == "Added Successfully!"){
+                                                category: const CategorySelector().getCategory(),
+                                                image: selectedImage!).addProduct() == "Added Successfully!"){
                               const CategorySelector().resetCategory();
-
                         }
                       },
                       child: Container(
