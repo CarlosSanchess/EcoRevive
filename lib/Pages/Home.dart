@@ -15,7 +15,7 @@ class Home extends StatelessWidget {
         ),
       ),
       body: const Padding(
-        padding: EdgeInsets.all(16.0), // Adjust the value as needed
+        padding: EdgeInsets.all(16.0),
         child: Center(
           child: Text(
             'Home Page, click on the "+" Icon to add product, on the "Profile" icon to access your Profile',
@@ -32,7 +32,6 @@ class Home extends StatelessWidget {
                     color: Colors.black
               ),
               onPressed: () {
-                // Add your onPressed logic here
               },
             ),
             const Spacer(), // Espaço entre os ícones e as extremidades
@@ -42,7 +41,6 @@ class Home extends StatelessWidget {
                 color: Colors.black,
               ),
               onPressed: () {
-                // Add your onPressed logic here
               },
             ),
             const Spacer(),
@@ -54,7 +52,7 @@ class Home extends StatelessWidget {
               ),
 
               onPressed: () {
-                // Add your onPressed logic here
+
               },
             ),
           ],

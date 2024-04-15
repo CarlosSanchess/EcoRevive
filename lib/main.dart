@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       title: 'EcoRevive',
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      home:  Home(),
+      home:  addProduct(),
     );
   }
 }

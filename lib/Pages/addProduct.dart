@@ -129,9 +129,6 @@ class _addProductState extends State<addProduct> {
                               const CategorySelector().resetCategory();
 
                         }
-                        //if (selectedImage != null) {
-                        //  CloudStorageController().uploadImage(selectedImage!);
-                        //}
                       },
                       child: Container(
                         padding: const EdgeInsets.all(25),
