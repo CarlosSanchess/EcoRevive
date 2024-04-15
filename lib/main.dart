@@ -7,6 +7,8 @@ import 'package:register/Pages/Login.dart';
 import 'package:register/Pages/addProduct.dart';
 import 'package:register/firebase_options.dart';
 
+import 'Pages/filterProduct.dart';
+
 
 
 void main() async{
@@ -25,7 +27,7 @@ class MyApp extends StatelessWidget {
       title: 'EcoRevive',
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      home:  addProduct(),
+      home:  filterProduct(),
     );
   }
 }
