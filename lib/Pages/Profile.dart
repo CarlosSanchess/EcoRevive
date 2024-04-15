@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../Auth/Auth.dart';
+
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -7,6 +9,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool isDarkMode = false;
+  final auth = Auth(); // Create an instance of Auth
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +39,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      'João Rebelo',
-                      style: TextStyle(
-                        fontSize: 28, // Increased font size
-                        fontWeight: FontWeight.bold, // Made it bold
-                      ),
+                    FutureBuilder<String?>(
+                      future: auth.getEmail(), // Get the current user's email
+                      builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return CircularProgressIndicator(); // Show a loading spinner while waiting
+                        } else {
+                          final email = snapshot.data ?? 'No email'; // Use the email if it's available, otherwise use 'No email'
+                          return Text(
+                            email,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey[800],
+                            ),
+                          );
+                        }
+                      },
                     ),
                     SizedBox(height: 8),
                     Text(
