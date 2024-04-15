@@ -77,11 +77,6 @@ class RegisterLoginControllers {
   }
 }
 
-Future<bool> checkLoggedIn() async {
-  User? user = FirebaseAuth.instance.currentUser;
-  return user != null;
-}
-
 String acceptablePassword(String str) {
     bool containsUppercase = str.contains(RegExp(r'[A-Z]'));
     bool containsNumber = str.contains(RegExp(r'[0-9]'));

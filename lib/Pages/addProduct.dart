@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:register/Controllers/AddProductController.dart';
 import 'package:register/Functions/Functions.dart';
 import 'package:register/Controllers/FireStoreController.dart';
+import 'package:register/Functions/CategorySelector.dart';
 
 
 //Max Width and Max Height for image
@@ -56,8 +57,8 @@ class _addProductState extends State<addProduct> {
         child: Center(
           child: SingleChildScrollView(
             child: Container(
-              margin: const EdgeInsets.all(20),
-            child: Column(
+              margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 0),
+              child: Column(
                   children: [
                     const Text(
                       'Add Product',
@@ -107,7 +108,7 @@ class _addProductState extends State<addProduct> {
                         padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                         child: TextField(
                           controller: descriptionController,
-                          maxLines: 4,
+                          maxLines: 3,
                           decoration: const InputDecoration.collapsed(hintText: "Description..."),
                           style: const TextStyle(
                             fontSize: 20,
@@ -117,10 +118,15 @@ class _addProductState extends State<addProduct> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 20),
+                    const CategorySelector(),
+                    const SizedBox(height: 30),
+
                     GestureDetector(
                       onTap: () {
-                        AddProductController(productNameController: productNameController, descriptionController: descriptionController).addProduct();
+                        //AddProductController(productNameController: productNameController, descriptionController: descriptionController).addProduct();
+                        print(CategorySelector().getCategory());
+                        print("asdad");
                       },
                       child: Container(
                         padding: const EdgeInsets.all(25),
@@ -184,4 +190,3 @@ Widget imageDisplay(double height,  File? selectedImage) {
        ), // If imageUrl is null, display an empty container
     );
 }
-

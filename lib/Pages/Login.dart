@@ -88,14 +88,6 @@ class LoginState extends State<Login> {
                 GestureDetector(
                   onTap: () async {
                         createPopUp(RegisterLoginControllers(usernameController: usernameController, passwordController: passwordController).signIn(), context);
-                        if(checkLoggedIn() == true){
-                          print("LOGGED IN");
-                        }else{
-                          print("Failed");
-                        }
-                         if(await Auth().isLoggedIn()){
-                              print("asdas");
-                         };
                   },
                   child: Container(
                     padding: const EdgeInsets.all(25),
