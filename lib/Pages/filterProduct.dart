@@ -16,12 +16,34 @@ class _filterProductState extends State<filterProduct> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        title: const Text(
+          'Filter',
+          style: TextStyle(color: Colors.black),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      hintText: 'Search for your item...',
+                      prefixIcon: Icon(Icons.search),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text('Search'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
             const Text(
               'Category',
               style: TextStyle(
@@ -79,6 +101,7 @@ class _filterProductState extends State<filterProduct> {
                   ),
                   const SizedBox(height: 10),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       filterChip('New', false),
                       filterChip('Used', false),
@@ -130,25 +153,6 @@ class _filterProductState extends State<filterProduct> {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
