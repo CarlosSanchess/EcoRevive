@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CategorySelector extends StatefulWidget {
-   const CategorySelector({super.key});
-
+  const CategorySelector({super.key});
 
   @override
   _CategorySelectionWidgetState createState() => _CategorySelectionWidgetState();
 
   String? getCategory(){
-    return _CategorySelectionWidgetState().selectedCategory;
   }
 }
 
@@ -33,7 +31,8 @@ class _CategorySelectionWidgetState extends State<CategorySelector > {
       ),
       child: DropdownButton<String>(
         value: _selectedCategory,
-        onChanged: (String? newValue) { // Nullable string for onChanged callback
+        focusColor: Colors.green,
+        onChanged: (String? newValue) {
           setState(() {
             _selectedCategory = newValue;
           });

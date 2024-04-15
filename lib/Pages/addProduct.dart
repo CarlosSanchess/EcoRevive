@@ -124,9 +124,9 @@ class _addProductState extends State<addProduct> {
 
                     GestureDetector(
                       onTap: () {
-                        //AddProductController(productNameController: productNameController, descriptionController: descriptionController).addProduct();
-                        print(CategorySelector().getCategory());
-                        print("asdad");
+                        AddProductController(productNameController: productNameController, descriptionController: descriptionController).addProduct();
+                        //print( CategorySelector().getCategory());
+                        //print("asdad");
                       },
                       child: Container(
                         padding: const EdgeInsets.all(25),

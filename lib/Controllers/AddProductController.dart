@@ -12,7 +12,9 @@ class AddProductController {
 
   String addProduct() {
       if(_checkInputValues(productNameController, descriptionController) == "Ok"){
-        FireStoreController().addToDataBase(productNameController.text, descriptionController.text);
+        FireStoreController().addToProductsCollection(productNameController.text, descriptionController.text);
+        productNameController.clear();
+        descriptionController.clear();
         return "Added Successfully!";
       }else{
         return _checkInputValues(productNameController, descriptionController);
@@ -36,12 +38,18 @@ class AddProductController {
     if (str.isEmpty) {
       return "Product Name cannot be empty";
     }
+    if(str.length > 25){
+      return "Product Name cannot have more than 25 chars.";
+    }
     return "Ok";
   }
 
   String _acceptableDescription(String str) {
     if (str.isEmpty) {
       return "Description cannot be empty";
+    }
+    if(str.length > 200){
+      return "Description cannot have more than 200 chars";
     }
     return "Ok";
   }
