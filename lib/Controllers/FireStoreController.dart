@@ -7,11 +7,12 @@ class FireStoreController{
    final db = FirebaseFirestore.instance;
 
 
-  void addToProductsCollection(String productName, String description) async {
+  void addToProductsCollection(String productName, String description, String? category) async {
     // Create a new user with a first and last name
     final product = <String, dynamic> {
       "ProductName": productName,
       "Description": description,
+      "Category": category,
       "Owner": await Auth().getUid()
     };
 

@@ -6,12 +6,17 @@ class CategorySelector extends StatefulWidget {
   @override
   _CategorySelectionWidgetState createState() => _CategorySelectionWidgetState();
 
-  String? getCategory(){
+  String? getCategory() {
+    return _CategorySelectionWidgetState.selectedCategory;
+  }
+
+  void resetCategory() {
+    _CategorySelectionWidgetState.selectedCategory = null;
   }
 }
 
-class _CategorySelectionWidgetState extends State<CategorySelector > {
-  String? _selectedCategory;
+class _CategorySelectionWidgetState extends State<CategorySelector> {
+  static String? selectedCategory;
 
   final List<String> _categories = [
     'Rato',
@@ -20,6 +25,7 @@ class _CategorySelectionWidgetState extends State<CategorySelector > {
     'Telemóvel',
     'Outro'
   ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +36,11 @@ class _CategorySelectionWidgetState extends State<CategorySelector > {
         border: Border.all(color: Colors.grey),
       ),
       child: DropdownButton<String>(
-        value: _selectedCategory,
+        value: selectedCategory,
         focusColor: Colors.green,
         onChanged: (String? newValue) {
           setState(() {
-            _selectedCategory = newValue;
+            selectedCategory = newValue; // Assign newValue to static variable
           });
         },
         underline: Container(),
@@ -57,5 +63,4 @@ class _CategorySelectionWidgetState extends State<CategorySelector > {
       ),
     );
   }
-  String? get selectedCategory => _selectedCategory;
 }

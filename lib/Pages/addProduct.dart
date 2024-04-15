@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:register/Controllers/AddProductController.dart';
-import 'package:register/Functions/Functions.dart';
-import 'package:register/Controllers/FireStoreController.dart';
+import 'package:register/Controllers/CloudStorageController.dart';
 import 'package:register/Functions/CategorySelector.dart';
 
 
@@ -124,9 +123,15 @@ class _addProductState extends State<addProduct> {
 
                     GestureDetector(
                       onTap: () {
-                        AddProductController(productNameController: productNameController, descriptionController: descriptionController).addProduct();
-                        //print( CategorySelector().getCategory());
-                        //print("asdad");
+                        if(AddProductController(productNameController: productNameController,
+                                                descriptionController: descriptionController,
+                                                category: const CategorySelector().getCategory()).addProduct() == "Added Successfully!"){
+                              const CategorySelector().resetCategory();
+
+                        }
+                        //if (selectedImage != null) {
+                        //  CloudStorageController().uploadImage(selectedImage!);
+                        //}
                       },
                       child: Container(
                         padding: const EdgeInsets.all(25),

@@ -4,15 +4,17 @@ import 'package:register/Controllers/FireStoreController.dart';
 class AddProductController {
   final TextEditingController productNameController;
   final TextEditingController descriptionController;
+  final String? category;
 
   const AddProductController({
     required this.productNameController,
     required this.descriptionController,
+    required this.category
   });
 
   String addProduct() {
       if(_checkInputValues(productNameController, descriptionController) == "Ok"){
-        FireStoreController().addToProductsCollection(productNameController.text, descriptionController.text);
+        FireStoreController().addToProductsCollection(productNameController.text, descriptionController.text, category);
         productNameController.clear();
         descriptionController.clear();
         return "Added Successfully!";
