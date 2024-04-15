@@ -1,21 +1,3 @@
-<<<<<<< HEAD
-# register
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
 # EcoRevive Development Report
 
 Welcome to the documentation pages of the EcoRevive!
@@ -190,4 +172,3 @@ During sprint planning, we select items from the Product Backlog and move them i
 By utilizing this project management system, we ensure clear communication and efficient task allocation which facilitates the development of EcoRevive.
 
 [Link to Project Board](https://github.com/orgs/FEUP-LEIC-ES-2023-24/projects/43/)
->>>>>>> 2031d45a00d2c526692ee275131e034ebe4d572a
