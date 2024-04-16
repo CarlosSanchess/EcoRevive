@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:register/Pages/ChangePassword.dart';
+import 'package:register/Pages/theme_provider.dart';
 import '../Auth/Auth.dart';
+import 'Login.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-
-import 'Login.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  bool isDarkMode = false;
+  late ThemeProvider themeProvider;
   final auth = Auth();
   File? selectedImage;
 
@@ -37,13 +37,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: themeProvider.getTheme().appBarTheme.backgroundColor,
         title: Text(
           'Profile',
           style: TextStyle(
-            color: Colors.black,
+            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -53,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: Colors.black,
+            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
           ),
         ),
       ),
@@ -104,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       email,
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.grey[800],
+                        color: themeProvider.getTheme().textTheme!.headline1!.color,
                         fontWeight: FontWeight.bold,
                       ),
                     );
@@ -120,6 +122,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 top: BorderSide(color: Colors.grey[300]!),
                 bottom: BorderSide(color: Colors.grey[300]!),
               ),
+              color: themeProvider.getTheme().brightness == Brightness.dark
+                  ? Colors.grey[850] // Darker background color
+                  : Colors.grey[200], // Light background color
             ),
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Row(
@@ -131,18 +136,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     'Switch to Dark Mode',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
                     ),
                   ),
                 ),
                 Switch(
-                  value: isDarkMode,
+                  value: themeProvider.getTheme().brightness == Brightness.dark,
                   onChanged: (value) {
-                    setState(() {
-                      isDarkMode = value;
-                    });
+                    themeProvider.toggleTheme();
                   },
-                  activeColor: Color.fromRGBO(85, 139, 47, 1),
+                  activeColor: themeProvider.getTheme().hintColor,
                 ),
               ],
             ),
@@ -150,7 +153,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(height: 20),
           Expanded(
             child: Container(
-              color: Colors.grey[200],
+              color: themeProvider.getTheme().brightness == Brightness.dark
+                  ? Colors.grey[850] // Darker background color
+                  : Colors.grey[200], // Light background color
               child: Padding(
                 padding: EdgeInsets.only(top: 40),
                 child: Column(
@@ -165,6 +170,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: _buildButtonWithIcon(
                               text: 'Product List',
                               onPressed: () {},
+                              context: context,
                             ),
                           ),
                           SizedBox(height: 16),
@@ -178,6 +184,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
                                 );
                               },
+                              context: context,
                             ),
                           ),
                         ],
@@ -199,7 +206,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
-                              backgroundColor: Color.fromRGBO(85, 139, 47, 1),
+                              backgroundColor: themeProvider.getTheme().primaryColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
@@ -219,12 +226,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildButtonWithIcon({required String text, required VoidCallback onPressed}) {
+  Widget _buildButtonWithIcon(
+      {required String text, required VoidCallback onPressed, required BuildContext context}) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
-        backgroundColor: Color.fromRGBO(85, 139, 47, 1),
+        backgroundColor: themeProvider.getTheme().primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
