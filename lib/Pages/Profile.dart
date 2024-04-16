@@ -170,14 +170,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: Colors.grey[300]!),
-                    bottom: BorderSide(color: Colors.grey[300]!),
+                border: Border(
+                  top: BorderSide(
+                    color: themeProvider.getTheme().brightness == Brightness.dark
+                        ? Colors.grey[600]! // Adjusted color for dark mode
+                        : Colors.grey[300]!,
                   ),
-                  color: themeProvider.getTheme().brightness ==
-                      Brightness.dark
-                      ? Colors.grey[850]
-                      : Colors.grey[200],
+                  bottom: BorderSide(
+                    color: themeProvider.getTheme().brightness == Brightness.dark
+                        ? Colors.grey[600]! // Adjusted color for dark mode
+                        : Colors.grey[300]!,
+                  ),
+                ),
+                color: themeProvider.getTheme().brightness == Brightness.dark
+                    ? Colors.grey[850]
+                    : Colors.grey[200],
               ),
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Row(
@@ -188,19 +195,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Row(
                       children: [
                         Icon(
-                          themeProvider.getTheme().brightness ==
-                              Brightness.dark
+                          themeProvider.getTheme().brightness == Brightness.dark
                               ? Icons.wb_sunny
                               : Icons.dark_mode,
-                          color: themeProvider.getTheme().brightness ==
-                              Brightness.dark
+                          color: themeProvider.getTheme().brightness == Brightness.dark
                               ? Colors.amber
                               : Colors.indigo,
                         ),
                         SizedBox(width: 8),
                         Text(
-                          themeProvider.getTheme().brightness ==
-                              Brightness.dark
+                          themeProvider.getTheme().brightness == Brightness.dark
                               ? 'Switch to Light Mode'
                               : 'Switch to Dark Mode',
                           style: TextStyle(
@@ -216,11 +220,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
-                        right: 25.0),
+                    padding: const EdgeInsets.only(right: 25.0),
                     child: Switch(
-                      value: themeProvider.getTheme().brightness ==
-                          Brightness.dark,
+                      value:
+                      themeProvider.getTheme().brightness == Brightness.dark,
                       onChanged: (value) {
                         themeProvider.toggleTheme();
                       },
@@ -230,6 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
+
             SizedBox(height: 20),
             Container(
               color: themeProvider.getTheme().brightness == Brightness.dark
@@ -310,8 +314,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required VoidCallback onPressed,
     required BuildContext context,
   }) {
-    final themeProvider =
-    Provider.of<ThemeProvider>(context, listen: false);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final brighterColor = themeProvider.getTheme().brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black;
 
     return ListTile(
       onTap: onPressed,
@@ -325,11 +331,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       title: Text(
         text,
         style: TextStyle(
-            color: themeProvider
-                .getTheme()
-                .textTheme!
-                .bodyText1!
-                .color),
+          color: brighterColor,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

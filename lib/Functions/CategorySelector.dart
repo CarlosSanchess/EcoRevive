@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CategorySelector extends StatefulWidget {
-  const CategorySelector({super.key});
+  const CategorySelector({Key? key}) : super(key: key);
 
   @override
   _CategorySelectionWidgetState createState() => _CategorySelectionWidgetState();
@@ -26,46 +26,64 @@ class _CategorySelectionWidgetState extends State<CategorySelector> {
     'Outro'
   ];
 
-
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDarkMode ? Colors.grey[950] : Colors.white;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey),
       ),
-      child: DropdownButton<String>(
-        value: selectedCategory,
-        focusColor: Colors.green,
-        onChanged: (String? newValue) {
+      child: PopupMenuButton<String>(
+        initialValue: selectedCategory,
+        onSelected: (String? newValue) {
           setState(() {
-            selectedCategory = newValue; // Assign newValue to static variable
+            selectedCategory = newValue;
           });
         },
-        underline: Container(),
-        icon: const Icon(Icons.arrow_drop_down_sharp),
-        iconSize: 24,
-        isExpanded: true,
-        style: const TextStyle(
-          fontSize: 16,
-          color: Colors.black,
+        itemBuilder: (BuildContext context) {
+          return _categories.map((String category) {
+            return PopupMenuItem<String>(
+              value: category,
+              child: Text(
+                category,
+                style: TextStyle(
+                  color: isDarkMode ? Colors.white : Colors.black,
+                ),
+              ),
+            );
+          }).toList();
+        },
+        offset: Offset(0, 40),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          color: backgroundColor,
+          child: Row(
+            children: [
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  selectedCategory ?? 'Select Category',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: isDarkMode ? Colors.white : Colors.grey[700],
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down_sharp),
+            ],
+          ),
         ),
-        items: _categories.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(
-              value,
-              style: const TextStyle(fontSize: 16),
-            ),
-          );
-        }).toList(),
       ),
     );
   }
+
   void resetCategory() {
     setState(() {
-      selectedCategory = null; // Reset selected category to null
+      selectedCategory = null;
     });
   }
 }

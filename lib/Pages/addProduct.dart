@@ -8,115 +8,139 @@ import 'package:register/Controllers/AddProductController.dart';
 import 'package:register/Functions/CategorySelector.dart';
 import 'package:register/Pages/theme_provider.dart';
 
-
-//Max Width and Max Height for image
-class addProduct extends StatefulWidget{
-
-  addProduct({Key? key}) : super(key: key);
+class AddProduct extends StatefulWidget {
+  AddProduct({Key? key}) : super(key: key);
 
   @override
-  State<addProduct> createState() => _addProductState();
+  State<AddProduct> createState() => _AddProductState();
 }
 
-class _addProductState extends State<addProduct> {
+class _AddProductState extends State<AddProduct> {
   File? selectedImage;
   double imageHeight = 200;
-
 
   TextEditingController descriptionController = TextEditingController();
   TextEditingController productNameController = TextEditingController();
 
-  Future pickImageFromGallery() async{
+  Future pickImageFromGallery() async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final image =
+      await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return;
       final imageTemp = File(image.path);
       setState(() {
         selectedImage = imageTemp;
       });
-    }on PlatformException catch (e){
+    } on PlatformException catch (e) {
       print('Failed to Pick image: $e');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     return Scaffold(
-        appBar:  AppBar(
-          backgroundColor: themeProvider.getTheme().appBarTheme.backgroundColor,
-          title: Text(
-            'Add Product',
-            style: TextStyle(
-              color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
-              fontWeight: FontWeight.bold,
-                fontSize: 35
-            ),
-          ),
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: Icon(
-              Icons.arrow_back_ios_new,
-              color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
-            ),
+      appBar: AppBar(
+        backgroundColor:
+        themeProvider.getTheme().appBarTheme.backgroundColor,
+        title: Text(
+          'Add Product',
+          style: TextStyle(
+            color: themeProvider
+                .getTheme()
+                .appBarTheme
+                .iconTheme!
+                .color,
+            fontWeight: FontWeight.bold,
+            fontSize: 35,
           ),
         ),
-      backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: themeProvider
+                .getTheme()
+                .appBarTheme
+                .iconTheme!
+                .color,
+          ),
+        ),
+      ),
+      backgroundColor: themeProvider.getTheme().backgroundColor,
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Center(
           child: SingleChildScrollView(
             child: Container(
-              margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 0),
+              margin: const EdgeInsets.only(
+                  left: 20, right: 20, bottom: 20, top: 0),
               child: Column(
                 children: [
                   const Text(
                     'Fill out the information below to post a product',
-                    textAlign: TextAlign.left, // Align left
+                    textAlign: TextAlign.left,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.grey,
-                      fontSize: 15
+                      fontSize: 15,
                     ),
                   ),
-
                   const SizedBox(height: 40),
-
                   if (selectedImage != null)
                     imageDisplay(imageHeight, selectedImage)
-                  else  imagePickerContainer(200, () => pickImageFromGallery()),
+                  else
+                    imagePickerContainer(
+                      200,
+                          () => pickImageFromGallery(),
+                      isDarkMode:
+                      themeProvider.getTheme().brightness == Brightness.dark,
+                    ),
                   const SizedBox(height: 30),
                   Card(
-                      color: Colors.grey.shade200,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                        child: TextField(
-                          controller: productNameController,
-                          maxLines: 1,
-                          decoration: const InputDecoration.collapsed(hintText: "Product Name..."),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.black87,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    color: themeProvider.getTheme().cardColor,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                      child: TextField(
+                        controller: productNameController,
+                        maxLines: 1,
+                        decoration: const InputDecoration.collapsed(
+                          hintText: "Product Name...",
+                          hintStyle: TextStyle(color: Colors.grey),
                         ),
-                      )
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: themeProvider
+                              .getTheme()
+                              .textTheme
+                              .bodyText1!
+                              .color,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Card(
-                    color: Colors.grey.shade200,
+                    color: themeProvider.getTheme().cardColor,
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                       child: TextField(
                         controller: descriptionController,
                         maxLines: 3,
-                        decoration: const InputDecoration.collapsed(hintText: "Description..."),
-                        style: const TextStyle(
+                        decoration: const InputDecoration.collapsed(
+                          hintText: "Description...",
+                          hintStyle: TextStyle(color: Colors.grey),
+                        ),
+                        style: TextStyle(
                           fontSize: 20,
-                          color: Colors.black87,
+                          color: themeProvider
+                              .getTheme()
+                              .textTheme
+                              .bodyText1!
+                              .color,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -125,38 +149,44 @@ class _addProductState extends State<addProduct> {
                   const SizedBox(height: 20),
                   const CategorySelector(),
                   const SizedBox(height: 40),
-
                   GestureDetector(
                     onTap: () {
-                      if(AddProductController(productNameController: productNameController,
+                      if (AddProductController(
+                          productNameController: productNameController,
                           descriptionController: descriptionController,
-                          category: const CategorySelector().getCategory(),
-                          image: selectedImage!).addProduct() == "Added Successfully!"){
-                         const CategorySelector().resetCategory();
+                          category:
+                          const CategorySelector().getCategory(),
+                          image: selectedImage!)
+                          .addProduct() ==
+                          "Added Successfully!") {
+                        const CategorySelector().resetCategory();
                         setState(() {
                           selectedImage = null;
                         });
                       }
                     },
-                    child: Container(
-                      padding: const EdgeInsets.all(25),
-                      decoration: BoxDecoration(
-                        color: Colors.lightGreen[800],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          "Post Product",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                    child: Consumer<ThemeProvider>(
+                      builder: (context, themeProvider, _) {
+                        return Container(
+                          padding: const EdgeInsets.all(25),
+                          decoration: BoxDecoration(
+                            color: themeProvider.getTheme().primaryColor,
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                        ),
-                      ),
+                          child: const Center(
+                            child: Text(
+                              "Post Product",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
-
                   const SizedBox(height: 100)
                 ],
               ),
@@ -168,12 +198,14 @@ class _addProductState extends State<addProduct> {
   }
 }
 
-
-Widget imagePickerContainer(double height, Future<void> Function() onPressed) {
+Widget imagePickerContainer(
+    double height, Future<void> Function() onPressed,
+    {required bool isDarkMode}) {
+  final color = isDarkMode ? Colors.grey[800] : Colors.grey[200];
   return Container(
     width: double.infinity,
     height: height,
-    color: Colors.grey[200],
+    color: color,
     child: Center(
       child: ElevatedButton(
         onPressed: () {
@@ -185,17 +217,16 @@ Widget imagePickerContainer(double height, Future<void> Function() onPressed) {
   );
 }
 
-Widget imageDisplay(double height,  File? selectedImage) {
+Widget imageDisplay(double height, File? selectedImage) {
   return Container(
     width: double.infinity,
     height: height,
-    color: Colors.grey[200],
-    child:
-    AspectRatio(
-      aspectRatio: 16 / 9, // Adjust the aspect ratio as needed
+    color: Colors.grey[800],
+    child: AspectRatio(
+      aspectRatio: 16 / 9,
       child: Image.file(
         selectedImage!,
-        fit: BoxFit.fill, // Maintain aspect ratio and fill the space
+        fit: BoxFit.fill,
       ),
     ),
   );
