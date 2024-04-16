@@ -6,10 +6,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:register/Controllers/AddProductController.dart';
 import 'package:register/Functions/CategorySelector.dart';
+import 'package:register/Pages/Home.dart';
 import 'package:register/Pages/theme_provider.dart';
 
 class AddProduct extends StatefulWidget {
-  const AddProduct({super.key});
+  const AddProduct({Key? key}) : super(key: key);
 
   @override
   State<AddProduct> createState() => _AddProductState();
@@ -41,16 +42,11 @@ class _AddProductState extends State<AddProduct> {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:
-        themeProvider.getTheme().appBarTheme.backgroundColor,
+        backgroundColor: themeProvider.getTheme().appBarTheme.backgroundColor,
         title: Text(
           'Add Product',
           style: TextStyle(
-            color: themeProvider
-                .getTheme()
-                .appBarTheme
-                .iconTheme!
-                .color,
+            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
             fontWeight: FontWeight.bold,
             fontSize: 35,
           ),
@@ -61,11 +57,7 @@ class _AddProductState extends State<AddProduct> {
           },
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: themeProvider
-                .getTheme()
-                .appBarTheme
-                .iconTheme!
-                .color,
+            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
           ),
         ),
       ),
@@ -95,8 +87,8 @@ class _AddProductState extends State<AddProduct> {
                     imagePickerContainer(
                       200,
                           () => pickImageFromGallery(),
-                      isDarkMode:
-                      themeProvider.getTheme().brightness == Brightness.dark,
+                      isDarkMode: themeProvider.getTheme().brightness ==
+                          Brightness.dark,
                     ),
                   const SizedBox(height: 30),
                   Card(
@@ -151,19 +143,18 @@ class _AddProductState extends State<AddProduct> {
                   const SizedBox(height: 40),
                   GestureDetector(
                     onTap: () {
-                      if (AddProductController(
-                          productNameController: productNameController,
-                          descriptionController: descriptionController,
-                          category:
-                          const CategorySelector().getCategory(),
-                          image: selectedImage!)
-                          .addProduct() ==
-                          "Added Successfully!") {
-                        const CategorySelector().resetCategory();
-                        setState(() {
-                          selectedImage = null;
-                        });
-                      }
+                      AddProductController(
+                        productNameController: productNameController,
+                        descriptionController: descriptionController,
+                        category: const CategorySelector().getCategory(),
+                        image: selectedImage!,
+                      ).addProduct();
+
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AddProduct()),
+                      );
                     },
                     child: Consumer<ThemeProvider>(
                       builder: (context, themeProvider, _) {
