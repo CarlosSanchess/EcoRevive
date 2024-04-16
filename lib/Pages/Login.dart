@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:register/Functions/Functions.dart';
 import 'package:register/Controllers/RegisterLoginControllers.dart';
 import 'package:register/Auth/Auth.dart';
+import 'package:register/Pages/Home.dart';
 
 class Login extends StatefulWidget {
   final void Function() switchPages;
@@ -89,10 +90,18 @@ class LoginState extends State<Login> {
                 const SizedBox(height: 25),
                 GestureDetector(
                   onTap: () async {
-                    createPopUp(RegisterLoginControllers(
+                    Future<String> aux = RegisterLoginControllers(
                       usernameController: usernameController,
                       passwordController: passwordController,
-                    ).signIn(), context);
+                    ).signIn();
+                    if(await aux == "Logged In!!"){
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => Home()),
+                      );
+                    }else{
+                        createPopUp(aux, context);
+                    }
                   },
                   child: Container(
                     padding: const EdgeInsets.all(25),

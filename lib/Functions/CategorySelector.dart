@@ -11,7 +11,7 @@ class CategorySelector extends StatefulWidget {
   }
 
   void resetCategory() {
-    _CategorySelectionWidgetState.selectedCategory = null;
+    _CategorySelectionWidgetState().resetCategory();
   }
 }
 
@@ -62,5 +62,10 @@ class _CategorySelectionWidgetState extends State<CategorySelector> {
         }).toList(),
       ),
     );
+  }
+  void resetCategory() {
+    setState(() {
+      selectedCategory = null; // Reset selected category to null
+    });
   }
 }

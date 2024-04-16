@@ -124,7 +124,10 @@ class _addProductState extends State<addProduct> {
                           descriptionController: descriptionController,
                           category: const CategorySelector().getCategory(),
                           image: selectedImage!).addProduct() == "Added Successfully!"){
-                        const CategorySelector().resetCategory();
+                         const CategorySelector().resetCategory();
+                        setState(() {
+                          selectedImage = null;
+                        });
                       }
                     },
                     child: Container(

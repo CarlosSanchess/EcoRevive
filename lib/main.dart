@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'EcoRevive',
       theme: themeProvider.getTheme(),
-      home: ProfileScreen(),
+      home: IntroPage(),
     );
   }
 }
