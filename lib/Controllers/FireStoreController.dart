@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:register/Auth/Auth.dart';
+import 'package:register/Controllers/CloudStorageController.dart';
 
 
 
@@ -12,7 +13,6 @@ import '../Pages/filterProduct.dart' as filter;
 class FireStoreController{
 
    final db = FirebaseFirestore.instance;
-   final storage = FirebaseStorage.instance;
 
 
   Future<String> addToProductsCollection(String productName, String description, String? category) async {
@@ -43,8 +43,7 @@ class FireStoreController{
          String description = doc['Description'];
          String productId = doc.id;
 
-         Reference imageRef = storage.ref().child('ProductImages/$productId');
-         String imageUrl = await imageRef.getDownloadURL();
+         String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
 
          products.add(info(productID: productId, productName: name, description: description, category: category, imageURL: imageUrl));
        }
@@ -55,17 +54,13 @@ class FireStoreController{
    }
 
 
-       Future<void> deleteProduct(info product) async {
-         try {
-           await db.collection('Products').doc(product.productID).delete();
-           Reference imageRef = storage.ref().child(
-               'ProductImages/${product.productID}');
-           await imageRef.delete();
-         } catch (error) {
-           print("Error while deleting: $error");
-           throw error;
-         }
-       }
+   Future<void> deleteProduct(info product) async {
+     try {
+       CloudStorageController().deleteImage('ProductImages/${product.productID}');
+     } catch (error) {
+       print("Error while deleting: $error");
+     }
+   }
 
    Future<List<info2>> fetchProductsByCategory(String category) async {
      User? user = FirebaseAuth.instance.currentUser;
@@ -84,8 +79,7 @@ class FireStoreController{
          String description = doc['Description'];
          String productId = doc.id;
 
-         Reference imageRef = storage.ref().child('ProductImages/$productId');
-         String imageUrl = await imageRef.getDownloadURL();
+         String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
          products.add(filter.info2(productName: name, description: description, category: productCategory, imageURL: imageUrl));
        }
        return products;
