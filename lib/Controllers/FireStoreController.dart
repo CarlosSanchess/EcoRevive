@@ -1,16 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:register/Auth/Auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 
-import '../Pages/Home.dart';
-import '../Pages/filterProduct.dart';
 
 import '../Pages/myProducts.dart';
+import '../Pages/filterProduct.dart' as filter;
 
 class FireStoreController{
 
@@ -33,6 +29,7 @@ class FireStoreController{
     return docRef.id;
   }
 
+
    Future<List<info>> getOwnedProducts() async {
      User? user = FirebaseAuth.instance.currentUser;
 
@@ -42,6 +39,33 @@ class FireStoreController{
        for (QueryDocumentSnapshot doc in ownedProducts.docs) {
          String name = doc['ProductName'];
          String category = doc['Category'];
+         String description = doc['Description'];
+         String productId = doc.id;
+
+         Reference imageRef = storage.ref().child('ProductImages/$productId');
+         String imageUrl = await imageRef.getDownloadURL();
+
+         products.add(info(productID: productId, productName: name, description: description, category: category, imageURL: imageUrl));
+       }
+       return products;
+     } else {
+       throw 'Not logged in.';
+     }
+   }
+
+
+       Future<void> deleteProduct(info product) async {
+         try {
+           await db.collection('Products').doc(product.productID).delete();
+           Reference imageRef = storage.ref().child(
+               'ProductImages/${product.productID}');
+           await imageRef.delete();
+         } catch (error) {
+           print("Error while deleting: $error");
+           throw error;
+         }
+       }
+
    Future<List<info>> fetchProductsByCategory(String category) async {
      User? user = FirebaseAuth.instance.currentUser;
 
@@ -61,9 +85,7 @@ class FireStoreController{
 
          Reference imageRef = storage.ref().child('ProductImages/$productId');
          String imageUrl = await imageRef.getDownloadURL();
-
-         products.add(info(productID: productId, productName: name, description: description, category: category, imageURL: imageUrl));
-
+         products.add(filter.info(productName: name, description: description, category: productCategory, imageURL: imageUrl));
        }
        return products;
      } else {
@@ -71,16 +93,4 @@ class FireStoreController{
      }
    }
 
-
-  Future<void> deleteProduct(info product) async{
-    try {
-      await db.collection('Products').doc(product.productID).delete();
-      Reference imageRef = storage.ref().child('ProductImages/${product.productID}');
-      await imageRef.delete();
-    } catch (error) {
-      print("Error while deleting: $error");
-      throw error;
-    }
   }
-
-}

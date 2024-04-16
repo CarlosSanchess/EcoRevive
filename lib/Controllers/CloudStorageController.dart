@@ -34,4 +34,12 @@ class CloudStorageController {
       return Future.error("Failed to get download URL");
     }
   }
+  Future<void> deleteImage(String storageURL) async{
+    try{
+      Reference imageRef = storage.ref().child(storageURL);
+      await imageRef.delete();
+    } catch (e){
+      print("Error Deleting Image $e");
+    }
+  }
 }
