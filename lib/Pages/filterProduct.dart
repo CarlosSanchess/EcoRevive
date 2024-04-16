@@ -27,9 +27,15 @@ class _filterProductState extends State<filterProduct> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text(
-          'Filter',
-          style: TextStyle(color: Colors.black),
+        title: Row(
+          children: [
+            Image.asset('lib/Imgs/Icon.png', height: 40,),
+            const SizedBox(width: 10),
+            const Text(
+              'EcoRevive',
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
         ),
       ),
       body: Padding(
@@ -58,7 +64,14 @@ class _filterProductState extends State<filterProduct> {
                 const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  ),
                   child: Icon(Icons.search),
+
                 ),
               ],
             ),
@@ -67,7 +80,7 @@ class _filterProductState extends State<filterProduct> {
               'Category',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 20,
+                fontSize: 25,
               ),
             ),
             const SizedBox(height: 10),
@@ -76,17 +89,17 @@ class _filterProductState extends State<filterProduct> {
               child: Row(
                 children: [
                   filterChip('Electronics', selectedCategory == 'Electronics',
-                      Colors.purple, Colors.grey[300]!, onCategorySelected),
+                      Colors.lightGreenAccent, Colors.grey[300]!, onCategorySelected),
                   filterChip('Furniture', selectedCategory == 'Furniture',
-                      Colors.purple, Colors.grey[300]!, onCategorySelected),
+                      Colors.lightGreenAccent, Colors.grey[300]!, onCategorySelected),
                   filterChip(
-                      'Clothing', selectedCategory == 'Clothing', Colors.purple,
+                      'Clothing', selectedCategory == 'Clothing', Colors.lightGreenAccent,
                       Colors.grey[300]!, onCategorySelected),
                   filterChip(
-                      'Books', selectedCategory == 'Books', Colors.purple,
+                      'Books', selectedCategory == 'Books', Colors.lightGreenAccent,
                       Colors.grey[300]!, onCategorySelected),
                   filterChip(
-                      'Others', selectedCategory == 'Others', Colors.purple,
+                      'Others', selectedCategory == 'Others', Colors.lightGreenAccent,
                       Colors.grey[300]!, onCategorySelected),
                 ],
               ),
@@ -105,7 +118,7 @@ class _filterProductState extends State<filterProduct> {
                     'Other Filters',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
+fontSize: 20,
                     ),
                   ),
                   Icon(
@@ -174,22 +187,30 @@ class _filterProductState extends State<filterProduct> {
     return Padding(
       padding: const EdgeInsets.only(right: 10),
       child: FilterChip(
-        label: Text(label),
+        label: Text(
+          label,
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
         selected: isSelected,
         selectedColor: selectedColor,
         labelStyle: TextStyle(
-            color: isSelected ? Colors.white : Colors.black, // Use black color for unselected chips
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal),
+          color: isSelected ? Colors.green : Colors.black,
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+        ),
         backgroundColor: unselectedColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          side: BorderSide(
+            color: isSelected ? Colors.green : unselectedColor,
+            width: 1.5,
+          ),
+        ),
+        checkmarkColor: Colors.green,
         onSelected: (value) {
           onCategorySelected(label);
         },
-        shape: StadiumBorder(
-          side: BorderSide(
-            color: isSelected ? selectedColor : Colors.grey[600]!,
-            width: 1.0,
-          ),
-        ),
       ),
     );
   }
