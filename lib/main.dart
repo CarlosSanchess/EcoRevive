@@ -14,7 +14,7 @@ import 'package:register/Pages/addProduct.dart';
 import 'package:register/firebase_options.dart';
 
 import 'Pages/theme.dart';
-import 'Pages/theme_provider.dart'; // Import your theme_provider.dart file
+import 'Pages/theme_provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

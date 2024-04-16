@@ -1,14 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../Controllers/FireStoreController.dart';
 
 class info{
+  final String productID;
   final String productName;
   final String description;
   final String category;
   final String imageURL;
 
   info({
+    required this.productID,
     required this.productName,
     required this.description,
     required this.category,
@@ -61,17 +62,50 @@ class Listing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(8.0),
+      margin: EdgeInsets.all(6.0),
       child: ListTile(
         leading: Image.network(
           product.imageURL,
-          width: 100,
+          width: 80,
           height: 100,
           fit: BoxFit.cover,
         ),
         title: Text(product.productName),
-        subtitle: Text('Category: ${product.category}'),
+        subtitle: Text(product.category),
+        trailing: IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () {
+            deleteProductOption(context, product);
+          },
+        )
       ),
     );
   }
+}
+
+void deleteProductOption(BuildContext context, info product) async{
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Delete Product'),
+        content: Text('Are you sure you want to delete ${product.productName}?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              FireStoreController().deleteProduct(product);
+              Navigator.of(context).pop();
+            },
+            child: Text('Delete'),
+          ),
+        ],
+      );
+    },
+  );
 }

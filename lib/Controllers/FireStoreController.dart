@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:register/Auth/Auth.dart';
 
 import '../Pages/myProducts.dart';
@@ -39,11 +41,22 @@ class FireStoreController{
          Reference imageRef = storage.ref().child('ProductImages/$productId');
          String imageUrl = await imageRef.getDownloadURL();
 
-         products.add(info(productName: name, description: description, category: category, imageURL: imageUrl));
+         products.add(info(productID: productId, productName: name, description: description, category: category, imageURL: imageUrl));
        }
        return products;
      } else {
        throw 'Not logged in.';
      }
    }
+
+  Future<void> deleteProduct(info product) async{
+    try {
+      await db.collection('Products').doc(product.productID).delete();
+      Reference imageRef = storage.ref().child('ProductImages/${product.productID}');
+      await imageRef.delete();
+    } catch (error) {
+      print("Error while deleting: $error");
+      throw error;
+    }
+  }
 }
