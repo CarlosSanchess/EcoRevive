@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../Auth/Auth.dart';
+import 'package:provider/provider.dart';
+import 'package:register/Pages/theme_provider.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
   final TextEditingController _oldPasswordController = TextEditingController();
@@ -9,9 +11,13 @@ class ChangePasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Change Password'),
+        backgroundColor: themeProvider.getTheme().appBarTheme.backgroundColor,
+        iconTheme: themeProvider.getTheme().appBarTheme.iconTheme,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -50,11 +56,11 @@ class ChangePasswordScreen extends StatelessWidget {
                 _handleChangePassword(context);
               },
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
+                padding: EdgeInsets.symmetric(vertical: 16.0), backgroundColor: themeProvider.getTheme().primaryColor,
               ),
               child: Text(
                 'Change Password',
-                style: TextStyle(fontSize: 16.0),
+                style: TextStyle(fontSize: 16.0, color: Colors.white),
               ),
             ),
           ],

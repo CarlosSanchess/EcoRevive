@@ -121,6 +121,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 top: BorderSide(color: Colors.grey[300]!),
                 bottom: BorderSide(color: Colors.grey[300]!),
               ),
+              color: themeProvider.getTheme().brightness == Brightness.dark
+                  ? Colors.grey[850] // Darker background color
+                  : Colors.grey[200], // Light background color
             ),
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Row(
@@ -149,7 +152,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(height: 20),
           Expanded(
             child: Container(
-              color: Colors.grey[200],
+              color: themeProvider.getTheme().brightness == Brightness.dark
+                  ? Colors.grey[850] // Darker background color
+                  : Colors.grey[200], // Light background color
               child: Padding(
                 padding: EdgeInsets.only(top: 40),
                 child: Column(
@@ -168,19 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           SizedBox(height: 16),
-                          SizedBox(
-                            width: 300,
-                            child: _buildButtonWithIcon(
-                              text: 'Change Password',
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
-                                );
-                              },
-                              context: context,
-                            ),
-                          ),
+                          // Add other widgets here
                         ],
                       ),
                     ),
