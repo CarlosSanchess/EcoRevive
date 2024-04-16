@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+
   flutter:
     sdk: flutter
 
@@ -44,6 +45,9 @@ dependencies:
   font_awesome_flutter: ^9.2.0
 
   firebase_storage: ^11.6.9
+
+
+  #firebase_app_check: ^0.2.2+1
 
 
 
@@ -75,7 +79,7 @@ flutter:
   uses-material-design: true
 
   assets:
-      - lib/Imgs/Icon.png
+    - lib/Imgs/Icon.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -2,8 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:register/Pages/Home.dart';
+import 'package:register/Pages/filterProduct.dart';
 import 'package:register/firebase_options.dart';
 import 'Pages/theme_provider.dart';
+
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +28,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'EcoRevive',
       theme: themeProvider.getTheme(),
-      home: const Home(),
+      home: const filterProduct(),
+
     );
   }
 }
