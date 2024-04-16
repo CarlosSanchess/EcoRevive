@@ -9,6 +9,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:register/Controllers/CloudStorageController.dart';
 import 'package:register/Pages/Login.dart';
 
+import 'Home.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -102,7 +104,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => Home()),
+            );
           },
           icon: Icon(
             Icons.arrow_back_ios_new,
@@ -351,7 +355,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           padding: const EdgeInsets.only(left: 8.0),
           child: Text(
             text,
-            style: TextStyle(color: textColor, fontSize: 15),
+            style: TextStyle(color: textColor, fontSize: 17, fontWeight: FontWeight.bold),
           ),
         ),
       ),
