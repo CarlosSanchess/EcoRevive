@@ -134,19 +134,45 @@ class _filterProductState extends State<filterProduct> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  filterChip('Computador', selectedCategory == 'Computador',
-                      Colors.lightGreenAccent, Colors.grey[300]!, onCategorySelected),
-                  filterChip('Telemóvel', selectedCategory == 'Telemóvel',
-                      Colors.lightGreenAccent, Colors.grey[300]!, onCategorySelected),
-                  filterChip('Teclado', selectedCategory == 'Teclado',
-                      Colors.lightGreenAccent, Colors.grey[300]!, onCategorySelected),
-                  filterChip('Rato', selectedCategory == 'Rato',
-                      Colors.lightGreenAccent, Colors.grey[300]!, onCategorySelected),
-                  filterChip('Outro', selectedCategory == 'Outro',
-                      Colors.lightGreenAccent, Colors.grey[300]!, onCategorySelected),
+                  filterChip(
+                    'Computador',
+                    selectedCategory == 'Computador',
+                    Theme.of(context).brightness == Brightness.light ? Colors.lightGreenAccent : Color.fromRGBO(94, 39, 176, 1.0),
+                    Colors.grey[300]!,
+                    onCategorySelected,
+                  ),
+                  filterChip(
+                    'Telemóvel',
+                    selectedCategory == 'Telemóvel',
+                    Theme.of(context).brightness == Brightness.light ? Colors.lightGreenAccent : Color.fromRGBO(94, 39, 176, 1.0),
+                    Colors.grey[300]!,
+                    onCategorySelected,
+                  ),
+                  filterChip(
+                    'Teclado',
+                    selectedCategory == 'Teclado',
+                    Theme.of(context).brightness == Brightness.light ? Colors.lightGreenAccent : Color.fromRGBO(94, 39, 176, 1.0),
+                    Colors.grey[300]!,
+                    onCategorySelected,
+                  ),
+                  filterChip(
+                    'Rato',
+                    selectedCategory == 'Rato',
+                    Theme.of(context).brightness == Brightness.light ? Colors.lightGreenAccent : Color.fromRGBO(94, 39, 176, 1.0),
+                    Colors.grey[300]!,
+                    onCategorySelected,
+                  ),
+                  filterChip(
+                    'Outro',
+                    selectedCategory == 'Outro',
+                    Theme.of(context).brightness == Brightness.light ? Colors.lightGreenAccent : Color.fromRGBO(94, 39, 176, 1.0),
+                    Colors.grey[300]!,
+                    onCategorySelected,
+                  ),
                 ],
               ),
             ),
+
             const SizedBox(height: 20),
             if (products != null && products!.isNotEmpty)
               Expanded(
@@ -184,18 +210,18 @@ class _filterProductState extends State<filterProduct> {
         selected: isSelected,
         selectedColor: selectedColor,
         labelStyle: TextStyle(
-          color: isSelected ? Colors.green : Colors.black,
+          color: isSelected ? Colors.grey[300] : Colors.black,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
         ),
         backgroundColor: unselectedColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
           side: BorderSide(
-            color: isSelected ? Colors.green : unselectedColor,
+            color: isSelected ? Color.fromRGBO(94, 39, 176, 1.0) : unselectedColor,
             width: 1.5,
           ),
         ),
-        checkmarkColor: Colors.green,
+        checkmarkColor: Colors.grey[300],
         onSelected: (value) {
           onCategorySelected(label);
         },
