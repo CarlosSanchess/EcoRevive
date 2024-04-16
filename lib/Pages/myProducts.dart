@@ -44,7 +44,9 @@ class _myProductsState extends State<myProducts> {
               itemCount: snapshot.data!.length,
               itemBuilder: (BuildContext context, int index) {
                 info product = snapshot.data![index];
-                return Listing(product: product);
+                return Listing(product: product, onDelete: () {
+                  setState(() {});
+                });
               },
             );
           }
@@ -56,8 +58,9 @@ class _myProductsState extends State<myProducts> {
 
 class Listing extends StatelessWidget {
   final info product;
+  final VoidCallback onDelete;
 
-  const Listing({required this.product});
+  const Listing({required this.product, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +78,7 @@ class Listing extends StatelessWidget {
         trailing: IconButton(
           icon: Icon(Icons.delete),
           onPressed: () {
-            deleteProductOption(context, product);
+            deleteProductOption(context, product, onDelete);
           },
         )
       ),
@@ -83,7 +86,7 @@ class Listing extends StatelessWidget {
   }
 }
 
-void deleteProductOption(BuildContext context, info product) async{
+void deleteProductOption(BuildContext context, info product, VoidCallback onDelete) async{
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -101,6 +104,7 @@ void deleteProductOption(BuildContext context, info product) async{
             onPressed: () {
               FireStoreController().deleteProduct(product);
               Navigator.of(context).pop();
+              onDelete();
             },
             child: Text('Delete'),
           ),
