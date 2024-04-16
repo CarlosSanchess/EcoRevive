@@ -170,22 +170,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 20),
                 FutureBuilder<String?>(
                   future: auth.getEmail(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<String?> snapshot) {
-                    if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
+                  builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
                     } else {
                       final email = snapshot.data ?? 'No email';
+                      final theme = themeProvider.getTheme();
+                      final textColor = theme.brightness == Brightness.light
+                          ? Colors.grey[700]
+                          : theme.textTheme.displayLarge!.color;
                       return Text(
                         email,
                         style: TextStyle(
                           fontSize: 16,
-                          color: themeProvider
-                              .getTheme()
-                              .textTheme
-                              .displayLarge!
-                              .color,
+                          color: textColor,
                           fontWeight: FontWeight.bold,
                         ),
                       );
