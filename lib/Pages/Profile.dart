@@ -4,12 +4,13 @@ import 'package:register/Pages/ChangePassword.dart';
 import 'package:register/Pages/myProducts.dart';
 import 'package:register/Pages/theme_provider.dart';
 import '../Auth/Auth.dart';
-import 'Login.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:register/Controllers/CloudStorageController.dart';
+import 'package:register/Pages/Login.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -19,10 +20,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late ThemeProvider themeProvider;
   final auth = Auth();
   File? selectedImage;
+  String? path = 'PFPImages/${Auth().currentUser?.uid}';
+  String? downloadURL;
 
   Future<void> pickImageFromGallery() async {
     try {
-      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final pickedImage = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+      );
       if (pickedImage == null) {
         print('No image selected.');
         return;
@@ -31,9 +36,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         selectedImage = imageTemp;
       });
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Save Image?'),
+            content: const Text('Do you want to save the selected image?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                  var currentUser = Auth().currentUser;
+                  if (currentUser != null) {
+                    CloudStorageController().uploadPFPImage(selectedImage!, currentUser.uid);
+                  } else {
+                    print("Can't find that user");
+                  }
+                },
+                child: const Text('Save'),
+              ),
+            ],
+          );
+        },
+      ).then((value) {
+        if (value == false) {
+          setState(() {
+            selectedImage = null;
+          });
+        }
+      });
     } catch (e) {
       print('Error picking image: $e');
     }
+  }
+
+  Future<String?> existsPhoto() async {
+    try {
+      downloadURL = await CloudStorageController().getDownloadURL(path!);
+      return downloadURL;
+    } catch (e) {
+      print("Doesn't exist photo");
+    }
+    return null;
   }
 
   @override
@@ -60,116 +110,163 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return SafeArea(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            ListTile(
-                              leading: Icon(Icons.photo_library),
-                              title: Text('Choose from gallery'),
-                              onTap: () {
-                                Navigator.pop(context);
-                                pickImageFromGallery();
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: CircleAvatar(
-                  radius: 70,
-                  backgroundImage: selectedImage != null ? FileImage(selectedImage!) : null,
-                  child: selectedImage == null ? Icon(Icons.add_a_photo, size: 70) : null,
-                ),
-              ),
-              SizedBox(height: 20),
-              FutureBuilder<String?>(
-                future: auth.getEmail(),
-                builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else {
-                    final email = snapshot.data ?? 'No email';
-                    return Text(
-                      email,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: themeProvider.getTheme().textTheme!.headline1!.color,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Container(
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(color: Colors.grey[300]!),
-                bottom: BorderSide(color: Colors.grey[300]!),
-              ),
-              color: themeProvider.getTheme().brightness == Brightness.dark
-                  ? Colors.grey[850] // Darker background color
-                  : Colors.grey[200], // Light background color
-            ),
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 16.0),
-                  child: Text(
-                    'Switch to Dark Mode',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
-                    ),
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SafeArea(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                leading: const Icon(Icons.photo_library),
+                                title: const Text('Choose from gallery'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  pickImageFromGallery();
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: 70,
+                    backgroundImage: selectedImage != null
+                        ? FileImage(selectedImage!)
+                        : null,
+                    child: selectedImage == null
+                        ? FutureBuilder<String?>(
+                      future: existsPhoto(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting ||
+                            snapshot.data == null) {
+                          return const Icon(Icons.add_a_photo, size: 70);
+                        } else {
+                          return ClipOval(
+                            child: Image.network(
+                              snapshot.data!,
+                              fit: BoxFit.cover,
+                              width: 140,
+                              height: 140,
+                            ),
+                          );
+                        }
+                      },
+                    )
+                        : null,
                   ),
                 ),
-                Switch(
-                  value: themeProvider.getTheme().brightness == Brightness.dark,
-                  onChanged: (value) {
-                    themeProvider.toggleTheme();
+                const SizedBox(height: 20),
+                FutureBuilder<String?>(
+                  future: auth.getEmail(),
+                  builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else {
+                      final email = snapshot.data ?? 'No email';
+                      final theme = themeProvider.getTheme();
+                      final textColor = theme.brightness == Brightness.light
+                          ? Colors.grey[700]
+                          : theme.textTheme.displayLarge!.color;
+                      return Text(
+                        email,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: textColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    }
                   },
-                  activeColor: themeProvider.getTheme().hintColor,
                 ),
               ],
             ),
-          ),
-          SizedBox(height: 20),
-          Expanded(
-            child: Container(
+            const SizedBox(height: 40),
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(color: Colors.grey[300]!),
+                  bottom: BorderSide(color: Colors.grey[300]!),
+                ),
+                color: themeProvider.getTheme().brightness == Brightness.dark
+                    ? Colors.grey[850]
+                    : Colors.grey[200],
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25.0),
+                    child: Row(
+                      children: [
+                        Icon(
+                          themeProvider.getTheme().brightness == Brightness.dark
+                              ? Icons.wb_sunny
+                              : Icons.dark_mode,
+                          color: themeProvider.getTheme().brightness == Brightness.dark
+                              ? Colors.amber
+                              : Colors.indigo,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          themeProvider.getTheme().brightness == Brightness.dark
+                              ? 'Switch to Light Mode'
+                              : 'Switch to Dark Mode',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 30.0),
+                    child: Switch(
+                      value: themeProvider.getTheme().brightness == Brightness.dark,
+                      onChanged: (value) {
+                        themeProvider.toggleTheme();
+                      },
+                      activeColor: themeProvider.getTheme().hintColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+            Container(
               color: themeProvider.getTheme().brightness == Brightness.dark
-                  ? Colors.grey[850] // Darker background color
-                  : Colors.grey[200], // Light background color
+                  ? Colors.grey[850]
+                  : Colors.grey[200],
               child: Padding(
-                padding: EdgeInsets.only(top: 40),
+                padding: const EdgeInsets.only(top: 40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         children: <Widget>[
                           SizedBox(
                             width: 300,
                             child: _buildButtonWithIcon(
-                              text: 'Product List',
+
+                               icon: Icons.shopping_bag,
+                              text: 'My Products',
                               onPressed: () {
                                 Navigator.push(
                                    context,
@@ -179,10 +276,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               context: context,
                             ),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           SizedBox(
                             width: 300,
                             child: _buildButtonWithIcon(
+                              icon: Icons.lock,
                               text: 'Change Password',
                               onPressed: () {
                                 Navigator.push(
@@ -193,59 +291,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               context: context,
                             ),
                           ),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            width: 300,
+                            child: _buildButtonWithIcon(
+                              icon: Icons.logout,
+                              text: 'Log Out',
+                              onPressed: () {
+                                auth.signOut();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Login(
+                                        switchPages: () {},
+                                      )),
+                                );
+                              },
+                              context: context,
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              auth.signOut();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => Login(switchPages: () {})),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              backgroundColor: themeProvider.getTheme().primaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                            child: Text('Log Out'),
-                          ),
-                        ),
-                      ],
-                    ),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildButtonWithIcon(
-      {required String text, required VoidCallback onPressed, required BuildContext context}) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white,
-        backgroundColor: themeProvider.getTheme().primaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
+          ],
         ),
       ),
-      child: Text(text),
     );
   }
+  Widget _buildButtonWithIcon({
+    required IconData icon,
+    required String text,
+    required VoidCallback onPressed,
+    required BuildContext context,
+  }) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final textColor = themeProvider.getTheme().brightness == Brightness.dark
+        ? Colors.white
+        : themeProvider.getTheme().textTheme.bodyLarge!.color;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0), // Adjust horizontal padding as needed
+      child: ListTile(
+        contentPadding: EdgeInsets.zero,
+        onTap: onPressed,
+        leading: SizedBox(
+          width: 70,
+          child: CircleAvatar(
+            backgroundColor: themeProvider.getTheme().primaryColor,
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Icon(icon, color: themeProvider.getTheme().primaryColor),
+            ),
+          ),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Text(
+            text,
+            style: TextStyle(color: textColor, fontSize: 15),
+          ),
+        ),
+      ),
+    );
+  }
+
 }

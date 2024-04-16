@@ -9,13 +9,15 @@ class ChangePasswordScreen extends StatelessWidget {
   final TextEditingController _confirmPasswordController = TextEditingController();
   final Auth _auth = Auth();
 
+  ChangePasswordScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Change Password'),
+        title: const Text('Change Password'),
         backgroundColor: themeProvider.getTheme().appBarTheme.backgroundColor,
         iconTheme: themeProvider.getTheme().appBarTheme.iconTheme,
       ),
@@ -27,38 +29,38 @@ class ChangePasswordScreen extends StatelessWidget {
             TextField(
               controller: _oldPasswordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Old Password',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: _newPasswordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'New Password',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: _confirmPasswordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Confirm New Password',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
                 _handleChangePassword(context);
               },
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 16.0), backgroundColor: themeProvider.getTheme().primaryColor,
+                padding: const EdgeInsets.symmetric(vertical: 16.0), backgroundColor: themeProvider.getTheme().primaryColor,
               ),
-              child: Text(
+              child: const Text(
                 'Change Password',
                 style: TextStyle(fontSize: 16.0, color: Colors.white),
               ),
@@ -75,7 +77,7 @@ class ChangePasswordScreen extends StatelessWidget {
     String confirmPassword = _confirmPasswordController.text;
 
     if (newPassword != confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('New password and confirm password do not match.'),
       ));
       return;
@@ -83,7 +85,7 @@ class ChangePasswordScreen extends StatelessWidget {
 
     try {
       await _auth.ChangePassword(oldPassword, newPassword);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Password changed successfully.'),
       ));
       Navigator.pop(context);

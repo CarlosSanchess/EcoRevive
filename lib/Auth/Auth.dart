@@ -28,7 +28,7 @@ class Auth {
   }
 
   Future<void> updateUserEmail(String email) async {
-    await currentUser?.updateEmail(email);
+    await currentUser?.verifyBeforeUpdateEmail(email);
   }
 
   Future<void> updateUserPassword(String password) async {
@@ -36,7 +36,11 @@ class Auth {
   }
 
   Future<String> getUid() async {
-    return currentUser!.uid;
+    if (currentUser != null) {
+      return currentUser!.uid;
+    } else {
+      throw Exception("No user is currently signed in.");
+    }
   }
 
   Future<void> updatePhotoURL(String? url) async {

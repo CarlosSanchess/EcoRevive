@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:register/Functions/Functions.dart';
 import 'package:register/Controllers/RegisterLoginControllers.dart';
-import 'package:register/Auth/Auth.dart';
+import 'package:register/Pages/Home.dart';
 
 class Login extends StatefulWidget {
   final void Function() switchPages;
-  const Login({Key? key, required this.switchPages}) : super(key: key);
+  const Login({super.key, required this.switchPages});
 
   @override
   LoginState createState() => LoginState();
@@ -49,7 +49,7 @@ class LoginState extends State<Login> {
                   'Sign in to continue',
                   style: TextStyle(
                     fontSize: 18,
-                    color: theme.brightness == Brightness.light ? theme.textTheme.bodyText1!.color : theme.textTheme.titleMedium!.color,
+                    color: theme.brightness == Brightness.light ? theme.textTheme.bodyLarge!.color : theme.textTheme.titleMedium!.color,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -89,10 +89,18 @@ class LoginState extends State<Login> {
                 const SizedBox(height: 25),
                 GestureDetector(
                   onTap: () async {
-                    createPopUp(RegisterLoginControllers(
+                    Future<String> aux = RegisterLoginControllers(
                       usernameController: usernameController,
                       passwordController: passwordController,
-                    ).signIn(), context);
+                    ).signIn();
+                    if(await aux == "Logged In!!"){
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Home()),
+                      );
+                    }else{
+                        createPopUp(aux, context);
+                    }
                   },
                   child: Container(
                     padding: const EdgeInsets.all(25),
@@ -149,7 +157,7 @@ class LoginState extends State<Login> {
                       size: 36,
                       color: theme.brightness == Brightness.light ? Colors.blueAccent : Colors.white,
                     ),
-                    SizedBox(width: 25),
+                    const SizedBox(width: 25),
                     Icon(
                       Icons.apple,
                       size: 36,

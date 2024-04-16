@@ -4,6 +4,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:register/Auth/Auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
+
+import '../Pages/Home.dart';
+import '../Pages/filterProduct.dart';
 
 import '../Pages/myProducts.dart';
 
@@ -12,7 +17,9 @@ class FireStoreController{
    final db = FirebaseFirestore.instance;
    final storage = FirebaseStorage.instance;
 
+
   Future<String> addToProductsCollection(String productName, String description, String? category) async {
+
     // Create a new user with a first and last name
     final product = <String, dynamic>{
       "ProductName": productName,
@@ -35,6 +42,20 @@ class FireStoreController{
        for (QueryDocumentSnapshot doc in ownedProducts.docs) {
          String name = doc['ProductName'];
          String category = doc['Category'];
+   Future<List<info>> fetchProductsByCategory(String category) async {
+     User? user = FirebaseAuth.instance.currentUser;
+
+     if (user != null) {
+       QuerySnapshot categoryProducts;
+       if (category == "all") {
+         categoryProducts = await db.collection('Products').get();
+       } else {
+         categoryProducts = await db.collection('Products').where('Category', isEqualTo: category).get();
+       }
+       List<info> products = [];
+       for (QueryDocumentSnapshot doc in categoryProducts.docs) {
+         String name = doc['ProductName'];
+         String productCategory = doc['Category'];
          String description = doc['Description'];
          String productId = doc.id;
 
@@ -42,12 +63,14 @@ class FireStoreController{
          String imageUrl = await imageRef.getDownloadURL();
 
          products.add(info(productID: productId, productName: name, description: description, category: category, imageURL: imageUrl));
+
        }
        return products;
      } else {
        throw 'Not logged in.';
      }
    }
+
 
   Future<void> deleteProduct(info product) async{
     try {
@@ -59,4 +82,5 @@ class FireStoreController{
       throw error;
     }
   }
+
 }
