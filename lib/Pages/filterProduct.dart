@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-
 import '../Controllers/FireStoreController.dart';
 
-class info2 {
+class ProductInfo {
   final String productName;
   final String description;
   final String category;
   final String imageURL;
 
-  info2({
+  ProductInfo({
     required this.productName,
     required this.description,
     required this.category,
@@ -16,11 +15,10 @@ class info2 {
   });
 }
 
-
 class ProductItem extends StatelessWidget {
-  final info2 product;
+  final ProductInfo product;
 
-  const ProductItem({super.key, required this.product});
+  const ProductItem({Key? key, required this.product}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,210 +27,139 @@ class ProductItem extends StatelessWidget {
       child: ListTile(
         leading: Image.network(
           product.imageURL,
-          width: 100, // adjust width as needed
-          height: 100, // adjust height as needed
-          fit: BoxFit.cover, // adjust the fit as needed
+          width: 60,
+          height: 100,
+          fit: BoxFit.cover,
         ),
         title: Text(product.productName),
         subtitle: Text('Category: ${product.category}'),
-        // Add more details as needed
       ),
     );
   }
 }
 
-
-
-
-
-
-class filterProduct extends StatefulWidget {
-  const filterProduct({super.key});
+class FilterProduct extends StatefulWidget {
+  const FilterProduct({Key? key}) : super(key: key);
 
   @override
-  _filterProductState createState() => _filterProductState();
+  _FilterProductState createState() => _FilterProductState();
 }
 
-class _filterProductState extends State<filterProduct> {
-  bool isChecked = false;
-  bool isConditionExpanded = false;
+class _FilterProductState extends State<FilterProduct> {
   String? selectedCategory;
-  List<info2>? products;
+  List<ProductInfo>? products;
 
+  @override
+  void initState() {
+    super.initState();
+    onCategorySelected("all");
+  }
 
   void onCategorySelected(String category) {
-    setState(() {
-      if (selectedCategory == category) {
-        selectedCategory = null;
-        FireStoreController().fetchProductsByCategory("all").then((fetchedProducts) {
-          setState(() {
-            products = fetchedProducts;
-          });
-        });
-      } else {
+    FireStoreController().fetchProductsByCategory(category).then((fetchedProducts) {
+      setState(() {
+        products = fetchedProducts;
         selectedCategory = category;
-        FireStoreController().fetchProductsByCategory(category).then((fetchedProducts) {
-          setState(() {
-            products = fetchedProducts;
-          });
-        });
-      }
+      });
+    }).catchError((error) {
+      // Handle errors here, e.g., show a snackbar or alert dialog
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search for your item...',
-                        prefixIcon: const Icon(Icons.search, size: 16,),
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 15),
-                      ),
-                    )
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  ),
-                  child: const Icon(Icons.search),
-
-                ),
-              ],
-            ),
+            buildSearchRow(),
             const SizedBox(height: 20),
-            const Text(
-              'Category',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 25,
-              ),
-            ),
+            const Text('Category', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
             const SizedBox(height: 10),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  filterChip(
-                    'Computador',
-                    selectedCategory == 'Computador',
-                    Theme.of(context).brightness == Brightness.light ? Colors.green : Color.fromRGBO(94, 39, 176, 1.0),
-                    Colors.grey[300]!,
-                    onCategorySelected,
-                  ),
-                  filterChip(
-                    'Telemóvel',
-                    selectedCategory == 'Telemóvel',
-                    Theme.of(context).brightness == Brightness.light ? Colors.green : Color.fromRGBO(94, 39, 176, 1.0),
-                    Colors.grey[300]!,
-                    onCategorySelected,
-                  ),
-                  filterChip(
-                    'Teclado',
-                    selectedCategory == 'Teclado',
-                    Theme.of(context).brightness == Brightness.light ? Colors.green : Color.fromRGBO(94, 39, 176, 1.0),
-                    Colors.grey[300]!,
-                    onCategorySelected,
-                  ),
-                  filterChip(
-                    'Rato',
-                    selectedCategory == 'Rato',
-                    Theme.of(context).brightness == Brightness.light ? Colors.green : Color.fromRGBO(94, 39, 176, 1.0),
-                    Colors.grey[300]!,
-                    onCategorySelected,
-                  ),
-                  filterChip(
-                    'Outro',
-                    selectedCategory == 'Outro',
-                    Theme.of(context).brightness == Brightness.light ? Colors.green : Color.fromRGBO(94, 39, 176, 1.0),
-                    Colors.grey[300]!,
-                    onCategorySelected,
-                  ),
-                ],
-              ),
-            ),
-
+            buildCategoryChips(),
             const SizedBox(height: 20),
-            if (products != null && products!.isNotEmpty)
-              Expanded(
-                child: ListView.builder(
-                  itemCount: products!.length,
-                  itemBuilder: (context, index) {
-                    final product = products![index];
-                    return Card(
-                      child: ListTile(
-                        leading: Image.network(product.imageURL),
-                        title: Text(product.productName),
-                        subtitle: Text(product.description),
-                      ),
-                    );
-                  },
-                ),
-              ),
+            buildProductList(),
           ],
         ),
       ),
     );
   }
 
-  Widget filterChip(
-      String label,
-      bool isSelected,
-      Color selectedColor,
-      Color unselectedColor,
-      Function(String) onCategorySelected,
-      ) {
+  Widget buildSearchRow() {
+    return Row(
+      children: [
+        Expanded(
+          child: TextField(
+            decoration: InputDecoration(
+              hintText: 'Search for your item...',
+              prefixIcon: const Icon(Icons.search, size: 16),
+              filled: true,
+              fillColor: Colors.grey[200],
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          ),
+          child: const Icon(Icons.search),
+        ),
+      ],
+    );
+  }
+
+  Widget buildCategoryChips() {
+    List<String> categories = ['all', 'Computador', 'Telemóvel', 'Teclado', 'Rato', 'Outro'];
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: categories.map((category) => filterChip(category)).toList(),
+      ),
+    );
+  }
+
+  Widget filterChip(String label) {
+    bool isSelected = selectedCategory == label;
+    Color selectedColor = Theme.of(context).brightness == Brightness.light ? Colors.green : Color.fromRGBO(94, 39, 176, 1.0);
     return Padding(
       padding: const EdgeInsets.only(right: 10),
       child: FilterChip(
-        label: Text(
-          label,
-          style: const TextStyle(
-            fontSize: 18,
-          ),
-        ),
+        label: Text(label, style: TextStyle(fontSize: 18, color: isSelected ? Colors.white : Colors.black)),
         selected: isSelected,
         selectedColor: selectedColor,
-        labelStyle: TextStyle(
-          color: isSelected ? Colors.grey[300] : Colors.black,
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-        ),
-        backgroundColor: unselectedColor,
+        backgroundColor: Colors.grey[300],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
-          side: BorderSide(
-            color: isSelected
-                ? Theme.of(context).brightness == Brightness.dark
-                ? Colors.white // Dark theme border color
-                : Colors.green // Light theme border color
-                : unselectedColor,
-            width: 1.5,
-          ),
+          side: BorderSide(color: isSelected ? selectedColor : Colors.grey[300]!, width: 1.5),
         ),
-        checkmarkColor: Colors.grey[300],
-        onSelected: (value) {
+        checkmarkColor: Colors.white,
+        onSelected: (bool value) {
           onCategorySelected(label);
+        },
+      ),
+    );
+  }
+
+  Widget buildProductList() {
+    if (products == null || products!.isEmpty) {
+      return Expanded(child: Center(child: Text('No products found')));
+    }
+    return Expanded(
+      child: ListView.builder(
+        itemCount: products!.length,
+        itemBuilder: (context, index) {
+          final product = products![index];
+          return ProductItem(product: product);
         },
       ),
     );
