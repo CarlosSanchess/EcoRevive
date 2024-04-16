@@ -5,9 +5,8 @@ import 'package:register/Functions/Functions.dart';
 import 'package:register/Pages/theme_provider.dart';
 
 class Register extends StatelessWidget {
-  final void Function() switchPages;
 
-  Register({super.key, required this.switchPages});
+  Register({super.key});
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -18,11 +17,13 @@ class Register extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: themeProvider.getTheme().appBarTheme.backgroundColor,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         leading: IconButton(
-          onPressed: switchPages,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
           icon: const Icon(Icons.arrow_back_ios_new),
-          color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
+          color: Theme.of(context).appBarTheme.iconTheme!.color,
         ),
       ),
       backgroundColor: themeProvider.getTheme().scaffoldBackgroundColor,
@@ -54,7 +55,7 @@ class Register extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                const SizedBox(height: 100),
+                const SizedBox(height: 125),
                 TextContainer(
                   hintText: "E-mail",
                   obscureText: false,
@@ -68,10 +69,33 @@ class Register extends StatelessWidget {
                   icon: const Icon(Icons.key),
                   textEditingController: passwordController,
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 70),
                 GestureDetector(
-                  onTap: () {
-                    createPopUp(RegisterLoginControllers(usernameController: usernameController, passwordController: passwordController).signUp(), context);
+                  onTap: () async {
+                    String result = await RegisterLoginControllers(
+                      usernameController: usernameController,
+                      passwordController: passwordController,
+                    ).signUp();
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: Text(result),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              print(result);
+                              if (result == "Registered !!") {
+                                Navigator.pop(context, 'OK');
+                                Navigator.pop(context);
+                              } else {
+                                Navigator.pop(context, 'OK');
+                              }
+                            },
+                            child: const Text('OK'),
+                          )
+                        ],
+                      ),
+                    );
                   },
                   child: Container(
                     padding: const EdgeInsets.all(25),
@@ -92,7 +116,7 @@ class Register extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 70),
               ],
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:register/Pages/Home.dart';
+import 'package:register/Pages/Login.dart';
 import 'package:register/Pages/theme_provider.dart';
 import 'package:register/firebase_options.dart';
 import 'Pages/theme.dart';
@@ -32,8 +33,8 @@ class MyApp extends StatelessWidget {
           ? themeProvider.getTheme()
           : ThemeData.light(),
       home: themeProvider.isThemeLoaded
-          ? const Home()
-          : Scaffold(
+          ? const Login()
+          : const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),

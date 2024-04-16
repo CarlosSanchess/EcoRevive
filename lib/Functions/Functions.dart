@@ -92,3 +92,17 @@ void createPopUp(Future<String> alert, BuildContext context) async {
     ),
   );
 }
+void createPopUpNonA(String alert, BuildContext context)  {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: Text(alert),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'OK'),
+          child: const Text('OK'),
+        )
+      ],
+    ),
+  );
+}

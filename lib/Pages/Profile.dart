@@ -302,9 +302,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Login(
-                                        switchPages: () {},
-                                      )),
+                                      builder: (context) => const Login()),
                                 );
                               },
                               context: context,
