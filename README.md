@@ -167,8 +167,20 @@ The Product Backlog contains a comprehensive list of all features, tasks, and us
 
 
 ### Sprint Backlog
+#### Sprint #0
 During sprint planning, we select items from the Product Backlog and move them into the Sprint Backlog, where they are actively worked on by our team throughtout the sprint. 
 
 By utilizing this project management system, we ensure clear communication and efficient task allocation which facilitates the development of EcoRevive.
+
+#### Sprint #1 
+
+- At the conclusion of Sprint #1, we successfully followed the priority defined in the sprint backlog, ensuring that tasks were completed in alignment with their designated importance. By following this prioritization, we effectively tackled essential user stories, such as enabling user registration and login, adding new recyclable products, and providing profile customization options. However, as we transition into Sprint #2, we recognize the need to enhance our development process. To achieve this, we aim to intensify our focus on unit testing throughout the software development lifecycle. By incorporating rigorous testing procedures, we aspire to identify and address potential issues early on, ensuring the delivery of a more robust and reliable product. Additionally, we intend to improve our integration practices by merging divergent features into the product more frequently. This approach will allow us to detect and rectify any bugs or inconsistencies promptly, fostering a smoother and more cohesive development cycle. We are also looking forward to integrate each individual feature into the whole product more often in order to find conflicting bugs.
+
+- The following image is our Sprint#1 backlog at the start of the project development:
+![Sprint Backlog Sprint#1](docs/diagrams/sprint1_backlog.png)
+
+- The following image is our project board at the end of sprint#1 before the final Sprint review:
+![Project Board end of Sprint#1](docs/diagrams/project_board_sprint1.png)
+
 
 [Link to Project Board](https://github.com/orgs/FEUP-LEIC-ES-2023-24/projects/43/)
