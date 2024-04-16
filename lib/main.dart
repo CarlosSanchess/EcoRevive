@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:register/Auth/Auth.dart';
 import 'package:register/Pages/Home.dart';
 import 'package:register/Pages/Login.dart';
 import 'package:register/Pages/theme_provider.dart';
@@ -15,16 +16,19 @@ void main() async {
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
-      child: const MyApp(),
+      child: MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+
+  Auth auth = Auth();
+  MyApp({Key? key}) : super(key: key);
+
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
       title: 'EcoRevive',
@@ -33,7 +37,9 @@ class MyApp extends StatelessWidget {
           ? themeProvider.getTheme()
           : ThemeData.light(),
       home: themeProvider.isThemeLoaded
-          ? const Login()
+          ? auth.currentUser != null
+              ? const Home()
+              : const Login()
           : const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
