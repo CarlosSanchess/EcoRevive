@@ -1,4 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../Controllers/FireStoreController.dart';
+
+class info {
+  final String productName;
+  final String description;
+  final String category;
+  final String imageURL;
+
+  info({
+    required this.productName,
+    required this.description,
+    required this.category,
+    required this.imageURL,
+  });
+}
+
+
+class categoryProducts extends StatefulWidget{
+
+  categoryProducts({Key? key}) : super(key: key);
+
+  @override
+  State<categoryProducts> createState() => _categoryProductsState();
+}
+
+class _categoryProductsState extends State<categoryProducts> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Your Products'),
+      ),
+      body: FutureBuilder(
+        future: FireStoreController().fetchProductsByCategory(''),
+        builder: (BuildContext context, AsyncSnapshot<List<info>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (BuildContext context, int index) {
+                info product = snapshot.data![index];
+                return ProductItem(product: product);
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+class ProductItem extends StatelessWidget {
+  final info product;
+
+  const ProductItem({required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.all(8.0),
+      child: ListTile(
+        leading: Image.network(
+          product.imageURL,
+          width: 100, // adjust width as needed
+          height: 100, // adjust height as needed
+          fit: BoxFit.cover, // adjust the fit as needed
+        ),
+        title: Text(product.productName),
+        subtitle: Text('Category: ${product.category}'),
+        // Add more details as needed
+      ),
+    );
+  }
+}
+
+
+
+
+
 
 class filterProduct extends StatefulWidget {
   const filterProduct({Key? key}) : super(key: key);
@@ -11,13 +94,38 @@ class _filterProductState extends State<filterProduct> {
   bool isChecked = false;
   bool isConditionExpanded = false;
   String? selectedCategory;
+  List<info>? products;
+
+  Future<void> fetchProductsByCategory(String category) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('Products')
+        .where('Category', isEqualTo: category)
+        .get();
+
+    setState(() {
+      products = querySnapshot.docs.map((doc) {
+        return info(
+          productName: doc['ProductName'],
+          description: doc['Description'],
+          category: doc['Category'],
+          imageURL: doc['ImageURL'],
+        );
+      }).toList();
+    });
+  }
 
   void onCategorySelected(String category) {
     setState(() {
       if (selectedCategory == category) {
         selectedCategory = null;
+        products = null;
       } else {
         selectedCategory = category;
+        FireStoreController().fetchProductsByCategory(category).then((fetchedProducts) {
+          setState(() {
+            products = fetchedProducts;
+          });
+        });
       }
     });
   }
@@ -88,94 +196,36 @@ class _filterProductState extends State<filterProduct> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  filterChip('Electronics', selectedCategory == 'Electronics',
+                  filterChip('Computador', selectedCategory == 'Computador',
                       Colors.lightGreenAccent, Colors.grey[300]!, onCategorySelected),
-                  filterChip('Furniture', selectedCategory == 'Furniture',
+                  filterChip('Telemóvel', selectedCategory == 'Telemóvel',
                       Colors.lightGreenAccent, Colors.grey[300]!, onCategorySelected),
-                  filterChip(
-                      'Clothing', selectedCategory == 'Clothing', Colors.lightGreenAccent,
-                      Colors.grey[300]!, onCategorySelected),
-                  filterChip(
-                      'Books', selectedCategory == 'Books', Colors.lightGreenAccent,
-                      Colors.grey[300]!, onCategorySelected),
-                  filterChip(
-                      'Others', selectedCategory == 'Others', Colors.lightGreenAccent,
-                      Colors.grey[300]!, onCategorySelected),
+                  filterChip('Teclado', selectedCategory == 'Teclado',
+                      Colors.lightGreenAccent, Colors.grey[300]!, onCategorySelected),
+                  filterChip('Rato', selectedCategory == 'Rato',
+                      Colors.lightGreenAccent, Colors.grey[300]!, onCategorySelected),
+                  filterChip('Outro', selectedCategory == 'Outro',
+                      Colors.lightGreenAccent, Colors.grey[300]!, onCategorySelected),
                 ],
               ),
             ),
             const SizedBox(height: 20),
-            /*InkWell(
-              onTap: () {
-                setState(() {
-                  isConditionExpanded = !isConditionExpanded;
-                });
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Other Filters',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-fontSize: 20,
-                    ),
-                  ),
-                  Icon(
-                    isConditionExpanded ? Icons.expand_less : Icons.expand_more,
-                    color: Colors.grey,
-                  ),
-                ],
+            if (products != null && products!.isNotEmpty)
+              Expanded(
+                child: ListView.builder(
+                  itemCount: products!.length,
+                  itemBuilder: (context, index) {
+                    final product = products![index];
+                    return Card(
+                      child: ListTile(
+                        leading: Image.network(product.imageURL),
+                        title: Text(product.productName),
+                        subtitle: Text(product.description),
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-            if (isConditionExpanded)
-              Column(
-                children: [
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Condition',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      //filterChip('New', false),
-                      //filterChip('Used', false),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: isChecked,
-                        onChanged: (value) {
-                          setState(() {
-                            isChecked = value!;
-                          });
-                        },
-                      ),
-                      const Text(
-                        'Only show items with images',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Apply Filters'),
-                    ),
-                  ),
-                ],
-              ),*/
           ],
         ),
       ),

@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:register/Auth/Auth.dart';
+
+import '../Pages/filterProduct.dart';
 
 
 class FireStoreController{
@@ -19,4 +22,25 @@ class FireStoreController{
         print('DocumentSnapshot added with ID: ${doc.id}'));
   }
 
+   Future<List<info>> fetchProductsByCategory(String category) async {
+     User? user = FirebaseAuth.instance.currentUser;
+
+     if (user != null) {
+       QuerySnapshot categoryProducts = await db.collection('Products').where('Category', isEqualTo: category).get();
+       List<info> products = [];
+       for (QueryDocumentSnapshot doc in categoryProducts.docs) {
+         String name = doc['ProductName'];
+         String productCategory = doc['Category'];
+         String description = doc['Description'];
+         String productId = doc.id;
+
+         Reference imageRef = storage.ref().child('ProductImages/$productId');
+         String imageUrl = await imageRef.getDownloadURL();
+         products.add(info(productName: name, description: description, category: productCategory, imageURL: imageUrl));
+       }
+       return products;
+     } else {
+       throw 'Not logged in.';
+     }
+   }
 }
