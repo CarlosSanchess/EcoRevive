@@ -10,6 +10,17 @@ class filterProduct extends StatefulWidget {
 class _filterProductState extends State<filterProduct> {
   bool isChecked = false;
   bool isConditionExpanded = false;
+  String? selectedCategory;
+
+  void onCategorySelected(String category) {
+    setState(() {
+      if (selectedCategory == category) {
+        selectedCategory = null;
+      } else {
+        selectedCategory = category;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,24 +40,25 @@ class _filterProductState extends State<filterProduct> {
             Row(
               children: [
                 Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search for your item...',
-                      prefixIcon: Icon(Icons.search),
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search for your item...',
+                        prefixIcon: Icon(Icons.search, size: 16,),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 15),
                       ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                    ),
-                  )
+                    )
                 ),
                 const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () {},
-                  child: const Text('Search'),
+                  child: Icon(Icons.search),
                 ),
               ],
             ),
@@ -63,16 +75,24 @@ class _filterProductState extends State<filterProduct> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  filterChip('Electronics', false),
-                  filterChip('Furniture', false),
-                  filterChip('Clothing', false),
-                  filterChip('Books', false),
-                  filterChip('Others', false),
+                  filterChip('Electronics', selectedCategory == 'Electronics',
+                      Colors.purple, Colors.grey[300]!, onCategorySelected),
+                  filterChip('Furniture', selectedCategory == 'Furniture',
+                      Colors.purple, Colors.grey[300]!, onCategorySelected),
+                  filterChip(
+                      'Clothing', selectedCategory == 'Clothing', Colors.purple,
+                      Colors.grey[300]!, onCategorySelected),
+                  filterChip(
+                      'Books', selectedCategory == 'Books', Colors.purple,
+                      Colors.grey[300]!, onCategorySelected),
+                  filterChip(
+                      'Others', selectedCategory == 'Others', Colors.purple,
+                      Colors.grey[300]!, onCategorySelected),
                 ],
               ),
             ),
             const SizedBox(height: 20),
-            InkWell(
+            /*InkWell(
               onTap: () {
                 setState(() {
                   isConditionExpanded = !isConditionExpanded;
@@ -110,8 +130,8 @@ class _filterProductState extends State<filterProduct> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      filterChip('New', false),
-                      filterChip('Used', false),
+                      //filterChip('New', false),
+                      //filterChip('Used', false),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -142,23 +162,35 @@ class _filterProductState extends State<filterProduct> {
                     ),
                   ),
                 ],
-              ),
+              ),*/
           ],
         ),
       ),
     );
   }
 
-  Widget filterChip(String label, bool isSelected) {
+  Widget filterChip(String label, bool isSelected, Color selectedColor,
+      Color unselectedColor, Function(String) onCategorySelected) {
     return Padding(
       padding: const EdgeInsets.only(right: 10),
       child: FilterChip(
         label: Text(label),
         selected: isSelected,
-        onSelected: (value) {},
+        selectedColor: selectedColor,
+        labelStyle: TextStyle(
+            color: isSelected ? Colors.white : Colors.black, // Use black color for unselected chips
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal),
+        backgroundColor: unselectedColor,
+        onSelected: (value) {
+          onCategorySelected(label);
+        },
+        shape: StadiumBorder(
+          side: BorderSide(
+            color: isSelected ? selectedColor : Colors.grey[600]!,
+            width: 1.0,
+          ),
+        ),
       ),
     );
   }
 }
-
-
