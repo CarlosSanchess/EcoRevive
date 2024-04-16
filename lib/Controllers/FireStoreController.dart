@@ -57,6 +57,9 @@ class FireStoreController{
   Future<void> deleteProduct(info product) async {
     try {
       CloudStorageController().deleteImage('ProductImages/${product.productID}');
+      DocumentReference productRef = FirebaseFirestore.instance.collection('Products').doc(product.productID);
+      await productRef.delete();
+
     } catch (error) {
       print("Error while deleting: $error");
     }
