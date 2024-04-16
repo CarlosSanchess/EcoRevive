@@ -34,8 +34,8 @@ class FireStoreController{
          String description = doc['Description'];
          String productId = doc.id;
 
-         Reference imageRef = storage.ref().child('ProductImages/$productId');
-         String imageUrl = await imageRef.getDownloadURL();
+         String imageUrl = 'gs://vertical-prototype-70c6c.appspot.com/ProductImages%2F$productId?alt=media';
+
          products.add(info(productName: name, description: description, category: productCategory, imageURL: imageUrl));
        }
        return products;
