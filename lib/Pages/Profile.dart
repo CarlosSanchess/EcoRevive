@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:register/Auth/Auth.dart';
 import 'package:register/Pages/theme_provider.dart';
-import 'ChangePassword.dart';
 import 'Login.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -29,10 +28,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         selectedImage = imageTemp;
       });
+
+      // Show confirmation dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Save Image?'),
+            content: Text('Do you want to save the selected image?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false); // Return false if canceled
+                },
+                child: Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true); // Return true if saved
+                },
+                child: Text('Save'),
+              ),
+            ],
+          );
+        },
+      ).then((value) {
+        if (value == false) {
+          setState(() {
+            selectedImage = null; // Do not set the selected image if canceled
+          });
+        }
+      });
+
     } catch (e) {
       print('Error picking image: $e');
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
