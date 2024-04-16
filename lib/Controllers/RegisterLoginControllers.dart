@@ -41,7 +41,6 @@ class RegisterLoginControllers {
     return "Registered !!";
   }
 
-
   Future<String> signIn() async{
 
     String email = usernameController.text;
@@ -61,18 +60,6 @@ class RegisterLoginControllers {
       // Sign in fails
       return 'Invalid Credentials!';
     }
-      /*
-    } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-            print("asdad");
-            return 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-            print("asdad");
-            return 'Wrong password provided for that user.';
-      }
-    }catch (e) {
-      print('Sign in error: $e');
-    }*/
     return 'Logged In!!';
   }
 }

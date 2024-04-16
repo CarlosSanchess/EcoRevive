@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:register/Controllers/AddProductController.dart';
 import 'package:register/Functions/CategorySelector.dart';
+import 'package:register/Pages/theme_provider.dart';
 
 
 //Max Width and Max Height for image
@@ -19,6 +21,7 @@ class addProduct extends StatefulWidget{
 class _addProductState extends State<addProduct> {
   File? selectedImage;
   double imageHeight = 200;
+
 
   TextEditingController descriptionController = TextEditingController();
   TextEditingController productNameController = TextEditingController();
@@ -39,15 +42,28 @@ class _addProductState extends State<addProduct> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: const IconButton( // On pressed
-          onPressed: null,
-          icon: Icon(Icons.arrow_back_ios_new),
-          color: Colors.black, // Optionally, set the color of the icon
+        appBar:  AppBar(
+          backgroundColor: themeProvider.getTheme().appBarTheme.backgroundColor,
+          title: Text(
+            'Add Product',
+            style: TextStyle(
+              color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
+              fontWeight: FontWeight.bold,
+                fontSize: 35
+            ),
+          ),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_new,
+              color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
+            ),
+          ),
         ),
-      ),
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -58,24 +74,16 @@ class _addProductState extends State<addProduct> {
               child: Column(
                 children: [
                   const Text(
-                    'Add Product',
-                    textAlign: TextAlign.left, // Align left
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Text(
                     'Fill out the information below to post a product',
                     textAlign: TextAlign.left, // Align left
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.grey,
+                      fontSize: 15
                     ),
                   ),
 
-                  const SizedBox(height: 50),
-
+                  const SizedBox(height: 40),
 
                   if (selectedImage != null)
                     imageDisplay(imageHeight, selectedImage)
@@ -116,7 +124,7 @@ class _addProductState extends State<addProduct> {
                   ),
                   const SizedBox(height: 20),
                   const CategorySelector(),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 40),
 
                   GestureDetector(
                     onTap: () {
