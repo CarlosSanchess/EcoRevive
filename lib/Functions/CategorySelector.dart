@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CategorySelector extends StatefulWidget {
-  const CategorySelector({Key? key}) : super(key: key);
+  const CategorySelector({super.key});
 
   @override
   _CategorySelectionWidgetState createState() => _CategorySelectionWidgetState();
@@ -57,7 +57,7 @@ class _CategorySelectionWidgetState extends State<CategorySelector> {
             );
           }).toList();
         },
-        offset: Offset(0, 40),
+        offset: const Offset(0, 40),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
           color: backgroundColor,

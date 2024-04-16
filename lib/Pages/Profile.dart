@@ -3,12 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:register/Pages/ChangePassword.dart';
 import 'package:register/Pages/theme_provider.dart';
 import '../Auth/Auth.dart';
-import 'Login.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:register/Controllers/CloudStorageController.dart';
+import 'package:register/Pages/Login.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -18,6 +19,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late ThemeProvider themeProvider;
   final auth = Auth();
   File? selectedImage;
+  String? path = 'PFPImages/${Auth().currentUser?.uid}';
+  String? downloadURL;
 
   Future<void> pickImageFromGallery() async {
     try {
@@ -36,20 +39,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Save Image?'),
-            content: Text('Do you want to save the selected image?'),
+            title: const Text('Save Image?'),
+            content: const Text('Do you want to save the selected image?'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(false);
                 },
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(true);
+                  var currentUser = Auth().currentUser;
+                  if (currentUser != null) {
+                    CloudStorageController().uploadPFPImage(selectedImage!, currentUser.uid);
+                  } else {
+                    print("Can't find that user");
+                  }
                 },
-                child: Text('Save'),
+                child: const Text('Save'),
               ),
             ],
           );
@@ -61,10 +70,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           });
         }
       });
-
     } catch (e) {
       print('Error picking image: $e');
     }
+  }
+
+  Future<String?> existsPhoto() async {
+    try {
+      downloadURL = await CloudStorageController().getDownloadURL(path!);
+      return downloadURL;
+    } catch (e) {
+      print("Doesn't exist photo");
+    }
+    return null;
   }
 
   @override
@@ -73,16 +91,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:
-        themeProvider.getTheme().appBarTheme.backgroundColor,
+        backgroundColor: themeProvider.getTheme().appBarTheme.backgroundColor,
         title: Text(
           'Profile',
           style: TextStyle(
-            color: themeProvider
-                .getTheme()
-                .appBarTheme
-                .iconTheme!
-                .color,
+            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -92,11 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: themeProvider
-                .getTheme()
-                .appBarTheme
-                .iconTheme!
-                .color,
+            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
           ),
         ),
       ),
@@ -117,8 +126,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               ListTile(
-                                leading: Icon(Icons.photo_library),
-                                title: Text('Choose from gallery'),
+                                leading: const Icon(Icons.photo_library),
+                                title: const Text('Choose from gallery'),
                                 onTap: () {
                                   Navigator.pop(context);
                                   pickImageFromGallery();
@@ -136,18 +145,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ? FileImage(selectedImage!)
                         : null,
                     child: selectedImage == null
-                        ? Icon(Icons.add_a_photo, size: 70)
+                        ? FutureBuilder<String?>(
+                      future: existsPhoto(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting ||
+                            snapshot.data == null) {
+                          return const Icon(Icons.add_a_photo, size: 70);
+                        } else {
+                          return ClipOval(
+                            child: Image.network(
+                              snapshot.data!,
+                              fit: BoxFit.cover,
+                              width: 140,
+                              height: 140,
+                            ),
+                          );
+                        }
+                      },
+                    )
                         : null,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 FutureBuilder<String?>(
                   future: auth.getEmail(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<String?> snapshot) {
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String?> snapshot) {
                     if (snapshot.connectionState ==
                         ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else {
                       final email = snapshot.data ?? 'No email';
                       return Text(
@@ -156,8 +183,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontSize: 16,
                           color: themeProvider
                               .getTheme()
-                              .textTheme!
-                              .headline1!
+                              .textTheme
+                              .displayLarge!
                               .color,
                           fontWeight: FontWeight.bold,
                         ),
@@ -167,31 +194,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(
-                    color: themeProvider.getTheme().brightness == Brightness.dark
-                        ? Colors.grey[600]! // Adjusted color for dark mode
-                        : Colors.grey[300]!,
-                  ),
-                  bottom: BorderSide(
-                    color: themeProvider.getTheme().brightness == Brightness.dark
-                        ? Colors.grey[600]! // Adjusted color for dark mode
-                        : Colors.grey[300]!,
-                  ),
+                  top: BorderSide(color: Colors.grey[300]!),
+                  bottom: BorderSide(color: Colors.grey[300]!),
                 ),
                 color: themeProvider.getTheme().brightness == Brightness.dark
                     ? Colors.grey[850]
                     : Colors.grey[200],
               ),
-              padding: EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(left: 16.0),
+                    padding: const EdgeInsets.only(left: 16.0),
                     child: Row(
                       children: [
                         Icon(
@@ -202,18 +221,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ? Colors.amber
                               : Colors.indigo,
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(
                           themeProvider.getTheme().brightness == Brightness.dark
                               ? 'Switch to Light Mode'
                               : 'Switch to Dark Mode',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: themeProvider
-                                .getTheme()
-                                .appBarTheme
-                                .iconTheme!
-                                .color,
+                            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
                           ),
                         ),
                       ],
@@ -222,8 +237,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Padding(
                     padding: const EdgeInsets.only(right: 25.0),
                     child: Switch(
-                      value:
-                      themeProvider.getTheme().brightness == Brightness.dark,
+                      value: themeProvider.getTheme().brightness == Brightness.dark,
                       onChanged: (value) {
                         themeProvider.toggleTheme();
                       },
@@ -234,18 +248,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               color: themeProvider.getTheme().brightness == Brightness.dark
                   ? Colors.grey[850]
                   : Colors.grey[200],
               child: Padding(
-                padding: EdgeInsets.only(top: 40),
+                padding: const EdgeInsets.only(top: 40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         children: <Widget>[
                           SizedBox(
@@ -253,12 +267,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: _buildButtonWithIcon(
                               icon: Icons.shopping_bag,
                               text: 'My Products',
-                              onPressed: () {
-                              },
+                              onPressed: () {},
                               context: context,
                             ),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           SizedBox(
                             width: 300,
                             child: _buildButtonWithIcon(
@@ -267,15 +280,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChangePasswordScreen()),
+                                  MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
                                 );
                               },
                               context: context,
                             ),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           SizedBox(
                             width: 300,
                             child: _buildButtonWithIcon(
@@ -297,7 +308,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -315,9 +326,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required BuildContext context,
   }) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-    final brighterColor = themeProvider.getTheme().brightness == Brightness.dark
+    final textColor = themeProvider.getTheme().brightness == Brightness.dark
         ? Colors.white
-        : Colors.black;
+        : themeProvider.getTheme().textTheme.bodyLarge!.color;
 
     return ListTile(
       onTap: onPressed,
@@ -330,11 +341,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       title: Text(
         text,
-        style: TextStyle(
-          color: brighterColor,
-          fontWeight: FontWeight.bold,
-        ),
+        style: TextStyle(color: textColor),
       ),
     );
   }
+
 }

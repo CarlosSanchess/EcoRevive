@@ -4,6 +4,8 @@ import 'package:register/Pages/Profile.dart';
 
 
 class Home extends StatelessWidget {
+  const Home({super.key});
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -39,7 +41,7 @@ class Home extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddProduct()),);
+                  MaterialPageRoute(builder: (context) => const AddProduct()),);
               },
             ),
             const Spacer(),

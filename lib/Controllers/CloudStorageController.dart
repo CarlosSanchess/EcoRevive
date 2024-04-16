@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path_provider/path_provider.dart';
 
 class CloudStorageController {
   final FirebaseStorage storage = FirebaseStorage.instance;
@@ -26,20 +25,13 @@ class CloudStorageController {
     }
   }
 
-  Future<File?> getImageByProdID(String documentID) async { // Not Working yet
-    final tempDir = await getTemporaryDirectory();
-    final file = File('$tempDir/$documentID');
-
+  Future<String> getDownloadURL(String storageURL) async {
     try {
-      Reference ref = storage.ref().child("ProductImages/$documentID");
-      await ref.writeToFile(file);
-      return file;
+      Reference imageRef = storage.ref().child(storageURL);
+      return await imageRef.getDownloadURL();
     } catch (e) {
-      print("Error Downloading Image: $e");
-      return null;
+      print("Error getting Download URL: $e");
+      return Future.error("Failed to get download URL");
     }
   }
 }
-//Future<File?> getImageByUid(String UserID) async{
-
-//  }

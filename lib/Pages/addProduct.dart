@@ -9,7 +9,7 @@ import 'package:register/Functions/CategorySelector.dart';
 import 'package:register/Pages/theme_provider.dart';
 
 class AddProduct extends StatefulWidget {
-  AddProduct({Key? key}) : super(key: key);
+  const AddProduct({super.key});
 
   @override
   State<AddProduct> createState() => _AddProductState();
@@ -69,7 +69,7 @@ class _AddProductState extends State<AddProduct> {
           ),
         ),
       ),
-      backgroundColor: themeProvider.getTheme().backgroundColor,
+      backgroundColor: themeProvider.getTheme().colorScheme.background,
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Center(
@@ -115,7 +115,7 @@ class _AddProductState extends State<AddProduct> {
                           color: themeProvider
                               .getTheme()
                               .textTheme
-                              .bodyText1!
+                              .bodyLarge!
                               .color,
                           fontWeight: FontWeight.bold,
                         ),
@@ -139,7 +139,7 @@ class _AddProductState extends State<AddProduct> {
                           color: themeProvider
                               .getTheme()
                               .textTheme
-                              .bodyText1!
+                              .bodyLarge!
                               .color,
                           fontWeight: FontWeight.bold,
                         ),
@@ -211,7 +211,7 @@ Widget imagePickerContainer(
         onPressed: () {
           onPressed();
         },
-        child: Text('Add Image'),
+        child: const Text('Add Image'),
       ),
     ),
   );

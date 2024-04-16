@@ -7,7 +7,7 @@ import 'package:register/Pages/theme_provider.dart';
 class Register extends StatelessWidget {
   final void Function() switchPages;
 
-  Register({Key? key, required this.switchPages}) : super(key: key);
+  Register({super.key, required this.switchPages});
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -21,7 +21,7 @@ class Register extends StatelessWidget {
         backgroundColor: themeProvider.getTheme().appBarTheme.backgroundColor,
         leading: IconButton(
           onPressed: switchPages,
-          icon: Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(Icons.arrow_back_ios_new),
           color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
         ),
       ),
@@ -37,7 +37,7 @@ class Register extends StatelessWidget {
                   size: 100,
                   color: themeProvider.getTheme().brightness == Brightness.light
                       ? Colors.grey[300]
-                      : themeProvider.getTheme().iconTheme!.color,
+                      : themeProvider.getTheme().iconTheme.color,
                 ),
                 const Text(
                   'Create Account',
@@ -50,7 +50,7 @@ class Register extends StatelessWidget {
                   'Create New Account',
                   style: TextStyle(
                     fontSize: 18,
-                    color: themeProvider.getTheme().textTheme.headline2!.color,
+                    color: themeProvider.getTheme().textTheme.displayMedium!.color,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
