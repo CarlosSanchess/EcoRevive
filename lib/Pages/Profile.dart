@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:register/Pages/ChangePassword.dart';
-import '../Auth/Auth.dart';
+import 'package:provider/provider.dart';
+import 'package:register/Auth/Auth.dart';
+import 'package:register/Pages/theme_provider.dart';
+import 'ChangePassword.dart';
+import 'Login.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-
-import 'Login.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -15,7 +15,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  bool isDarkMode = false;
   final auth = Auth();
   File? selectedImage;
 
@@ -37,13 +36,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: themeProvider.getTheme().appBarTheme.backgroundColor,
         title: Text(
           'Profile',
           style: TextStyle(
-            color: Colors.black,
+            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -53,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: Colors.black,
+            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
           ),
         ),
       ),
@@ -104,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       email,
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.grey[800],
+                        color: themeProvider.getTheme().textTheme!.headline1!.color,
                         fontWeight: FontWeight.bold,
                       ),
                     );
@@ -131,18 +132,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     'Switch to Dark Mode',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
                     ),
                   ),
                 ),
                 Switch(
-                  value: isDarkMode,
+                  value: themeProvider.getTheme().brightness == Brightness.dark,
                   onChanged: (value) {
-                    setState(() {
-                      isDarkMode = value;
-                    });
+                    themeProvider.toggleTheme();
                   },
-                  activeColor: Color.fromRGBO(85, 139, 47, 1),
+                  activeColor: themeProvider.getTheme().hintColor,
                 ),
               ],
             ),
@@ -165,6 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: _buildButtonWithIcon(
                               text: 'Product List',
                               onPressed: () {},
+                              context: context,
                             ),
                           ),
                           SizedBox(height: 16),
@@ -178,6 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
                                 );
                               },
+                              context: context,
                             ),
                           ),
                         ],
@@ -199,7 +200,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
-                              backgroundColor: Color.fromRGBO(85, 139, 47, 1),
+                              backgroundColor: themeProvider.getTheme().primaryColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
@@ -219,12 +220,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildButtonWithIcon({required String text, required VoidCallback onPressed}) {
+  Widget _buildButtonWithIcon(
+      {required String text, required VoidCallback onPressed, required BuildContext context}) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
-        backgroundColor: Color.fromRGBO(85, 139, 47, 1),
+        backgroundColor: themeProvider.getTheme().primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
