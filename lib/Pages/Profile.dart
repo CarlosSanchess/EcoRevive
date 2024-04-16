@@ -192,7 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             Container(
               decoration: BoxDecoration(
                 border: Border(
@@ -203,12 +203,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ? Colors.grey[850]
                     : Colors.grey[200],
               ),
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
+                    padding: const EdgeInsets.only(left: 25.0),
                     child: Row(
                       children: [
                         Icon(
@@ -233,7 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 25.0),
+                    padding: const EdgeInsets.only(right: 30.0),
                     child: Switch(
                       value: themeProvider.getTheme().brightness == Brightness.dark,
                       onChanged: (value) {
@@ -316,7 +316,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-
   Widget _buildButtonWithIcon({
     required IconData icon,
     required String text,
@@ -328,18 +327,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ? Colors.white
         : themeProvider.getTheme().textTheme.bodyLarge!.color;
 
-    return ListTile(
-      onTap: onPressed,
-      leading: CircleAvatar(
-        backgroundColor: themeProvider.getTheme().primaryColor,
-        child: CircleAvatar(
-          backgroundColor: Colors.white,
-          child: Icon(icon, color: themeProvider.getTheme().primaryColor),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0), // Adjust horizontal padding as needed
+      child: ListTile(
+        contentPadding: EdgeInsets.zero,
+        onTap: onPressed,
+        leading: SizedBox(
+          width: 70,
+          child: CircleAvatar(
+            backgroundColor: themeProvider.getTheme().primaryColor,
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Icon(icon, color: themeProvider.getTheme().primaryColor),
+            ),
+          ),
         ),
-      ),
-      title: Text(
-        text,
-        style: TextStyle(color: textColor),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Text(
+            text,
+            style: TextStyle(color: textColor, fontSize: 15),
+          ),
+        ),
       ),
     );
   }
