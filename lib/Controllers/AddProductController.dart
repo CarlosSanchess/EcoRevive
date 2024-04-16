@@ -20,11 +20,8 @@ class AddProductController {
       if(_checkInputValues(productNameController, descriptionController) == "Ok"){
         String documentId = await FireStoreController().addToProductsCollection(productNameController.text, descriptionController.text, category);
 
-        if(image != null){
-          CloudStorageController().uploadImage(image, documentId);
-        }else{
-          print("Image is Null.");
-        }
+
+        CloudStorageController().uploadProductImage(image, documentId);
 
         productNameController.clear();
         descriptionController.clear();
