@@ -137,35 +137,35 @@ class _filterProductState extends State<filterProduct> {
                   filterChip(
                     'Computador',
                     selectedCategory == 'Computador',
-                    Theme.of(context).brightness == Brightness.light ? Colors.lightGreenAccent : Color.fromRGBO(94, 39, 176, 1.0),
+                    Theme.of(context).brightness == Brightness.light ? Colors.green : Color.fromRGBO(94, 39, 176, 1.0),
                     Colors.grey[300]!,
                     onCategorySelected,
                   ),
                   filterChip(
                     'Telemóvel',
                     selectedCategory == 'Telemóvel',
-                    Theme.of(context).brightness == Brightness.light ? Colors.lightGreenAccent : Color.fromRGBO(94, 39, 176, 1.0),
+                    Theme.of(context).brightness == Brightness.light ? Colors.green : Color.fromRGBO(94, 39, 176, 1.0),
                     Colors.grey[300]!,
                     onCategorySelected,
                   ),
                   filterChip(
                     'Teclado',
                     selectedCategory == 'Teclado',
-                    Theme.of(context).brightness == Brightness.light ? Colors.lightGreenAccent : Color.fromRGBO(94, 39, 176, 1.0),
+                    Theme.of(context).brightness == Brightness.light ? Colors.green : Color.fromRGBO(94, 39, 176, 1.0),
                     Colors.grey[300]!,
                     onCategorySelected,
                   ),
                   filterChip(
                     'Rato',
                     selectedCategory == 'Rato',
-                    Theme.of(context).brightness == Brightness.light ? Colors.lightGreenAccent : Color.fromRGBO(94, 39, 176, 1.0),
+                    Theme.of(context).brightness == Brightness.light ? Colors.green : Color.fromRGBO(94, 39, 176, 1.0),
                     Colors.grey[300]!,
                     onCategorySelected,
                   ),
                   filterChip(
                     'Outro',
                     selectedCategory == 'Outro',
-                    Theme.of(context).brightness == Brightness.light ? Colors.lightGreenAccent : Color.fromRGBO(94, 39, 176, 1.0),
+                    Theme.of(context).brightness == Brightness.light ? Colors.green : Color.fromRGBO(94, 39, 176, 1.0),
                     Colors.grey[300]!,
                     onCategorySelected,
                   ),
@@ -196,8 +196,13 @@ class _filterProductState extends State<filterProduct> {
     );
   }
 
-  Widget filterChip(String label, bool isSelected, Color selectedColor,
-      Color unselectedColor, Function(String) onCategorySelected) {
+  Widget filterChip(
+      String label,
+      bool isSelected,
+      Color selectedColor,
+      Color unselectedColor,
+      Function(String) onCategorySelected,
+      ) {
     return Padding(
       padding: const EdgeInsets.only(right: 10),
       child: FilterChip(
@@ -217,7 +222,11 @@ class _filterProductState extends State<filterProduct> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
           side: BorderSide(
-            color: isSelected ? Color.fromRGBO(94, 39, 176, 1.0) : unselectedColor,
+            color: isSelected
+                ? Theme.of(context).brightness == Brightness.dark
+                ? Colors.white // Dark theme border color
+                : Colors.green // Light theme border color
+                : unselectedColor,
             width: 1.5,
           ),
         ),
