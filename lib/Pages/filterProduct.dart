@@ -18,42 +18,6 @@ class info {
 }
 
 
-class categoryProducts extends StatefulWidget{
-
-  categoryProducts({Key? key}) : super(key: key);
-
-  @override
-  State<categoryProducts> createState() => _categoryProductsState();
-}
-
-class _categoryProductsState extends State<categoryProducts> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Your Products'),
-      ),
-      body: FutureBuilder(
-        future: FireStoreController().fetchProductsByCategory("all"),
-        builder: (BuildContext context, AsyncSnapshot<List<info>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (BuildContext context, int index) {
-                info product = snapshot.data![index];
-                return ProductItem(product: product);
-              },
-            );
-          }
-        },
-      ),
-    );
-  }
-}
 class ProductItem extends StatelessWidget {
   final info product;
 
@@ -96,28 +60,6 @@ class _filterProductState extends State<filterProduct> {
   String? selectedCategory;
   List<info>? products;
 
-  Future<void> fetchProductsByCategory(String category) async {
-    QuerySnapshot querySnapshot;
-    if (category == "all") {
-      querySnapshot = await FirebaseFirestore.instance.collection('Products').get();
-    } else {
-      querySnapshot = await FirebaseFirestore.instance
-          .collection('Products')
-          .where('Category', isEqualTo: category)
-          .get();
-    }
-
-    setState(() {
-      products = querySnapshot.docs.map((doc) {
-        return info(
-          productName: doc['ProductName'],
-          description: doc['Description'],
-          category: doc['Category'],
-          imageURL: doc['ImageURL'],
-        );
-      }).toList();
-    });
-  }
 
   void onCategorySelected(String category) {
     setState(() {
