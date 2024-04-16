@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'EcoRevive',
       theme: themeProvider.getTheme(),
-      home: const filterProduct(),
+      home: const Home(),
 
     );
   }
