@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:register/Auth/Auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:register/Auth/Auth.dart';
+import 'package:register/Controllers/CloudStorageController.dart';
 
 
-import '../Pages/Home.dart';
+
 import '../Pages/filterProduct.dart';
-
+import '../Pages/myProducts.dart';
+import '../Pages/filterProduct.dart' as filter;
 
 class FireStoreController{
 
    final db = FirebaseFirestore.instance;
-   final storage = FirebaseStorage.instance;
 
 
   Future<String> addToProductsCollection(String productName, String description, String? category) async {
@@ -29,7 +30,39 @@ class FireStoreController{
     return docRef.id;
   }
 
-   Future<List<info>> fetchProductsByCategory(String category) async {
+
+   Future<List<info>> getOwnedProducts() async {
+     User? user = FirebaseAuth.instance.currentUser;
+
+     if (user != null) {
+       QuerySnapshot ownedProducts = await db.collection('Products').where('Owner', isEqualTo: user.uid).get();
+       List<info> products = [];
+       for (QueryDocumentSnapshot doc in ownedProducts.docs) {
+         String name = doc['ProductName'];
+         String category = doc['Category'];
+         String description = doc['Description'];
+         String productId = doc.id;
+
+         String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
+
+         products.add(info(productID: productId, productName: name, description: description, category: category, imageURL: imageUrl));
+       }
+       return products;
+     } else {
+       throw 'Not logged in.';
+     }
+   }
+
+
+   Future<void> deleteProduct(info product) async {
+     try {
+       CloudStorageController().deleteImage('ProductImages/${product.productID}');
+     } catch (error) {
+       print("Error while deleting: $error");
+     }
+   }
+
+   Future<List<info2>> fetchProductsByCategory(String category) async {
      User? user = FirebaseAuth.instance.currentUser;
 
      if (user != null) {
@@ -39,20 +72,20 @@ class FireStoreController{
        } else {
          categoryProducts = await db.collection('Products').where('Category', isEqualTo: category).get();
        }
-       List<info> products = [];
+       List<info2> products = [];
        for (QueryDocumentSnapshot doc in categoryProducts.docs) {
          String name = doc['ProductName'];
          String productCategory = doc['Category'];
          String description = doc['Description'];
          String productId = doc.id;
 
-         Reference imageRef = storage.ref().child('ProductImages/$productId');
-         String imageUrl = await imageRef.getDownloadURL();
-         products.add(info(productName: name, description: description, category: productCategory, imageURL: imageUrl));
+         String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
+         products.add(filter.info2(productName: name, description: description, category: productCategory, imageURL: imageUrl));
        }
        return products;
      } else {
        throw 'Not logged in.';
      }
    }
-}
+
+  }

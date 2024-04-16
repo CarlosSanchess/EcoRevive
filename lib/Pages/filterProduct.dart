@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../Controllers/FireStoreController.dart';
 
-class info {
+class info2 {
   final String productName;
   final String description;
   final String category;
   final String imageURL;
 
-  info({
+  info2({
     required this.productName,
     required this.description,
     required this.category,
@@ -18,7 +18,7 @@ class info {
 
 
 class ProductItem extends StatelessWidget {
-  final info product;
+  final info2 product;
 
   const ProductItem({super.key, required this.product});
 
@@ -57,7 +57,7 @@ class _filterProductState extends State<filterProduct> {
   bool isChecked = false;
   bool isConditionExpanded = false;
   String? selectedCategory;
-  List<info>? products;
+  List<info2>? products;
 
 
   void onCategorySelected(String category) {

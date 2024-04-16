@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:register/Pages/ChangePassword.dart';
+import 'package:register/Pages/myProducts.dart';
 import 'package:register/Pages/theme_provider.dart';
 import '../Auth/Auth.dart';
 import 'dart:io';
@@ -263,9 +264,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             width: 300,
                             child: _buildButtonWithIcon(
-                              icon: Icons.shopping_bag,
+
+                               icon: Icons.shopping_bag,
                               text: 'My Products',
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                   context,
+                                   MaterialPageRoute(builder: (context) => myProducts()),
+                                 );
+                              },
                               context: context,
                             ),
                           ),
