@@ -62,7 +62,6 @@ class _FilterProductState extends State<FilterProduct> {
         selectedCategory = category;
       });
     }).catchError((error) {
-      // Handle errors here, e.g., show a snackbar or alert dialog
     });
   }
 
@@ -94,9 +93,18 @@ class _FilterProductState extends State<FilterProduct> {
           child: TextField(
             decoration: InputDecoration(
               hintText: 'Search for your item...',
-              prefixIcon: const Icon(Icons.search, size: 16),
+              hintStyle: TextStyle(
+                color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[400] : Colors.grey,
+              ),
+              prefixIcon: Icon(
+                Icons.search,
+                size: 16,
+                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.grey,
+              ),
+
               filled: true,
-              fillColor: Colors.grey[200],
+              fillColor: Theme.of(context).brightness == Brightness.dark
+                  ? Color.fromRGBO(42, 41, 58, 1.0) : Colors.grey[200],
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide.none,
@@ -134,13 +142,19 @@ class _FilterProductState extends State<FilterProduct> {
     return Padding(
       padding: const EdgeInsets.only(right: 10),
       child: FilterChip(
-        label: Text(label, style: TextStyle(fontSize: 18, color: isSelected ? Colors.white : Colors.black)),
+        label: Text(label, style: TextStyle(fontSize: 18, color: isSelected ?  Theme.of(context).brightness == Brightness.dark ? Colors.grey[400] : Colors.white : Colors.grey[400])),
         selected: isSelected,
         selectedColor: selectedColor,
-        backgroundColor: Colors.grey[300],
+        backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ? Color.fromRGBO(42, 41, 58, 1.0) : Colors.grey[300]!,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
-          side: BorderSide(color: isSelected ? selectedColor : Colors.grey[300]!, width: 1.5),
+          side: BorderSide(color: isSelected
+              ? Theme.of(context).brightness == Brightness.dark
+              ? Colors.white : Colors.green
+              : Theme.of(context).brightness == Brightness.dark
+              ? Color.fromRGBO(42, 41, 58, 1.0) : Colors.white
+              , width: 1.5),
         ),
         checkmarkColor: Colors.white,
         onSelected: (bool value) {
