@@ -83,19 +83,7 @@ class _filterProductState extends State<filterProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Row(
-          children: [
-            Image.asset('lib/Imgs/Icon.png', height: 40,),
-            const SizedBox(width: 10),
-            const Text(
-              'EcoRevive',
-              style: TextStyle(color: Colors.black),
-            ),
-          ],
-        ),
-      ),
+
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
