@@ -4,37 +4,23 @@ import 'package:register/Pages/Profile.dart';
 
 import 'filterProduct.dart';
 
-
-
-
-
 class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Row(
-          children: [
-            Image.asset('lib/Imgs/Icon.png', height: 40,),
-            const SizedBox(width: 10),
-            const Text(
-              'EcoRevive',
-              style: TextStyle(color: Colors.black),
-            ),
-          ],
-        ),
-    ),
-      body:  filterProduct(),
-        bottomNavigationBar: BottomAppBar(
+      body: Padding(
+        padding: EdgeInsets.only(top: 50.0),
+        child: filterProduct(),
+      ),
+      bottomNavigationBar: BottomAppBar(
         child: Row(
           children: <Widget>[
             IconButton(
               icon: const Icon(Icons.search,
-                    size: 35,
-                    color: Colors.black
+                  size: 35,
+                  color: Colors.black
               ),
               onPressed: () {
               },
