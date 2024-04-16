@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:register/Pages/ChangePassword.dart';
 import '../Auth/Auth.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -36,9 +37,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double increaseFactor = 1.15;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -89,12 +87,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   );
                 },
                 child: CircleAvatar(
-                  radius: screenSize.width * 0.15 * increaseFactor,
+                  radius: 70,
                   backgroundImage: selectedImage != null ? FileImage(selectedImage!) : null,
-                  child: selectedImage == null ? Icon(Icons.add_a_photo, size: screenSize.width * 0.15 * increaseFactor) : null,
+                  child: selectedImage == null ? Icon(Icons.add_a_photo, size: 70) : null,
                 ),
               ),
-              SizedBox(height: 20 * increaseFactor),
+              SizedBox(height: 20),
               FutureBuilder<String?>(
                 future: auth.getEmail(),
                 builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
@@ -105,7 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     return Text(
                       email,
                       style: TextStyle(
-                        fontSize: 16 * increaseFactor,
+                        fontSize: 16,
                         color: Colors.grey[800],
                         fontWeight: FontWeight.bold,
                       ),
@@ -115,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ],
           ),
-          SizedBox(height: 20 * increaseFactor),
+          SizedBox(height: 20),
           Container(
             decoration: BoxDecoration(
               border: Border(
@@ -123,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 bottom: BorderSide(color: Colors.grey[300]!),
               ),
             ),
-            padding: EdgeInsets.symmetric(vertical: 10 * increaseFactor),
+            padding: EdgeInsets.symmetric(vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -149,46 +147,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
-          SizedBox(height: 20 * increaseFactor),
+          SizedBox(height: 20),
           Expanded(
             child: Container(
               color: Colors.grey[200],
               child: Padding(
-                padding: EdgeInsets.only(top: 40 * increaseFactor),
+                padding: EdgeInsets.only(top: 40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16 * increaseFactor),
+                      padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         children: <Widget>[
                           SizedBox(
-                            width: 300 * increaseFactor,
+                            width: 300,
                             child: _buildButtonWithIcon(
                               text: 'Product List',
                               onPressed: () {},
                             ),
                           ),
-                          SizedBox(height: 16 * increaseFactor),
+                          SizedBox(height: 16),
                           SizedBox(
-                            width: 300 * increaseFactor,
+                            width: 300,
                             child: _buildButtonWithIcon(
                               text: 'Change Password',
-                              onPressed: () async {
-                                bool isLoggedIn = await auth.isLoggedIn();
-                                print(isLoggedIn);
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
+                                );
                               },
                             ),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 24 * increaseFactor),
+                    SizedBox(height: 24),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                          width: 120 * increaseFactor,
+                          width: 120,
                           child: ElevatedButton(
                             onPressed: () {
                               auth.signOut();

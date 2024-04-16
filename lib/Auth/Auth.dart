@@ -1,20 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+class Auth {
+  final FirebaseAuth _firebaseAuth;
+  User? currentUser;
 
-class Auth{
-
-  final FirebaseAuth firebaseAuth;
-  late User? currentUser;
-
-  Auth() : firebaseAuth = FirebaseAuth.instance {
-    currentUser = firebaseAuth.currentUser;
+  Auth() : _firebaseAuth = FirebaseAuth.instance {
+    currentUser = _firebaseAuth.currentUser;
   }
 
-  Stream<User?> get authStateChanges => firebaseAuth.authStateChanges();
+  Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
-  Future<void> createUserWithMailAndPassword(String email, String password) async {
+  Future<void> createUserWithEmailAndPassword(String email, String password) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -26,29 +24,45 @@ class Auth{
   }
 
   Future<bool> isLoggedIn() async {
-    if (currentUser != null) {
-      return true;
-    } else {
-      return false;
-    }
+    return currentUser != null;
   }
 
-  Future<void> updateUserEmail(String email) async{
-    currentUser?.verifyBeforeUpdateEmail(email);
+  Future<void> updateUserEmail(String email) async {
+    await currentUser?.updateEmail(email);
   }
-  Future<void> updateUserPassWord(String password) async{
-    currentUser?.updatePassword(password);
+
+  Future<void> updateUserPassword(String password) async {
+    await currentUser?.updatePassword(password);
   }
-  Future<String> getUid() async{
-    return  currentUser!.uid;
+
+  Future<String> getUid() async {
+    return currentUser!.uid;
   }
-  Future<void> updatePhotoURL(String? url) async{
-    currentUser?.updatePhotoURL(url);
+
+  Future<void> updatePhotoURL(String? url) async {
+    await currentUser?.updatePhotoURL(url);
   }
-  Future<String?> getEmail() async{
+
+  Future<String?> getEmail() async {
     return currentUser?.email;
   }
+
   Future<void> signOut() async {
-    await firebaseAuth.signOut();
+    await _firebaseAuth.signOut();
+  }
+
+  Future<void> ChangePassword(String oldPassword, String newPassword) async {
+    try {
+      // Re-authenticate user with their current credentials
+      AuthCredential credential = EmailAuthProvider.credential(email: currentUser!.email!, password: oldPassword);
+      await currentUser!.reauthenticateWithCredential(credential);
+
+      // Update the password
+      await updateUserPassword(newPassword);
+      print('Password changed successfully.');
+    } catch (e) {
+      print('Failed to change password: $e');
+      rethrow;
+    }
   }
 }
