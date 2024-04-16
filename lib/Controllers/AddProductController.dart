@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:register/Controllers/FireStoreController.dart';
+import 'package:register/Controllers/CloudStorageController.dart';
+import 'dart:io' as io;
 
 class AddProductController {
   final TextEditingController productNameController;
   final TextEditingController descriptionController;
+  final String? category;
+  final io.File image;
 
   const AddProductController({
     required this.productNameController,
     required this.descriptionController,
+    required this.category,
+    required this.image
   });
 
-  String addProduct() {
+  Future<String> addProduct() async {
       if(_checkInputValues(productNameController, descriptionController) == "Ok"){
-        FireStoreController().addToProductsCollection(productNameController.text, descriptionController.text);
+        String documentId = await FireStoreController().addToProductsCollection(productNameController.text, descriptionController.text, category);
+
+
+        CloudStorageController().uploadProductImage(image, documentId);
+
         productNameController.clear();
         descriptionController.clear();
+
         return "Added Successfully!";
       }else{
         return _checkInputValues(productNameController, descriptionController);

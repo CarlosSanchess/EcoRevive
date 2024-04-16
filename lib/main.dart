@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,11 @@ import 'package:provider/provider.dart';
 import 'package:register/Pages/Entry.dart';
 import 'package:register/Pages/Login.dart';
 import 'package:register/Pages/Profile.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:register/Pages/Home.dart';
+
 import 'package:register/Pages/addProduct.dart';
 import 'package:register/firebase_options.dart';
 
