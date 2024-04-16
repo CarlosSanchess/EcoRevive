@@ -1,11 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:register/Functions/Functions.dart';
 import 'package:register/Controllers/RegisterLoginControllers.dart';
 import 'package:register/Auth/Auth.dart';
 
-
-//Needs to me
 class Login extends StatefulWidget {
   final void Function() switchPages;
   const Login({Key? key, required this.switchPages}) : super(key: key);
@@ -15,7 +12,6 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -27,8 +23,10 @@ class LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.colorScheme.background,
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Center(
@@ -38,7 +36,7 @@ class LoginState extends State<Login> {
                 Icon(
                   Icons.person_outlined,
                   size: 100,
-                  color: Colors.grey[300],
+                  color: theme.brightness == Brightness.light ? Colors.grey[300] : theme.iconTheme.color,
                 ),
                 const Text(
                   'Welcome, Back!',
@@ -48,52 +46,59 @@ class LoginState extends State<Login> {
                   ),
                 ),
                 Text(
-                  'sign in to continue',
+                  'Sign in to continue',
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.grey[400],
+                    color: theme.brightness == Brightness.light ? theme.textTheme.bodyText1!.color : theme.textTheme.titleMedium!.color,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
                 const SizedBox(height: 50),
-
-                TextContainer(hintText: "UserName", obscureText: false, icon: const Icon(Icons.mail), textEditingController: usernameController),
-
+                TextContainer(
+                  hintText: "UserName",
+                  obscureText: false,
+                  icon: const Icon(Icons.mail),
+                  textEditingController: usernameController,
+                ),
                 const SizedBox(height: 15),
-
-                TextContainer(hintText: "Password", obscureText: true, icon: const Icon(Icons.lock), textEditingController: passwordController),
-
+                TextContainer(
+                  hintText: "Password",
+                  obscureText: true,
+                  icon: const Icon(Icons.lock),
+                  textEditingController: passwordController,
+                ),
                 GestureDetector(
                   onTap: () {
                     // Implement your forgot password logic here
                     // For example, you can navigate to a forgot password screen
                   },
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 27.5),
-                        child: Text(
-                          "Forgot Password?",
-                          style: TextStyle(
-                            color: Color.fromRGBO(85, 139, 47, 1),
-                            fontSize: 16,
-                          ),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 27.5),
+                      child: Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                          color: theme.primaryColor,
+                          fontSize: 16,
                         ),
-                      )
-                    ],
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 25),
                 GestureDetector(
                   onTap: () async {
-                        createPopUp(RegisterLoginControllers(usernameController: usernameController, passwordController: passwordController).signIn(), context);
+                    createPopUp(RegisterLoginControllers(
+                      usernameController: usernameController,
+                      passwordController: passwordController,
+                    ).signIn(), context);
                   },
                   child: Container(
                     padding: const EdgeInsets.all(25),
                     margin: const EdgeInsets.symmetric(horizontal: 25),
                     decoration: BoxDecoration(
-                      color: Colors.lightGreen[800],
+                      color: theme.primaryColor,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Center(
@@ -116,32 +121,40 @@ class LoginState extends State<Login> {
                       Expanded(
                         child: Divider(
                           thickness: 0.5,
-                          color: Colors.grey[400],
+                          color: theme.primaryColor,
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
                           'Or continue with',
-                          style: TextStyle(color: Colors.grey[700]),
+                          style: TextStyle(color: theme.textTheme.titleMedium!.color),
                         ),
                       ),
                       Expanded(
                         child: Divider(
                           thickness: 0.5,
-                          color: Colors.grey[400],
+                          color: theme.primaryColor,
                         ),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Logos(icone: Icons.facebook,),
+                    Icon(
+                      Icons.facebook,
+                      size: 36,
+                      color: theme.brightness == Brightness.light ? Colors.blueAccent : Colors.white,
+                    ),
                     SizedBox(width: 25),
-                    Logos(icone: Icons.apple),
+                    Icon(
+                      Icons.apple,
+                      size: 36,
+                      color: theme.brightness == Brightness.light ? Colors.black : Colors.white,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -159,7 +172,7 @@ class LoginState extends State<Login> {
                       child: Text(
                         "Register",
                         style: TextStyle(
-                          color: Colors.lightGreen[800],
+                          color: theme.primaryColor,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -175,4 +188,3 @@ class LoginState extends State<Login> {
     );
   }
 }
-
