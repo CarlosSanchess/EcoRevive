@@ -31,7 +31,7 @@ class FireStoreController{
 
      if (user != null) {
        QuerySnapshot categoryProducts;
-       if (category == null) {
+       if (category == "all") {
          categoryProducts = await db.collection('Products').get();
        } else {
          categoryProducts = await db.collection('Products').where('Category', isEqualTo: category).get();

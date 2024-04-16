@@ -34,7 +34,7 @@ class _categoryProductsState extends State<categoryProducts> {
         title: Text('Your Products'),
       ),
       body: FutureBuilder(
-        future: FireStoreController().fetchProductsByCategory(''),
+        future: FireStoreController().fetchProductsByCategory("all"),
         builder: (BuildContext context, AsyncSnapshot<List<info>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -97,10 +97,15 @@ class _filterProductState extends State<filterProduct> {
   List<info>? products;
 
   Future<void> fetchProductsByCategory(String category) async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('Products')
-        .where('Category', isEqualTo: category)
-        .get();
+    QuerySnapshot querySnapshot;
+    if (category == "all") {
+      querySnapshot = await FirebaseFirestore.instance.collection('Products').get();
+    } else {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection('Products')
+          .where('Category', isEqualTo: category)
+          .get();
+    }
 
     setState(() {
       products = querySnapshot.docs.map((doc) {
@@ -118,7 +123,11 @@ class _filterProductState extends State<filterProduct> {
     setState(() {
       if (selectedCategory == category) {
         selectedCategory = null;
-        products = null;
+        FireStoreController().fetchProductsByCategory("all").then((fetchedProducts) {
+          setState(() {
+            products = fetchedProducts;
+          });
+        });
       } else {
         selectedCategory = category;
         FireStoreController().fetchProductsByCategory(category).then((fetchedProducts) {
