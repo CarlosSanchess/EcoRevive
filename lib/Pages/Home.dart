@@ -2,23 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:register/Pages/addProduct.dart';
 import 'package:register/Pages/Profile.dart';
 
+import 'filterProduct.dart';
+
+
+
+
 
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-
-    ),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Center(
-          child: Text(
-            'Home Page, click on the "+" Icon to add product, on the "Profile" icon to access your Profile',
-            style: TextStyle(fontSize: 20.0),
-          ),
+        backgroundColor: Colors.white,
+        title: Row(
+          children: [
+            Image.asset('lib/Imgs/Icon.png', height: 40,),
+            const SizedBox(width: 10),
+            const Text(
+              'EcoRevive',
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
         ),
-      ),
+    ),
+      body:  filterProduct(),
         bottomNavigationBar: BottomAppBar(
         child: Row(
           children: <Widget>[
