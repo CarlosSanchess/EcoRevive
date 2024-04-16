@@ -3,9 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:register/Pages/ChangePassword.dart';
 import 'package:register/Pages/theme_provider.dart';
 import '../Auth/Auth.dart';
-import 'Login.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:register/Controllers/CloudStorageController.dart';
+import 'package:register/Pages/Login.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -18,6 +19,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late ThemeProvider themeProvider;
   final auth = Auth();
   File? selectedImage;
+  String? path = 'PFPImages/${Auth().currentUser?.uid}';
+  String? downloadURL;
 
   Future<void> pickImageFromGallery() async {
     try {
@@ -48,6 +51,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(true);
+                  var currentUser = Auth().currentUser;
+                  if (currentUser != null) {
+                    CloudStorageController().uploadPFPImage(selectedImage!, currentUser.uid);
+                  } else {
+                    print("Can't find that user");
+                  }
                 },
                 child: Text('Save'),
               ),
@@ -61,10 +70,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           });
         }
       });
-
     } catch (e) {
       print('Error picking image: $e');
     }
+  }
+
+  Future<String?> existsPhoto() async {
+    try {
+      downloadURL = await CloudStorageController().getDownloadURL(path!);
+      return downloadURL;
+    } catch (e) {
+      print("Doesn't exist photo");
+    }
+    return null;
   }
 
   @override
@@ -73,16 +91,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:
-        themeProvider.getTheme().appBarTheme.backgroundColor,
+        backgroundColor: themeProvider.getTheme().appBarTheme.backgroundColor,
         title: Text(
           'Profile',
           style: TextStyle(
-            color: themeProvider
-                .getTheme()
-                .appBarTheme
-                .iconTheme!
-                .color,
+            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -92,11 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: themeProvider
-                .getTheme()
-                .appBarTheme
-                .iconTheme!
-                .color,
+            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
           ),
         ),
       ),
@@ -136,15 +145,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ? FileImage(selectedImage!)
                         : null,
                     child: selectedImage == null
-                        ? Icon(Icons.add_a_photo, size: 70)
+                        ? FutureBuilder<String?>(
+                      future: existsPhoto(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting ||
+                            snapshot.data == null) {
+                          return Icon(Icons.add_a_photo, size: 70);
+                        } else {
+                          return ClipOval(
+                            child: Image.network(
+                              snapshot.data!,
+                              fit: BoxFit.cover,
+                              width: 140,
+                              height: 140,
+                            ),
+                          );
+                        }
+                      },
+                    )
                         : null,
                   ),
                 ),
                 SizedBox(height: 20),
                 FutureBuilder<String?>(
                   future: auth.getEmail(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<String?> snapshot) {
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String?> snapshot) {
                     if (snapshot.connectionState ==
                         ConnectionState.waiting) {
                       return CircularProgressIndicator();
@@ -170,14 +197,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: Colors.grey[300]!),
-                    bottom: BorderSide(color: Colors.grey[300]!),
-                  ),
-                  color: themeProvider.getTheme().brightness ==
-                      Brightness.dark
-                      ? Colors.grey[850]
-                      : Colors.grey[200],
+                border: Border(
+                  top: BorderSide(color: Colors.grey[300]!),
+                  bottom: BorderSide(color: Colors.grey[300]!),
+                ),
+                color: themeProvider.getTheme().brightness == Brightness.dark
+                    ? Colors.grey[850]
+                    : Colors.grey[200],
               ),
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Row(
@@ -188,39 +214,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Row(
                       children: [
                         Icon(
-                          themeProvider.getTheme().brightness ==
-                              Brightness.dark
+                          themeProvider.getTheme().brightness == Brightness.dark
                               ? Icons.wb_sunny
                               : Icons.dark_mode,
-                          color: themeProvider.getTheme().brightness ==
-                              Brightness.dark
+                          color: themeProvider.getTheme().brightness == Brightness.dark
                               ? Colors.amber
                               : Colors.indigo,
                         ),
                         SizedBox(width: 8),
                         Text(
-                          themeProvider.getTheme().brightness ==
-                              Brightness.dark
+                          themeProvider.getTheme().brightness == Brightness.dark
                               ? 'Switch to Light Mode'
                               : 'Switch to Dark Mode',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: themeProvider
-                                .getTheme()
-                                .appBarTheme
-                                .iconTheme!
-                                .color,
+                            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
                           ),
                         ),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
-                        right: 25.0),
+                    padding: const EdgeInsets.only(right: 25.0),
                     child: Switch(
-                      value: themeProvider.getTheme().brightness ==
-                          Brightness.dark,
+                      value: themeProvider.getTheme().brightness == Brightness.dark,
                       onChanged: (value) {
                         themeProvider.toggleTheme();
                       },
@@ -249,8 +266,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: _buildButtonWithIcon(
                               icon: Icons.shopping_bag,
                               text: 'My Products',
-                              onPressed: () {
-                              },
+                              onPressed: () {},
                               context: context,
                             ),
                           ),
@@ -263,9 +279,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChangePasswordScreen()),
+                                  MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
                                 );
                               },
                               context: context,
@@ -310,8 +324,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required VoidCallback onPressed,
     required BuildContext context,
   }) {
-    final themeProvider =
-    Provider.of<ThemeProvider>(context, listen: false);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return ListTile(
       onTap: onPressed,
@@ -324,12 +337,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       title: Text(
         text,
-        style: TextStyle(
-            color: themeProvider
-                .getTheme()
-                .textTheme!
-                .bodyText1!
-                .color),
+        style: TextStyle(color: themeProvider.getTheme().textTheme!.bodyText1!.color),
       ),
     );
   }

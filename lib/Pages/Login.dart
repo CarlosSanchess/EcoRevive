@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:register/Functions/Functions.dart';
 import 'package:register/Controllers/RegisterLoginControllers.dart';
-import 'package:register/Auth/Auth.dart';
 import 'package:register/Pages/Home.dart';
 
 class Login extends StatefulWidget {
