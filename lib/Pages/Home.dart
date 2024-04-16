@@ -18,7 +18,7 @@ class Home extends StatelessWidget {
         child: Row(
           children: <Widget>[
             IconButton(
-              icon: const Icon(Icons.search,
+              icon: const Icon(Icons.chat_bubble_rounded,
                   size: 35,
                   color: Colors.black
               ),
