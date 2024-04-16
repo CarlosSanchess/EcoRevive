@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:register/Functions/Functions.dart';
 import 'package:register/Controllers/RegisterLoginControllers.dart';
 import 'package:register/Pages/Home.dart';
+import 'package:register/Pages/Register.dart';
 
 class Login extends StatefulWidget {
-  final void Function() switchPages;
-  const Login({super.key, required this.switchPages});
+  const Login({super.key});
 
   @override
   LoginState createState() => LoginState();
@@ -81,6 +81,7 @@ class LoginState extends State<Login> {
                         style: TextStyle(
                           color: theme.primaryColor,
                           fontSize: 16,
+                          fontWeight: FontWeight.w500
                         ),
                       ),
                     ),
@@ -176,11 +177,16 @@ class LoginState extends State<Login> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: widget.switchPages,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Register()),
+                        );
+                      },
                       child: Text(
                         "Register",
                         style: TextStyle(
-                          color: theme.primaryColor,
+                          color: Theme.of(context).primaryColor,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
