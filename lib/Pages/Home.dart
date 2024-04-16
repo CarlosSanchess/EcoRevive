@@ -12,7 +12,7 @@ class Home extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(top: 50.0),
-        child: filterProduct(),
+        child: FilterProduct(),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
