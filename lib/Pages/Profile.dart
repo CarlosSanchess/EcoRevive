@@ -21,7 +21,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> pickImageFromGallery() async {
     try {
-      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final pickedImage = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+      );
       if (pickedImage == null) {
         print('No image selected.');
         return;
@@ -30,6 +32,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         selectedImage = imageTemp;
       });
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Save Image?'),
+            content: Text('Do you want to save the selected image?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text('Save'),
+              ),
+            ],
+          );
+        },
+      ).then((value) {
+        if (value == false) {
+          setState(() {
+            selectedImage = null;
+          });
+        }
+      });
+
     } catch (e) {
       print('Error picking image: $e');
     }
@@ -41,11 +73,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: themeProvider.getTheme().appBarTheme.backgroundColor,
+        backgroundColor:
+        themeProvider.getTheme().appBarTheme.backgroundColor,
         title: Text(
           'Profile',
           style: TextStyle(
-            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
+            color: themeProvider
+                .getTheme()
+                .appBarTheme
+                .iconTheme!
+                .color,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -55,107 +92,149 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
+            color: themeProvider
+                .getTheme()
+                .appBarTheme
+                .iconTheme!
+                .color,
           ),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return SafeArea(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            ListTile(
-                              leading: Icon(Icons.photo_library),
-                              title: Text('Choose from gallery'),
-                              onTap: () {
-                                Navigator.pop(context);
-                                pickImageFromGallery();
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: CircleAvatar(
-                  radius: 70,
-                  backgroundImage: selectedImage != null ? FileImage(selectedImage!) : null,
-                  child: selectedImage == null ? Icon(Icons.add_a_photo, size: 70) : null,
-                ),
-              ),
-              SizedBox(height: 20),
-              FutureBuilder<String?>(
-                future: auth.getEmail(),
-                builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else {
-                    final email = snapshot.data ?? 'No email';
-                    return Text(
-                      email,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: themeProvider.getTheme().textTheme!.headline1!.color,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Container(
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(color: Colors.grey[300]!),
-                bottom: BorderSide(color: Colors.grey[300]!),
-              ),
-              color: themeProvider.getTheme().brightness == Brightness.dark
-                  ? Colors.grey[850] // Darker background color
-                  : Colors.grey[200], // Light background color
-            ),
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 16.0),
-                  child: Text(
-                    'Switch to Dark Mode',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
-                    ),
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SafeArea(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                leading: Icon(Icons.photo_library),
+                                title: Text('Choose from gallery'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  pickImageFromGallery();
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: 70,
+                    backgroundImage: selectedImage != null
+                        ? FileImage(selectedImage!)
+                        : null,
+                    child: selectedImage == null
+                        ? Icon(Icons.add_a_photo, size: 70)
+                        : null,
                   ),
                 ),
-                Switch(
-                  value: themeProvider.getTheme().brightness == Brightness.dark,
-                  onChanged: (value) {
-                    themeProvider.toggleTheme();
+                SizedBox(height: 20),
+                FutureBuilder<String?>(
+                  future: auth.getEmail(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<String?> snapshot) {
+                    if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else {
+                      final email = snapshot.data ?? 'No email';
+                      return Text(
+                        email,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: themeProvider
+                              .getTheme()
+                              .textTheme!
+                              .headline1!
+                              .color,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    }
                   },
-                  activeColor: themeProvider.getTheme().hintColor,
                 ),
               ],
             ),
-          ),
-          SizedBox(height: 20),
-          Expanded(
-            child: Container(
+            SizedBox(height: 20),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(color: Colors.grey[300]!),
+                    bottom: BorderSide(color: Colors.grey[300]!),
+                  ),
+                  color: themeProvider.getTheme().brightness ==
+                      Brightness.dark
+                      ? Colors.grey[850]
+                      : Colors.grey[200],
+              ),
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Row(
+                      children: [
+                        Icon(
+                          themeProvider.getTheme().brightness ==
+                              Brightness.dark
+                              ? Icons.wb_sunny
+                              : Icons.dark_mode,
+                          color: themeProvider.getTheme().brightness ==
+                              Brightness.dark
+                              ? Colors.amber
+                              : Colors.indigo,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          themeProvider.getTheme().brightness ==
+                              Brightness.dark
+                              ? 'Switch to Light Mode'
+                              : 'Switch to Dark Mode',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: themeProvider
+                                .getTheme()
+                                .appBarTheme
+                                .iconTheme!
+                                .color,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        right: 25.0),
+                    child: Switch(
+                      value: themeProvider.getTheme().brightness ==
+                          Brightness.dark,
+                      onChanged: (value) {
+                        themeProvider.toggleTheme();
+                      },
+                      activeColor: themeProvider.getTheme().hintColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
               color: themeProvider.getTheme().brightness == Brightness.dark
-                  ? Colors.grey[850] // Darker background color
-                  : Colors.grey[200], // Light background color
+                  ? Colors.grey[850]
+                  : Colors.grey[200],
               child: Padding(
                 padding: EdgeInsets.only(top: 40),
                 child: Column(
@@ -168,8 +247,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             width: 300,
                             child: _buildButtonWithIcon(
-                              text: 'Product List',
-                              onPressed: () {},
+                              icon: Icons.shopping_bag,
+                              text: 'My Products',
+                              onPressed: () {
+                              },
                               context: context,
                             ),
                           ),
@@ -177,11 +258,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             width: 300,
                             child: _buildButtonWithIcon(
+                              icon: Icons.lock,
                               text: 'Change Password',
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ChangePasswordScreen()),
+                                );
+                              },
+                              context: context,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          SizedBox(
+                            width: 300,
+                            child: _buildButtonWithIcon(
+                              icon: Icons.logout,
+                              text: 'Log Out',
+                              onPressed: () {
+                                auth.signOut();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Login(
+                                        switchPages: () {},
+                                      )),
                                 );
                               },
                               context: context,
@@ -191,55 +294,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              auth.signOut();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => Login(switchPages: () {})),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              backgroundColor: themeProvider.getTheme().primaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                            child: Text('Log Out'),
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildButtonWithIcon(
-      {required String text, required VoidCallback onPressed, required BuildContext context}) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+  Widget _buildButtonWithIcon({
+    required IconData icon,
+    required String text,
+    required VoidCallback onPressed,
+    required BuildContext context,
+  }) {
+    final themeProvider =
+    Provider.of<ThemeProvider>(context, listen: false);
 
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white,
+    return ListTile(
+      onTap: onPressed,
+      leading: CircleAvatar(
         backgroundColor: themeProvider.getTheme().primaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
+        child: CircleAvatar(
+          backgroundColor: Colors.white,
+          child: Icon(icon, color: themeProvider.getTheme().primaryColor),
         ),
       ),
-      child: Text(text),
+      title: Text(
+        text,
+        style: TextStyle(
+            color: themeProvider
+                .getTheme()
+                .textTheme!
+                .bodyText1!
+                .color),
+      ),
     );
   }
 }
