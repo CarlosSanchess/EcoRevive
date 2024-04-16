@@ -5,6 +5,7 @@ import 'package:register/Auth/Auth.dart';
 
 
 
+import '../Pages/filterProduct.dart';
 import '../Pages/myProducts.dart';
 import '../Pages/filterProduct.dart' as filter;
 
@@ -66,7 +67,7 @@ class FireStoreController{
          }
        }
 
-   Future<List<info>> fetchProductsByCategory(String category) async {
+   Future<List<info2>> fetchProductsByCategory(String category) async {
      User? user = FirebaseAuth.instance.currentUser;
 
      if (user != null) {
@@ -76,7 +77,7 @@ class FireStoreController{
        } else {
          categoryProducts = await db.collection('Products').where('Category', isEqualTo: category).get();
        }
-       List<info> products = [];
+       List<info2> products = [];
        for (QueryDocumentSnapshot doc in categoryProducts.docs) {
          String name = doc['ProductName'];
          String productCategory = doc['Category'];
@@ -85,7 +86,7 @@ class FireStoreController{
 
          Reference imageRef = storage.ref().child('ProductImages/$productId');
          String imageUrl = await imageRef.getDownloadURL();
-         products.add(filter.info(productName: name, description: description, category: productCategory, imageURL: imageUrl));
+         products.add(filter.info2(productName: name, description: description, category: productCategory, imageURL: imageUrl));
        }
        return products;
      } else {
