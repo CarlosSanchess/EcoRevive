@@ -1,11 +1,9 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:register/Controllers/AddProductController.dart';
-import 'package:register/Controllers/CloudStorageController.dart';
 import 'package:register/Functions/CategorySelector.dart';
 
 
@@ -31,7 +29,7 @@ class _addProductState extends State<addProduct> {
       if (image == null) return;
       final imageTemp = File(image.path);
       setState(() {
-          selectedImage = imageTemp;
+        selectedImage = imageTemp;
       });
     }on PlatformException catch (e){
       print('Failed to Pick image: $e');
@@ -58,102 +56,98 @@ class _addProductState extends State<addProduct> {
             child: Container(
               margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 0),
               child: Column(
-                  children: [
-                    const Text(
-                      'Add Product',
-                      textAlign: TextAlign.left, // Align left
-                      style: TextStyle(
-                        color: Color.fromRGBO(85, 139, 47, 1),
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                      ),
+                children: [
+                  const Text(
+                    'Add Product',
+                    textAlign: TextAlign.left, // Align left
+                    style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const Text(
-                      'Fill out the information below to post a product',
-                      textAlign: TextAlign.left, // Align left
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
+                  ),
+                  const Text(
+                    'Fill out the information below to post a product',
+                    textAlign: TextAlign.left, // Align left
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
                     ),
+                  ),
 
-                    const SizedBox(height: 50),
+                  const SizedBox(height: 50),
 
 
-                    if (selectedImage != null) 
-                        imageDisplay(imageHeight, selectedImage)
-                      else  imagePickerContainer(200, () => pickImageFromGallery()),
-                    const SizedBox(height: 30),
-                    Card(
-                        color: Colors.grey.shade200,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                          child: TextField(
-                            controller: productNameController,
-                            maxLines: 1,
-                            decoration: const InputDecoration.collapsed(hintText: "Product Name..."),
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.black87,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        )
-                    ),
-                    const SizedBox(height: 10),
-                    Card(
+                  if (selectedImage != null)
+                    imageDisplay(imageHeight, selectedImage)
+                  else  imagePickerContainer(200, () => pickImageFromGallery()),
+                  const SizedBox(height: 30),
+                  Card(
                       color: Colors.grey.shade200,
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                         child: TextField(
-                          controller: descriptionController,
-                          maxLines: 3,
-                          decoration: const InputDecoration.collapsed(hintText: "Description..."),
+                          controller: productNameController,
+                          maxLines: 1,
+                          decoration: const InputDecoration.collapsed(hintText: "Product Name..."),
                           style: const TextStyle(
                             fontSize: 20,
                             color: Colors.black87,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                      )
+                  ),
+                  const SizedBox(height: 10),
+                  Card(
+                    color: Colors.grey.shade200,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                      child: TextField(
+                        controller: descriptionController,
+                        maxLines: 3,
+                        decoration: const InputDecoration.collapsed(hintText: "Description..."),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    const CategorySelector(),
-                    const SizedBox(height: 30),
+                  ),
+                  const SizedBox(height: 20),
+                  const CategorySelector(),
+                  const SizedBox(height: 30),
 
-                    GestureDetector(
-                      onTap: () {
-                        if(AddProductController(productNameController: productNameController,
-                                                descriptionController: descriptionController,
-                                                category: const CategorySelector().getCategory()).addProduct() == "Added Successfully!"){
-                              const CategorySelector().resetCategory();
-
-                        }
-                        //if (selectedImage != null) {
-                        //  CloudStorageController().uploadImage(selectedImage!);
-                        //}
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(25),
-                        decoration: BoxDecoration(
-                          color: Colors.lightGreen[800],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "Post Product",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
+                  GestureDetector(
+                    onTap: () {
+                      if(AddProductController(productNameController: productNameController,
+                          descriptionController: descriptionController,
+                          category: const CategorySelector().getCategory(),
+                          image: selectedImage!).addProduct() == "Added Successfully!"){
+                        const CategorySelector().resetCategory();
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(25),
+                      decoration: BoxDecoration(
+                        color: Colors.lightGreen[800],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Post Product",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
                           ),
                         ),
                       ),
                     ),
+                  ),
 
-                    const SizedBox(height: 100)
-                  ],
+                  const SizedBox(height: 100)
+                ],
               ),
             ),
           ),
@@ -185,13 +179,13 @@ Widget imageDisplay(double height,  File? selectedImage) {
     width: double.infinity,
     height: height,
     color: Colors.grey[200],
-   child:
+    child:
     AspectRatio(
-        aspectRatio: 16 / 9, // Adjust the aspect ratio as needed
-        child: Image.file(
-          selectedImage!,
-          fit: BoxFit.fill, // Maintain aspect ratio and fill the space
-         ),
-       ), // If imageUrl is null, display an empty container
-    );
+      aspectRatio: 16 / 9, // Adjust the aspect ratio as needed
+      child: Image.file(
+        selectedImage!,
+        fit: BoxFit.fill, // Maintain aspect ratio and fill the space
+      ),
+    ),
+  );
 }

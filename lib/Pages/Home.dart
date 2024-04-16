@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 
+
 class Home extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-            'Eco Revive',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 30
-            ),
-          textAlign: TextAlign.center,
-        ),
-      ),
+
+    ),
       body: const Padding(
-        padding: EdgeInsets.all(16.0), // Adjust the value as needed
+        padding: EdgeInsets.all(16.0),
         child: Center(
           child: Text(
             'Home Page, click on the "+" Icon to add product, on the "Profile" icon to access your Profile',
@@ -32,17 +26,15 @@ class Home extends StatelessWidget {
                     color: Colors.black
               ),
               onPressed: () {
-                // Add your onPressed logic here
               },
             ),
-            const Spacer(), // Espaço entre os ícones e as extremidades
+            const Spacer(),
             IconButton(
               icon: const Icon(Icons.add_box,
                 size: 37,
                 color: Colors.black,
               ),
               onPressed: () {
-                // Add your onPressed logic here
               },
             ),
             const Spacer(),
@@ -54,9 +46,9 @@ class Home extends StatelessWidget {
               ),
 
               onPressed: () {
-                // Add your onPressed logic here
               },
             ),
+
           ],
         ),
       ),

@@ -7,17 +7,17 @@ class FireStoreController{
    final db = FirebaseFirestore.instance;
 
 
-  void addToProductsCollection(String productName, String description, String? category) async {
+  Future<String> addToProductsCollection(String productName, String description, String? category) async {
     // Create a new user with a first and last name
-    final product = <String, dynamic> {
+    final product = <String, dynamic>{
       "ProductName": productName,
       "Description": description,
       "Category": category,
       "Owner": await Auth().getUid()
     };
 
-    db.collection("Products").add(product).then((DocumentReference doc) =>
-        print('DocumentSnapshot added with ID: ${doc.id}'));
+    final DocumentReference docRef = await db.collection("Products").add(
+        product);
+    return docRef.id;
   }
-
 }
