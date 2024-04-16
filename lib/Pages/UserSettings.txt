@@ -1,5 +1,0 @@
-Settings
-        User Info (UserName Foto etc)
-        Change PassWord
-        Listed Products
-        App Theme

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:register/Auth/Auth.dart';
+import 'package:register/Pages/ChangePassword.dart';
 import 'package:register/Pages/theme_provider.dart';
+import '../Auth/Auth.dart';
 import 'Login.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -14,6 +15,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late ThemeProvider themeProvider;
   final auth = Auth();
   File? selectedImage;
 
@@ -28,48 +30,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         selectedImage = imageTemp;
       });
-
-      // Show confirmation dialog
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Save Image?'),
-            content: Text('Do you want to save the selected image?'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false); // Return false if canceled
-                },
-                child: Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true); // Return true if saved
-                },
-                child: Text('Save'),
-              ),
-            ],
-          );
-        },
-      ).then((value) {
-        if (value == false) {
-          setState(() {
-            selectedImage = null; // Do not set the selected image if canceled
-          });
-        }
-      });
-
     } catch (e) {
       print('Error picking image: $e');
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -206,7 +174,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           SizedBox(height: 16),
-                          // Add other widgets here
+                          SizedBox(
+                            width: 300,
+                            child: _buildButtonWithIcon(
+                              text: 'Change Password',
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
+                                );
+                              },
+                              context: context,
+                            ),
+                          ),
                         ],
                       ),
                     ),
