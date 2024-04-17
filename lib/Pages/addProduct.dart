@@ -6,8 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:register/Controllers/AddProductController.dart';
 import 'package:register/Functions/CategorySelector.dart';
-import 'package:register/Pages/Home.dart';
 import 'package:register/Pages/theme_provider.dart';
+import 'package:register/Pages/Home.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({Key? key}) : super(key: key);
@@ -53,7 +53,9 @@ class _AddProductState extends State<AddProduct> {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => Home()),
+            );
           },
           icon: Icon(
             Icons.arrow_back_ios_new,
