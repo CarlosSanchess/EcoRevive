@@ -17,7 +17,7 @@ class AddProductController {
   });
 
   Future<String> addProduct() async {
-      if(_checkInputValues(productNameController, descriptionController) == "Ok"){
+      if(checkInputValues(productNameController, descriptionController) == "Ok"){
         String documentId = await FireStoreController().addToProductsCollection(productNameController.text, descriptionController.text, category);
 
 
@@ -28,24 +28,24 @@ class AddProductController {
 
         return "Added Successfully!";
       }else{
-        return _checkInputValues(productNameController, descriptionController);
+        return checkInputValues(productNameController, descriptionController);
       }
   }
 
-  String _checkInputValues(
+  String checkInputValues(
       TextEditingController productNameController,
       TextEditingController descriptionController,
       ) {
-    if (_acceptableProductName(productNameController.text) != "Ok") {
-      return _acceptableProductName(productNameController.text);
+    if (acceptableProductName(productNameController.text) != "Ok") {
+      return acceptableProductName(productNameController.text);
     }
-    if (_acceptableDescription(descriptionController.text) != "Ok") {
-      return _acceptableDescription(descriptionController.text);
+    if (acceptableDescription(descriptionController.text) != "Ok") {
+      return acceptableDescription(descriptionController.text);
     }
     return "Ok";
   }
 
-  String _acceptableProductName(String str) {
+  String acceptableProductName(String str) {
     if (str.isEmpty) {
       return "Product Name cannot be empty";
     }
@@ -55,12 +55,12 @@ class AddProductController {
     return "Ok";
   }
 
-  String _acceptableDescription(String str) {
+  String acceptableDescription(String str) {
     if (str.isEmpty) {
       return "Description cannot be empty";
     }
-    if(str.length > 200){
-      return "Description cannot have more than 200 chars";
+    if(str.length > 500){
+      return "Description cannot have more than 500 chars";
     }
     return "Ok";
   }
