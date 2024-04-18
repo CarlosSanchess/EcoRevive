@@ -2,10 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:register/Auth/Auth.dart';
 import 'package:register/Controllers/CloudStorageController.dart';
+import 'package:register/Models/ProductInfo.dart';
 
-
-
-import '../Pages/filterProduct.dart';
 import '../Pages/myProducts.dart';
 import '../Pages/filterProduct.dart' as filter;
 
@@ -80,9 +78,10 @@ class FireStoreController{
         String productCategory = doc['Category'];
         String description = doc['Description'];
         String productId = doc.id;
+        String userId = doc['Owner'];
 
         String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
-        products.add(filter.ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl));
+        products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl, UserID: userId));
       }
       return products;
     } else {

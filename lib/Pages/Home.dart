@@ -10,7 +10,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      body: Padding(
+      body: const Padding(
         padding: EdgeInsets.only(top: 50.0),
         child: FilterProduct(),
       ),

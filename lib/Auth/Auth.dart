@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth {
@@ -68,5 +69,8 @@ class Auth {
       print('Failed to change password: $e');
       rethrow;
     }
+  }
+  Future<String> getEmailByUid(String userId) async {
+    //Need Admin SDK
   }
 }

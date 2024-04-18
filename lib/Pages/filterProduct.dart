@@ -1,19 +1,7 @@
 import 'package:flutter/material.dart';
 import '../Controllers/FireStoreController.dart';
-
-class ProductInfo {
-  final String productName;
-  final String description;
-  final String category;
-  final String imageURL;
-
-  ProductInfo({
-    required this.productName,
-    required this.description,
-    required this.category,
-    required this.imageURL,
-  });
-}
+import 'package:register/Models/ProductInfo.dart';
+import 'package:register/Pages/Product.dart';
 
 class ProductItem extends StatelessWidget {
   final ProductInfo product;
@@ -22,17 +10,24 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(8.0),
-      child: ListTile(
-        leading: Image.network(
-          product.imageURL,
-          width: 60,
-          height: 100,
-          fit: BoxFit.cover,
+   return  GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProductPage(product: product)),);
+      },
+      child: Card(
+        margin: const EdgeInsets.all(8.0),
+        child: ListTile(
+          leading: Image.network(
+            product.imageURL,
+            width: 60,
+            height: 100,
+            fit: BoxFit.cover,
+          ),
+          title: Text(product.productName),
+          subtitle: Text('Category: ${product.category}'),
         ),
-        title: Text(product.productName),
-        subtitle: Text('Category: ${product.category}'),
       ),
     );
   }
