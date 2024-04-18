@@ -115,7 +115,7 @@ class FireStoreController{
             // Filter by product name in Dart code
             if (searchTerm.isEmpty || name.toLowerCase().contains(searchTerm.toLowerCase())) {
               String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
-              products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl));
+              products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl, UserID: user.uid));
             }
           }
 
@@ -138,7 +138,7 @@ class FireStoreController{
           // Filter by product name in Dart code
           if (searchTerm.isEmpty || name.toLowerCase().contains(searchTerm.toLowerCase())) {
             String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
-            products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl));
+            products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl, UserID: user.uid));
           }
         }
 

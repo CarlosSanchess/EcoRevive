@@ -60,7 +60,8 @@ class ProductPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8),
+                 const SizedBox(height: 8),
+                  /*
                   FutureBuilder<String>(
                     future: Auth().getEmailByUid(product.UserID),
                     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -73,10 +74,21 @@ class ProductPage extends StatelessWidget {
                           snapshot.data ?? "No email found",
                           style: TextStyle(fontSize: 16),
                         );
-                      }
-                    },
-                  )
 
+                      const Text(
+                    'Owned By:',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                   */
+                   Text(product.UserID,
+                        style: const TextStyle(
+                        fontSize: 20,
+                        )
+                  ),
                 ],
               ),
             ),

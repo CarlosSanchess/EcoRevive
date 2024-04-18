@@ -70,7 +70,8 @@ class Auth {
       rethrow;
     }
   }
-  Future<String> getEmailByUid(String userId) async {
+  Future<void> getEmailByUid(String userId) async {
     //Need Admin SDK
+    return;
   }
 }
