@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:register/Auth/Auth.dart';
 import 'package:register/Models/ProductInfo.dart';
+import 'package:register/Controllers/CloudStorageController.dart';
 
 class ProductPage extends StatelessWidget {
   final ProductInfo product;
-
   ProductPage({required this.product});
 
   @override
@@ -30,7 +30,7 @@ class ProductPage extends StatelessWidget {
                     product.imageURL,
                     width: MediaQuery.of(context).size.width - 32,
                     height: 200,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                   ),
                 ),
               ),
@@ -40,10 +40,10 @@ class ProductPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
+                  const Text(
                     'Description:',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -60,34 +60,40 @@ class ProductPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                 const SizedBox(height: 8),
-                  /*
+                  const SizedBox(height: 8),
                   FutureBuilder<String>(
-                    future: Auth().getEmailByUid(product.UserID),
+                    future: CloudStorageController().getDownloadURL('ProductImages/${product.productID}'),
                     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return const CircularProgressIndicator();
                       } else if (snapshot.hasError) {
                         return Text("Error: ${snapshot.error}");
                       } else {
-                        return Text(
-                          snapshot.data ?? "No email found",
-                          style: TextStyle(fontSize: 16),
+                        snapshot.data ?? "No image Found"; // Assigning to snapshot.data
+                        return Row(
+                          children: [
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: NetworkImage(snapshot.data!),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10), // Space between image and text
+                            Text(
+                              product.UserID,
+                              style: const TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
                         );
-
-                      const Text(
-                    'Owned By:',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                   */
-                   Text(product.UserID,
-                        style: const TextStyle(
-                        fontSize: 20,
-                        )
+                      }
+                    },
                   ),
                 ],
               ),
