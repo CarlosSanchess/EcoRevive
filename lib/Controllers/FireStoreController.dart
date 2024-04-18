@@ -91,4 +91,48 @@ class FireStoreController{
     }
   }
 
+  Future<List<ProductInfo>> fetchProductsBySearchTerm(String searchTerm, String category) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      if (searchTerm.isEmpty) {
+        // If searchTerm is empty, fetch all products of the category
+        return fetchProductsByCategory(category);
+      } else {
+        // Query to filter by owner
+        QuerySnapshot ownerProducts = await db
+            .collection('Products')
+            .where('Owner', isNotEqualTo: user.uid).where('Category', isEqualTo: category)
+            .get();
+
+        // Query to search by product name
+        QuerySnapshot searchProducts = await db
+            .collection('Products')
+            .where('ProductName', isGreaterThanOrEqualTo: searchTerm.toLowerCase())
+            .where('ProductName', isLessThanOrEqualTo: searchTerm.toLowerCase() + '\uf8ff')
+            .get();
+
+        // Combine the results
+        Set<String> ownerProductIds = Set.from(ownerProducts.docs.map((doc) => doc.id));
+        List<ProductInfo> products = [];
+        for (QueryDocumentSnapshot doc in searchProducts.docs) {
+          if (!ownerProductIds.contains(doc.id)) {
+            String name = doc['ProductName'];
+            String productCategory = doc['Category'];
+            String description = doc['Description'];
+            String productId = doc.id;
+
+            String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
+            products.add(filter.ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl));
+          }
+        }
+        return products;
+      }
+    } else {
+      throw 'Not logged in.';
+    }
+  }
+
+
+
 }
