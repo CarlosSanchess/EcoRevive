@@ -68,9 +68,9 @@ class FireStoreController{
     if (user != null) {
       QuerySnapshot categoryProducts;
       if (category == "all") {
-        categoryProducts = await db.collection('Products').get();
+        categoryProducts = await db.collection('Products').where('Owner', isNotEqualTo: user.uid).get();
       } else {
-        categoryProducts = await db.collection('Products').where('Category', isEqualTo: category).get();
+        categoryProducts = await db.collection('Products').where('Category', isEqualTo: category).where('Owner', isNotEqualTo: user.uid).get();
       }
       List<ProductInfo> products = [];
       for (QueryDocumentSnapshot doc in categoryProducts.docs) {
@@ -88,5 +88,67 @@ class FireStoreController{
       throw 'Not logged in.';
     }
   }
+
+  Future<List<ProductInfo>> fetchProductsBySearchTerm(String searchTerm, String category) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      if (searchTerm.isEmpty) {
+        // If searchTerm is empty, fetch all products of the category
+        return fetchProductsByCategory(category);
+      } else {
+        if(category == "all"){
+          // Query to filter by owner
+          QuerySnapshot productsSnapshot = await db
+              .collection('Products')
+              .where('Owner', isNotEqualTo: user.uid)
+              .get();
+
+          List<ProductInfo> products = [];
+
+          for (QueryDocumentSnapshot doc in productsSnapshot.docs) {
+            String name = doc['ProductName'];
+            String productCategory = doc['Category'];
+            String description = doc['Description'];
+            String productId = doc.id;
+
+            // Filter by product name in Dart code
+            if (searchTerm.isEmpty || name.toLowerCase().contains(searchTerm.toLowerCase())) {
+              String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
+              products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl));
+            }
+          }
+
+          return products;
+        }
+        QuerySnapshot productsSnapshot = await db
+            .collection('Products')
+            .where('Owner', isNotEqualTo: user.uid)
+            .where('Category', isEqualTo: category)
+            .get();
+
+        List<ProductInfo> products = [];
+
+        for (QueryDocumentSnapshot doc in productsSnapshot.docs) {
+          String name = doc['ProductName'];
+          String productCategory = doc['Category'];
+          String description = doc['Description'];
+          String productId = doc.id;
+
+          // Filter by product name in Dart code
+          if (searchTerm.isEmpty || name.toLowerCase().contains(searchTerm.toLowerCase())) {
+            String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
+            products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl));
+          }
+        }
+
+        return products;
+      }
+    } else {
+      throw 'Not logged in.';
+    }
+  }
+
+
 
 }

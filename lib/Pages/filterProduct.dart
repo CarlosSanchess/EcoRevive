@@ -81,11 +81,14 @@ class _FilterProductState extends State<FilterProduct> {
     );
   }
 
+  TextEditingController searchController = TextEditingController();
+
   Widget buildSearchRow() {
     return Row(
       children: [
         Expanded(
           child: TextField(
+            controller: searchController,
             decoration: InputDecoration(
               hintText: 'Search for your item...',
               hintStyle: TextStyle(
@@ -96,7 +99,6 @@ class _FilterProductState extends State<FilterProduct> {
                 size: 16,
                 color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.grey,
               ),
-
               filled: true,
               fillColor: Theme.of(context).brightness == Brightness.dark
                   ? Color.fromRGBO(42, 41, 58, 1.0) : Colors.grey[200],
@@ -110,7 +112,19 @@ class _FilterProductState extends State<FilterProduct> {
         ),
         const SizedBox(width: 10),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () async {
+            try {
+              List<ProductInfo> fetchedProducts = await FireStoreController().fetchProductsBySearchTerm(
+                  searchController.text,
+                  selectedCategory!
+              );
+              setState(() {
+                products = fetchedProducts;
+              });
+            } catch (error) {
+              print("Error fetching products: $error");
+            }
+          },
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -120,6 +134,7 @@ class _FilterProductState extends State<FilterProduct> {
       ],
     );
   }
+
 
   Widget buildCategoryChips() {
     List<String> categories = ['all', 'Computador', 'Telemóvel', 'Teclado', 'Rato', 'Outro'];
