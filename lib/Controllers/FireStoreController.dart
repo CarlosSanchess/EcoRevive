@@ -71,9 +71,9 @@ class FireStoreController{
     if (user != null) {
       QuerySnapshot categoryProducts;
       if (category == "all") {
-        categoryProducts = await db.collection('Products').get();
+        categoryProducts = await db.collection('Products').where('Owner', isNotEqualTo: user.uid).get();
       } else {
-        categoryProducts = await db.collection('Products').where('Category', isEqualTo: category).get();
+        categoryProducts = await db.collection('Products').where('Category', isEqualTo: category).where('Owner', isNotEqualTo: user.uid).get();
       }
       List<ProductInfo> products = [];
       for (QueryDocumentSnapshot doc in categoryProducts.docs) {
