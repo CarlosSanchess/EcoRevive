@@ -121,7 +121,7 @@ class _FilterProductState extends State<FilterProduct> {
             try {
               List<ProductInfo> fetchedProducts = await FireStoreController().fetchProductsBySearchTerm(
                   searchController.text,
-                  selectedCategory ?? 'all' // Pass the selected category or 'all' if no category is selected
+                  selectedCategory!
               );
               setState(() {
                 products = fetchedProducts;
@@ -139,6 +139,7 @@ class _FilterProductState extends State<FilterProduct> {
       ],
     );
   }
+
 
   Widget buildCategoryChips() {
     List<String> categories = ['all', 'Computador', 'Telemóvel', 'Teclado', 'Rato', 'Outro'];
