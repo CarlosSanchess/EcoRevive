@@ -42,4 +42,14 @@ class CloudStorageController {
       print("Error Deleting Image $e");
     }
   }
+  Future<String> uploadChatImage(File image, String chatId) async {
+    try {
+      Reference ref = storage.ref().child("ChatImages/$chatId");
+      await ref.putFile(image);
+      return await ref.getDownloadURL();
+    } catch (e) {
+      print("Error uploading image: $e");
+      return Future.error("Failed to upload chat image");
+    }
+  }
 }
