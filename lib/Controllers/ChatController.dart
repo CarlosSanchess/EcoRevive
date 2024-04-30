@@ -23,7 +23,7 @@ class ChatController{
     List<String> buildId = [productId, user1Id, user2Id]..sort();
     String chatId = buildId.join("-");
     //New chat inside the Chats collection
-    await db.collection('Chats').doc(chatId).set({});
+    await db.collection('Chats').doc(chatId).set({'participants': [user1Id, user2Id], 'productId': productId});
   }
 
   Future<void> sendMessage(String productID, String receiverID, String? content, File? image) async {
