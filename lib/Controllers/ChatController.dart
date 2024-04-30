@@ -19,6 +19,13 @@ class ChatController{
     return chat.exists;
   }
 
+  Future<void> initiateChat(String productId, String user1Id, String user2Id) async {
+    List<String> buildId = [productId, user1Id, user2Id]..sort();
+    String chatId = buildId.join("-");
+    //New chat inside the Chats collection
+    await db.collection('Chats').doc(chatId).set({});
+  }
+
   Future<void> sendMessage(String productID, String receiverID, String? content, File? image) async {
     if ((content == null || content.isEmpty) && (image == null || image.path.isEmpty)) {
       throw ArgumentError('Messages cannot be empty');

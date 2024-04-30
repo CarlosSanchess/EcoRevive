@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:register/Auth/Auth.dart';
+import 'package:register/Controllers/ChatController.dart';
 import 'package:register/Models/ProductInfo.dart';
 import 'package:register/Controllers/CloudStorageController.dart';
 
@@ -104,7 +105,12 @@ class ProductPage extends StatelessWidget {
             Container(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  String sender = Auth().currentUser!.uid;
+                  bool flag = await ChatController().chatExists(product.productID, sender, product.UserID);
+
+                  if (!flag) ChatController().initiateChat(product.productID, sender, product.UserID);
+
                   Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(receiverId: product.UserID ,product: product)));
                 },
                 child: const Text('Chat'),

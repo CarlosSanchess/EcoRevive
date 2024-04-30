@@ -17,7 +17,7 @@ class Chat extends StatelessWidget {
   File? image;
 
   void sendMessage() async {
-    await chatController.sendMessage(receiverId, textController.text, textController.text, image);
+    await chatController.sendMessage(product.productID, receiverId, textController.text, image);
     textController.clear();
     image = null;
   }
@@ -115,13 +115,13 @@ class Chat extends StatelessWidget {
         Expanded(
           child: TextField(
             controller: textController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: "Type a message",
             ),
           ),
         ),
         IconButton(
-          icon: Icon(Icons.send),
+          icon: const Icon(Icons.send),
           onPressed: sendMessage,
         ),
       ],
