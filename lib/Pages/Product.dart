@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:register/Auth/Auth.dart';
 import 'package:register/Models/ProductInfo.dart';
 import 'package:register/Controllers/CloudStorageController.dart';
+
+import 'Chat.dart';
 
 class ProductPage extends StatelessWidget {
   final ProductInfo product;
@@ -85,7 +88,7 @@ class ProductPage extends StatelessWidget {
                             ),
                             const SizedBox(width: 10), // Space between image and text
                             Text(
-                              product.UserID,
+                              product.UserID.substring(0,20),
                               style: const TextStyle(
                                 fontSize: 20,
                               ),
@@ -98,6 +101,15 @@ class ProductPage extends StatelessWidget {
                 ],
               ),
             ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(receiverId: product.UserID ,product: product)));
+                },
+                child: const Text('Chat'),
+              ),
+            )
           ],
         ),
       ),
