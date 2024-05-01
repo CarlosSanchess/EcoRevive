@@ -328,7 +328,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const ChangeDisplayNamePage()),
+                                  MaterialPageRoute(builder: (context) => ChangeDisplayNamePage(auth: auth)),
                                 );
                               },
                               context: context,

@@ -9,7 +9,7 @@ class Register extends StatelessWidget {
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController displayNameController = TextEditingController(); // Controller for display name
+  TextEditingController displayNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

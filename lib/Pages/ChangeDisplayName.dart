@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../Auth/Auth.dart';
+import 'Profile.dart';
 
 class ChangeDisplayNamePage extends StatefulWidget {
-  const ChangeDisplayNamePage({Key? key}) : super(key: key);
+  final Auth auth;
+
+  const ChangeDisplayNamePage({Key? key, required this.auth}) : super(key: key);
 
   @override
   _ChangeDisplayNamePageState createState() => _ChangeDisplayNamePageState();
@@ -37,10 +39,13 @@ class _ChangeDisplayNamePageState extends State<ChangeDisplayNamePage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                final newName = _nameController.text;
+                final newName = _nameController.text.trim();
                 if (newName.isNotEmpty) {
-                  Provider.of<Auth>(context, listen: false).updateDisplayName(newName).then((_) {
-                    Navigator.pop(context);
+                  widget.auth.updateDisplayName(newName).then((_) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfileScreen()),
+                    );
                   });
                 }
               },
@@ -52,3 +57,4 @@ class _ChangeDisplayNamePageState extends State<ChangeDisplayNamePage> {
     );
   }
 }
+
