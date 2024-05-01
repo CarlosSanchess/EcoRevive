@@ -15,11 +15,11 @@ In this Sprint #1 our backlog tasks rely on some new technologies that we had to
 - Utilizing e-mail sending technoly to Change Password, in a safe way.
 
 ### Sprint Backlog
-- Enabled user registration and login functionality.
-- Implemented the ability for users to add new recyclable products.
-- Added profile customization options, including password change and theme selection that is stored in local storage acording to user preferences.
-- Implemented management functionality for listed recyclable products.
-- Added filtering options for the list of recyclable products based on various criteria.
+- [Enabled user registration and login functionality.](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/5)
+- [Implemented the ability for users to add new recyclable products.](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/2)
+- [Added profile customization options, including password change and theme selection that is stored in local storage acording to user preferences.](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/6)
+- [Implemented management functionality for listed recyclable products.](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/3)
+- [Added filtering options for the list of recyclable products based on various criteria.](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/4)
 
 ### Sprint#1 Backlog
 ![Sprint Backlog Sprint#1](docs/diagrams/sprint1_backlog.png)
