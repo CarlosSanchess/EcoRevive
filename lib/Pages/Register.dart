@@ -5,11 +5,11 @@ import 'package:register/Functions/Functions.dart';
 import 'package:register/Pages/theme_provider.dart';
 
 class Register extends StatelessWidget {
-
   Register({super.key});
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController displayNameController = TextEditingController(); // Controller for display name
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class Register extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                const SizedBox(height: 125),
+                const SizedBox(height: 30),
                 TextContainer(
                   hintText: "E-mail",
                   obscureText: false,
@@ -64,17 +64,25 @@ class Register extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 TextContainer(
+                  hintText: "Display Name",
+                  obscureText: false,
+                  icon: const Icon(Icons.person),
+                  textEditingController: displayNameController,
+                ),
+                const SizedBox(height: 15),
+                TextContainer(
                   hintText: "Password",
                   obscureText: true,
-                  icon: const Icon(Icons.key),
+                  icon: const Icon(Icons.lock),
                   textEditingController: passwordController,
                 ),
-                const SizedBox(height: 70),
+                const SizedBox(height: 40),
                 GestureDetector(
                   onTap: () async {
                     String result = await RegisterLoginControllers(
                       usernameController: usernameController,
                       passwordController: passwordController,
+                      displayNameController: displayNameController,
                     ).signUp();
                     showDialog(
                       context: context,
@@ -116,7 +124,7 @@ class Register extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 70),
+                const SizedBox(height: 40),
               ],
             ),
           ),

@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:register/Controllers/CloudStorageController.dart';
 import 'package:register/Pages/Login.dart';
 
+import 'ChangeDisplayName.dart';
 import 'FeedbackHistory.dart';
 import 'Home.dart';
 
@@ -196,6 +197,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     }
                   },
                 ),
+                const SizedBox(height: 10),
+                FutureBuilder<String?>(
+                  future: auth.getDisplayName(),
+                  builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else {
+                      final displayName = snapshot.data ?? 'No display name';
+                      final theme = themeProvider.getTheme();
+                      final textColor = theme.brightness == Brightness.light
+                          ? Colors.grey[700]
+                          : theme.textTheme.displayLarge!.color;
+                      return Text(
+                        displayName,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: textColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    }
+                  },
+                ),
               ],
             ),
             const SizedBox(height: 40),
@@ -269,14 +293,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             width: 300,
                             child: _buildButtonWithIcon(
-
-                               icon: Icons.shopping_bag,
+                              icon: Icons.shopping_bag,
                               text: 'My Products',
                               onPressed: () {
                                 Navigator.push(
-                                   context,
-                                   MaterialPageRoute(builder: (context) => myProducts()),
-                                 );
+                                  context,
+                                  MaterialPageRoute(builder: (context) => myProducts()),
+                                );
                               },
                               context: context,
                             ),
@@ -291,6 +314,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
+                                );
+                              },
+                              context: context,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            width: 300,
+                            child: _buildButtonWithIcon(
+                              icon: Icons.edit,
+                              text: 'Change Name',
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const ChangeDisplayNamePage()),
                                 );
                               },
                               context: context,
@@ -341,6 +379,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
   Widget _buildButtonWithIcon({
     required IconData icon,
     required String text,
@@ -377,5 +416,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-
 }

@@ -3,7 +3,7 @@ import 'package:register/Functions/Functions.dart';
 import 'package:register/Controllers/RegisterLoginControllers.dart';
 import 'package:register/Pages/Home.dart';
 import 'package:register/Pages/Register.dart';
-import 'package:register/Pages/ForgotPassword.dart'; // Import the ForgotPassword page
+import 'package:register/Pages/ForgotPassword.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -70,7 +70,6 @@ class LoginState extends State<Login> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigate to the ForgotPassword page
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
