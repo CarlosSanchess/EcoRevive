@@ -6,7 +6,7 @@ import '../Controllers/FeedbackController.dart';
 
 class ReviewPage extends StatefulWidget {
   final String productId;
-  final String revieweeId; // User ID of the product owner
+  final String revieweeId;
 
   ReviewPage({required this.productId, required this.revieweeId});
 

@@ -6,6 +6,7 @@ import 'package:register/Models/ProductInfo.dart';
 import 'package:register/Controllers/CloudStorageController.dart';
 import 'Chat.dart';
 import 'Review.dart';
+import 'package:register/Controllers/FireStoreController.dart';
 
 class ProductPage extends StatelessWidget {
   final ProductInfo product;
@@ -87,10 +88,48 @@ class ProductPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 10),
-                            Text(
-                              product.UserID.substring(0,20),
-                              style: const TextStyle(
-                                fontSize: 20,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product.UserID.substring(0,20),
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  FutureBuilder<double>(
+                                    future: FireStoreController().getUserOverallRating(product.UserID),
+                                    builder: (BuildContext context, AsyncSnapshot<double> ratingSnapshot) {
+                                      if (ratingSnapshot.connectionState == ConnectionState.waiting) {
+                                        return CircularProgressIndicator();
+                                      } else if (ratingSnapshot.hasError) {
+                                        return Text("Error: ${ratingSnapshot.error}");
+                                      } else {
+                                        final userRating = ratingSnapshot.data;
+                                        if (userRating == null || userRating == 0.0) {
+                                          return Text(
+                                            'Rating: No rating yet',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                        } else {
+                                          return Text(
+                                            'Rating: $userRating',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    },
+                                  ),
+
+                                ],
                               ),
                             ),
                           ],
