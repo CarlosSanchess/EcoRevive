@@ -35,12 +35,12 @@ class Chat extends StatelessWidget {
               height: 100,
               fit: BoxFit.cover,
             ),
-            SizedBox(width: 8), // Add some spacing
+            SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(product.productName),
-                Text(product.category),
+                Opacity(opacity: 0.5, child: Text(product.category),),
               ],
             ),
           ],
@@ -91,10 +91,12 @@ class Chat extends StatelessWidget {
     if (data["message"] != null && data["message"].isNotEmpty) {
       messageWidgets.add(Text(data["message"]));
     }
-
+    bool isReceiver = data["receiverID"] == receiverId;
     return Align(
-      alignment: data["receiverID"] == receiverId ? Alignment.centerRight : Alignment.centerLeft,
+
+      alignment: isReceiver ? Alignment.centerRight : Alignment.centerLeft,
       child: Column(
+        crossAxisAlignment: isReceiver ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: messageWidgets,
       )
     );
