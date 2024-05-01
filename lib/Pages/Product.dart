@@ -120,7 +120,7 @@ class ProductPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ReviewPage(productId: product.productID),
+                      builder: (context) => ReviewPage(productId: product.productID, revieweeId: product.UserID),
                     ),
                   );
                 },

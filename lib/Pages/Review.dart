@@ -6,7 +6,9 @@ import '../Controllers/FeedbackController.dart';
 
 class ReviewPage extends StatefulWidget {
   final String productId;
-  ReviewPage({required this.productId});
+  final String revieweeId; // User ID of the product owner
+
+  ReviewPage({required this.productId, required this.revieweeId});
 
   @override
   _ReviewPageState createState() => _ReviewPageState();
@@ -24,12 +26,12 @@ class _ReviewPageState extends State<ReviewPage> {
   }
 
   Future<void> submitReview() async {
-    final String userId = FirebaseAuth.instance.currentUser!.uid;
-    final String productId = widget.productId;
+    final String reviewerId = FirebaseAuth.instance.currentUser!.uid;
+    final String revieweeId = widget.revieweeId;
 
     FeedbackData feedback = FeedbackData(
-      userId: userId,
-      productId: productId,
+      reviewerId: reviewerId,
+      revieweeId: revieweeId,
       rating: _rating,
       feedback: _feedbackController.text,
       timestamp: DateTime.now(),
@@ -47,7 +49,6 @@ class _ReviewPageState extends State<ReviewPage> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +65,7 @@ class _ReviewPageState extends State<ReviewPage> {
             SizedBox(height: 20),
             RatingBar.builder(
               initialRating: _rating,
-              minRating: 0,
+              minRating: 1,
               direction: Axis.horizontal,
               allowHalfRating: true,
               itemCount: 5,

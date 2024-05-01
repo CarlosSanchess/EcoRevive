@@ -4,6 +4,7 @@ import 'package:register/Auth/Auth.dart';
 import 'package:register/Controllers/CloudStorageController.dart';
 import 'package:register/Models/ProductInfo.dart';
 
+import '../Models/Feedback.dart';
 import '../Pages/myProducts.dart';
 import '../Pages/filterProduct.dart' as filter;
 
@@ -147,8 +148,26 @@ class FireStoreController{
     } else {
       throw 'Not logged in.';
     }
+
   }
 
+  Future<List<FeedbackData>> getFeedbackForUser(String userId) async {
+    try {
+      final querySnapshot = await db
+          .collection('Feedbacks')
+          .where('revieweeId', isEqualTo: userId)
+          .get();
+
+      final List<FeedbackData> feedbackList = querySnapshot.docs
+          .map((doc) => FeedbackData.fromFirestore(doc.data()))
+          .toList();
+
+      return feedbackList;
+    } catch (error) {
+      print("Error getting feedback for user: $error");
+      throw error;
+    }
+  }
 
 
 }

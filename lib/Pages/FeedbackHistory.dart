@@ -1,27 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
+import '../Controllers/FireStoreController.dart'; // Import the FireStoreController
 import '../Models/Feedback.dart';
 
 class FeedbackHistoryPage extends StatelessWidget {
-  Stream<List<FeedbackData>> getFeedbackStream() {
-    return FirebaseFirestore.instance
-        .collection('Feedbacks')
-        .orderBy('timestamp', descending: true)
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-        .map((doc) => FeedbackData.fromFirestore(doc.data()))
-        .toList());
-  }
+  final FireStoreController _fireStoreController = FireStoreController(); // Create an instance of FireStoreController
 
   @override
   Widget build(BuildContext context) {
+    final currentUserID = FirebaseAuth.instance.currentUser!.uid;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Feedback History'),
       ),
-      body: StreamBuilder<List<FeedbackData>>(
-        stream: getFeedbackStream(),
+      body: FutureBuilder<List<FeedbackData>>(
+        future: _fireStoreController.getFeedbackForUser(currentUserID), // Use getFeedbackForUser method from FireStoreController
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
