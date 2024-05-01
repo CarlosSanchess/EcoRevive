@@ -92,8 +92,11 @@ class Chat extends StatelessWidget {
       messageWidgets.add(Text(data["message"]));
     }
 
-    return Column(
-      children: messageWidgets,
+    return Align(
+      alignment: data["receiverID"] == receiverId ? Alignment.centerRight : Alignment.centerLeft,
+      child: Column(
+        children: messageWidgets,
+      )
     );
   }
 

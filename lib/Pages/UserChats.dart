@@ -74,8 +74,15 @@ class _UserChatsState extends State<UserChats>{
                           trailing: IconButton(
                             icon: Icon(Icons.chat),
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(receiverId: info.UserID ,product: info)));
-                            },
+                              if (info.UserID == userId) {
+                                String otherUserId = chat['participants'].firstWhere((userId) => userId != info.UserID);
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) => Chat(receiverId: otherUserId, product: info)));
+                              } else {
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) => Chat(receiverId: info.UserID, product: info)));
+                              }
+                            }
                           ),
                           // Add more details about the chat if needed
                         );
