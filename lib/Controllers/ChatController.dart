@@ -40,7 +40,7 @@ class ChatController{
 
     String? imageUrl;
     if(image != null && image.path.isNotEmpty){
-      imageUrl = await CloudStorageController().uploadChatImage(image, chatId);
+      imageUrl = await CloudStorageController().uploadChatImage(image, chatId, time);
     }
 
     Message message = Message(
@@ -60,6 +60,10 @@ class ChatController{
     List<String> buildId = [productId, user1Id, user2Id]..sort();
     String chatId = buildId.join("-");
     return db.collection('Chats').doc(chatId).collection('Messages').orderBy('time').snapshots();
+  }
+
+  Stream<QuerySnapshot> getUserChats(String userId){
+    return db.collection('Chats').where('participants', arrayContains: userId).snapshots();
   }
 
 }
