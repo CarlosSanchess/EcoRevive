@@ -4,8 +4,8 @@ import 'package:register/Auth/Auth.dart';
 import 'package:register/Controllers/ChatController.dart';
 import 'package:register/Models/ProductInfo.dart';
 import 'package:register/Controllers/CloudStorageController.dart';
-
 import 'Chat.dart';
+import 'Review.dart';
 
 class ProductPage extends StatelessWidget {
   final ProductInfo product;
@@ -73,7 +73,6 @@ class ProductPage extends StatelessWidget {
                       } else if (snapshot.hasError) {
                         return Text("Error: ${snapshot.error}");
                       } else {
-                        snapshot.data ?? "No image Found"; // Assigning to snapshot.data
                         return Row(
                           children: [
                             Container(
@@ -87,7 +86,7 @@ class ProductPage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 10), // Space between image and text
+                            const SizedBox(width: 10),
                             Text(
                               product.UserID.substring(0,20),
                               style: const TextStyle(
@@ -108,14 +107,27 @@ class ProductPage extends StatelessWidget {
                 onPressed: () async {
                   String sender = Auth().currentUser!.uid;
                   bool flag = await ChatController().chatExists(product.productID, sender, product.UserID);
-
                   if (!flag) ChatController().initiateChat(product.productID, sender, product.UserID);
-
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(receiverId: product.UserID ,product: product)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(receiverId: product.UserID, product: product)));
                 },
                 child: const Text('Chat'),
               ),
+            ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReviewPage(productId: product.productID),
+                    ),
+                  );
+                },
+                child: const Text('Leave a Review'),
+              ),
             )
+
           ],
         ),
       ),

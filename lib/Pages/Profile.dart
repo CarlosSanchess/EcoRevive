@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:register/Controllers/CloudStorageController.dart';
 import 'package:register/Pages/Login.dart';
 
+import 'FeedbackHistory.dart';
 import 'Home.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -299,6 +300,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             width: 300,
                             child: _buildButtonWithIcon(
+                              icon: Icons.rate_review,
+                              text: 'View Feedback',
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => FeedbackHistoryPage()),
+                                );
+                              },
+                              context: context,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            width: 300,
+                            child: _buildButtonWithIcon(
                               icon: Icons.logout,
                               text: 'Log Out',
                               onPressed: () {
@@ -337,7 +353,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : themeProvider.getTheme().textTheme.bodyLarge!.color;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0), // Adjust horizontal padding as needed
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: ListTile(
         contentPadding: EdgeInsets.zero,
         onTap: onPressed,
