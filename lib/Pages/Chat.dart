@@ -6,22 +6,69 @@ import '../Auth/Auth.dart';
 import '../Controllers/ChatController.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Chat extends StatelessWidget {
+class Chat extends StatefulWidget {
   final String receiverId;
   final ProductInfo product;
-  Chat({Key? key, required this.receiverId, required this.product}) : super(key: key);
+  const Chat({super.key, required this.receiverId, required this.product});
 
+  @override
+  State<Chat> createState() => _ChatState();
+}
+
+class _ChatState extends State<Chat> with WidgetsBindingObserver{
   final TextEditingController textController = TextEditingController();
   final ChatController chatController = ChatController();
   final Auth auth = Auth();
+  FocusNode focusNode = FocusNode();
   File? image;
 
-  void sendMessage() async {
-    await chatController.sendMessage(product.productID, receiverId, textController.text, image);
-    textController.clear();
-    image = null;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        Future.delayed(const Duration(milliseconds: 100), () =>scrollDown(duration: const Duration(milliseconds: 400)));
+      }
+    });
+    
+    Future.delayed(const Duration(milliseconds: 200), () =>scrollDown(duration: const Duration(milliseconds: 400)));
   }
 
+  @override
+  void dispose(){
+    WidgetsBinding.instance.removeObserver(this);
+    focusNode.dispose();
+    textController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    scrollDown(duration: Duration.zero);
+  }
+
+  final ScrollController scrollController = ScrollController();
+  void scrollDown({required Duration duration}) {
+    if (duration == Duration.zero) {
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    } else {
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: duration,
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  void sendMessage() async {
+    await chatController.sendMessage(widget.product.productID, widget.receiverId, textController.text, image);
+    textController.clear();
+    image = null;
+
+    scrollDown(duration: const Duration(milliseconds: 400));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +77,7 @@ class Chat extends StatelessWidget {
         title: Row(
           children: [
             Image.network(
-              product.imageURL,
+              widget.product.imageURL,
               width: 80,
               height: 100,
               fit: BoxFit.cover,
@@ -39,8 +86,8 @@ class Chat extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(product.productName, style: Theme.of(context).appBarTheme.titleTextStyle,),
-                Opacity(opacity: 0.7, child: Text(product.category, style: const TextStyle(fontSize: 16.0),),),
+                Text(widget.product.productName, style: Theme.of(context).appBarTheme.titleTextStyle,),
+                Opacity(opacity: 0.7, child: Text(widget.product.category, style: const TextStyle(fontSize: 16.0),),),
               ],
             ),
           ],
@@ -63,7 +110,7 @@ class Chat extends StatelessWidget {
   Widget buildAllMessages() {
     String senderId = auth.currentUser!.uid;
     return StreamBuilder(
-        stream: ChatController().getMessages(product.productID, receiverId, senderId),
+        stream: ChatController().getMessages(widget.product.productID, widget.receiverId, senderId),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text("Error: ${snapshot.error}");
@@ -73,6 +120,7 @@ class Chat extends StatelessWidget {
           }
           else {
             return ListView(
+              controller: scrollController,
               children:
                 snapshot.data!.docs.map((doc) => buildSingleMessage(context, doc)).toList()
             );
@@ -92,7 +140,7 @@ class Chat extends StatelessWidget {
     if (data["message"] != null && data["message"].isNotEmpty) {
       messageWidgets.add(Text(data["message"]));
     }
-    bool isReceiver = data["receiverID"] == receiverId;
+    bool isReceiver = data["receiverID"] == widget.receiverId;
     return Align(
 
       alignment: isReceiver ? Alignment.centerRight : Alignment.centerLeft,
