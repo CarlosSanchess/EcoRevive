@@ -40,7 +40,7 @@ class ChatController{
 
     String? imageUrl;
     if(image != null && image.path.isNotEmpty){
-      imageUrl = await CloudStorageController().uploadChatImage(image, chatId);
+      imageUrl = await CloudStorageController().uploadChatImage(image, chatId, time);
     }
 
     Message message = Message(

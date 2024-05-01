@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class CloudStorageController {
@@ -42,9 +43,9 @@ class CloudStorageController {
       print("Error Deleting Image $e");
     }
   }
-  Future<String> uploadChatImage(File image, String chatId) async {
+  Future<String> uploadChatImage(File image, String chatId, Timestamp time) async {
     try {
-      Reference ref = storage.ref().child("ChatImages/$chatId");
+      Reference ref = storage.ref().child("ChatImages/$chatId/${time.seconds}");
       await ref.putFile(image);
       return await ref.getDownloadURL();
     } catch (e) {
