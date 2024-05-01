@@ -58,11 +58,9 @@ class Auth {
 
   Future<void> ChangePassword(String oldPassword, String newPassword) async {
     try {
-      // Re-authenticate user with their current credentials
       AuthCredential credential = EmailAuthProvider.credential(email: currentUser!.email!, password: oldPassword);
       await currentUser!.reauthenticateWithCredential(credential);
 
-      // Update the password
       await updateUserPassword(newPassword);
       print('Password changed successfully.');
     } catch (e) {
@@ -74,4 +72,20 @@ class Auth {
     //Need Admin SDK
     return;
   }
+  Future<String?> getDisplayName() async {
+    return FirebaseAuth.instance.currentUser?.displayName;
+  }
+
+  Future<void> updateDisplayName(String displayName) async {
+    try {
+      await currentUser?.updateDisplayName(displayName);
+      await currentUser?.reload();
+      currentUser = FirebaseAuth.instance.currentUser;
+      print('Display name updated to: ${currentUser?.displayName}');
+    } catch (e) {
+      print('Failed to update display name: $e');
+      rethrow;
+    }
+  }
+
 }

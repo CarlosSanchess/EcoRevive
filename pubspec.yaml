@@ -45,6 +45,10 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   mockito: ^5.0.0
   firebase_storage: ^11.6.9
+  flutter_rating_bar: ^4.0.0
+  firebase_messaging: ^14.9.1
+  flutter_local_notifications: ^17.1.1
+  flutter_gherkin: ^2.0.0
 
 
   #firebase_app_check: ^0.2.2+1

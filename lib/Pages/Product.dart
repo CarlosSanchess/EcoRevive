@@ -1,11 +1,30 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:register/Auth/Auth.dart';
+import 'package:register/Controllers/ChatController.dart';
 import 'package:register/Models/ProductInfo.dart';
 import 'package:register/Controllers/CloudStorageController.dart';
+import 'package:register/Controllers/FireStoreController.dart';
+
+import 'Chat.dart';
+import 'Review.dart';
 
 class ProductPage extends StatelessWidget {
   final ProductInfo product;
+
   ProductPage({required this.product});
+
+  Color _ratingColor(double rating) {
+    if (rating < 2.0) {
+      return Colors.red;
+    } else if (rating < 3.0) {
+      return Colors.orange;
+    } else if (rating < 4.0) {
+      return Colors.yellow;
+    } else {
+      return Colors.green;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +88,6 @@ class ProductPage extends StatelessWidget {
                       } else if (snapshot.hasError) {
                         return Text("Error: ${snapshot.error}");
                       } else {
-                        snapshot.data ?? "No image Found"; // Assigning to snapshot.data
                         return Row(
                           children: [
                             Container(
@@ -83,11 +101,50 @@ class ProductPage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 10), // Space between image and text
-                            Text(
-                              product.UserID,
-                              style: const TextStyle(
-                                fontSize: 20,
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product.UserID.substring(0,20),
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  FutureBuilder<double>(
+                                    future: FireStoreController().getUserOverallRating(product.UserID),
+                                    builder: (BuildContext context, AsyncSnapshot<double> ratingSnapshot) {
+                                      if (ratingSnapshot.connectionState == ConnectionState.waiting) {
+                                        return CircularProgressIndicator();
+                                      } else if (ratingSnapshot.hasError) {
+                                        return Text("Error: ${ratingSnapshot.error}");
+                                      } else {
+                                        final userRating = ratingSnapshot.data;
+                                        if (userRating == null || userRating == 0.0) {
+                                          return Text(
+                                            'Rating: No rating yet',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                        } else {
+                                          return Text(
+                                            'Rating: ${userRating.toStringAsFixed(1)}',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: _ratingColor(userRating),
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    },
+                                  ),
+
+                                ],
                               ),
                             ),
                           ],
@@ -98,6 +155,33 @@ class ProductPage extends StatelessWidget {
                 ],
               ),
             ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                onPressed: () async {
+                  String sender = Auth().currentUser!.uid;
+                  bool flag = await ChatController().chatExists(product.productID, sender, product.UserID);
+                  if (!flag) ChatController().initiateChat(product.productID, sender, product.UserID);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(receiverId: product.UserID, product: product)));
+                },
+                child: const Text('Chat'),
+              ),
+            ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReviewPage(productId: product.productID, revieweeId: product.UserID),
+                    ),
+                  );
+                },
+                child: const Text('Leave a Review'),
+              ),
+            )
+
           ],
         ),
       ),

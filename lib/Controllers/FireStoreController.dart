@@ -4,6 +4,7 @@ import 'package:register/Auth/Auth.dart';
 import 'package:register/Controllers/CloudStorageController.dart';
 import 'package:register/Models/ProductInfo.dart';
 
+import '../Models/Feedback.dart';
 import '../Pages/myProducts.dart';
 import '../Pages/filterProduct.dart' as filter;
 
@@ -14,7 +15,6 @@ class FireStoreController{
 
   Future<String> addToProductsCollection(String productName, String description, String? category) async {
 
-    // Create a new user with a first and last name
     final product = <String, dynamic>{
       "ProductName": productName,
       "Description": description,
@@ -94,11 +94,9 @@ class FireStoreController{
 
     if (user != null) {
       if (searchTerm.isEmpty) {
-        // If searchTerm is empty, fetch all products of the category
         return fetchProductsByCategory(category);
       } else {
         if(category == "all"){
-          // Query to filter by owner
           QuerySnapshot productsSnapshot = await db
               .collection('Products')
               .where('Owner', isNotEqualTo: user.uid)
@@ -112,7 +110,6 @@ class FireStoreController{
             String description = doc['Description'];
             String productId = doc.id;
 
-            // Filter by product name in Dart code
             if (searchTerm.isEmpty || name.toLowerCase().contains(searchTerm.toLowerCase())) {
               String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
               products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl, UserID: user.uid, productID: productId));
@@ -135,7 +132,6 @@ class FireStoreController{
           String description = doc['Description'];
           String productId = doc.id;
 
-          // Filter by product name in Dart code
           if (searchTerm.isEmpty || name.toLowerCase().contains(searchTerm.toLowerCase())) {
             String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
             products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl, UserID: user.uid, productID: productId));
@@ -147,8 +143,52 @@ class FireStoreController{
     } else {
       throw 'Not logged in.';
     }
+
   }
 
+  Future<List<FeedbackData>> getFeedbackForUser(String userId) async {
+    try {
+      final querySnapshot = await db
+          .collection('Feedbacks')
+          .where('revieweeId', isEqualTo: userId)
+          .get();
 
+      final List<FeedbackData> feedbackList = querySnapshot.docs
+          .map((doc) => FeedbackData.fromFirestore(doc.data()))
+          .toList();
+
+      return feedbackList;
+    } catch (error) {
+      print("Error getting feedback for user: $error");
+      throw error;
+    }
+  }
+
+  Future<double> getUserOverallRating(String userId) async {
+    try {
+      final querySnapshot = await db
+          .collection('Feedbacks')
+          .where('revieweeId', isEqualTo: userId)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        return 0.0;
+      }
+
+      final List<FeedbackData> feedbackList = querySnapshot.docs
+          .map((doc) => FeedbackData.fromFirestore(doc.data()))
+          .toList();
+
+      double overallRating = feedbackList
+          .map((feedback) => feedback.rating)
+          .reduce((value, element) => value + element) /
+          feedbackList.length;
+
+      return overallRating;
+    } catch (error) {
+      print("Error getting overall rating for user: $error");
+      throw error;
+    }
+  }
 
 }
