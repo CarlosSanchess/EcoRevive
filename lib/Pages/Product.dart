@@ -4,13 +4,27 @@ import 'package:register/Auth/Auth.dart';
 import 'package:register/Controllers/ChatController.dart';
 import 'package:register/Models/ProductInfo.dart';
 import 'package:register/Controllers/CloudStorageController.dart';
+import 'package:register/Controllers/FireStoreController.dart';
+
 import 'Chat.dart';
 import 'Review.dart';
-import 'package:register/Controllers/FireStoreController.dart';
 
 class ProductPage extends StatelessWidget {
   final ProductInfo product;
+
   ProductPage({required this.product});
+
+  Color _ratingColor(double rating) {
+    if (rating < 2.0) {
+      return Colors.red;
+    } else if (rating < 3.0) {
+      return Colors.orange;
+    } else if (rating < 4.0) {
+      return Colors.yellow;
+    } else {
+      return Colors.green;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,10 +132,11 @@ class ProductPage extends StatelessWidget {
                                           );
                                         } else {
                                           return Text(
-                                            'Rating: $userRating',
+                                            'Rating: ${userRating.toStringAsFixed(1)}',
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
+                                              color: _ratingColor(userRating),
                                             ),
                                           );
                                         }
