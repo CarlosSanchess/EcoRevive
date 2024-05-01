@@ -104,9 +104,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         leading: IconButton(
           onPressed: () {
+            /*
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => Home()),
             );
+             */
+            Navigator.of(context).pop();
           },
           icon: Icon(
             Icons.arrow_back_ios_new,
