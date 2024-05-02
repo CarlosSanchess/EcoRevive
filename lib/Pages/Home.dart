@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:register/Pages/addProduct.dart';
 import 'package:register/Pages/Profile.dart';
 
+import 'UserChats.dart';
 import 'filterProduct.dart';
 
 class Home extends StatelessWidget {
@@ -23,6 +24,9 @@ class Home extends StatelessWidget {
                   color: Colors.black
               ),
               onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserChats()),);
               },
             ),
             const Spacer(),
