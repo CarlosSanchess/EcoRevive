@@ -52,7 +52,7 @@ class ProductPage extends StatelessWidget {
                     product.description,
                     style: TextStyle(fontSize: 16),
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   const Text(
                     'Owned By:',
                     style: TextStyle(

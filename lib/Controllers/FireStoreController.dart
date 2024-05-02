@@ -27,6 +27,18 @@ class FireStoreController{
     return docRef.id;
   }
 
+  Future<String> addFCMTokenToCollection( String FCMtoken) async {
+
+    // Create a new user with a first and last name
+    final tokenInfo = <String, dynamic>{
+      "UserID": await Auth().getUid(),
+      "Token": FCMtoken,
+    };
+
+    final DocumentReference docRef = await db.collection("FCMToken").add(
+        tokenInfo);
+    return docRef.id;
+  }
 
   Future<List<info>> getOwnedProducts() async {
     User? user = FirebaseAuth.instance.currentUser;

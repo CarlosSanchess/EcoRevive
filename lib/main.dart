@@ -6,8 +6,7 @@ import 'package:register/Pages/Home.dart';
 import 'package:register/Pages/Login.dart';
 import 'package:register/Pages/theme_provider.dart';
 import 'package:register/firebase_options.dart';
-import 'Pages/theme.dart';
-import 'Pages/theme_provider.dart';
+import 'package:register/Controllers/NotificationController.dart';
 
 
 void main() async {
@@ -24,12 +23,18 @@ void main() async {
 class MyApp extends StatelessWidget {
 
   Auth auth = Auth();
+  final PushNotificationService _pushNotificationService = PushNotificationService();
+  Future<void> _initPushNotifications() async {
+    await _pushNotificationService.initialise();
+  }
+
   MyApp({Key? key}) : super(key: key);
 
 
   @override
   Widget build(BuildContext context){
     final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
       title: 'EcoRevive',
       // Check if the theme is loaded, if not, show a loading indicator
