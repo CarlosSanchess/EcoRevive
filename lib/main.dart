@@ -7,11 +7,9 @@ import 'package:register/Pages/Login.dart';
 import 'package:register/Pages/theme_provider.dart';
 import 'package:register/firebase_options.dart';
 import 'package:register/Controllers/NotificationController.dart';
-import 'package:flutter_driver/driver_extension.dart';
 
 
 void main() async {
-  enableFlutterDriverExtension();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
