@@ -182,5 +182,13 @@ By utilizing this project management system, we ensure clear communication and e
 - The following image is our project board at the end of sprint#1 before the final Sprint review:
 ![Project Board end of Sprint#1](docs/diagrams/project_board_sprint1.png)
 
+#### Sprint #2
+
+- The following image is our Sprint#2 backlog at the start of the project development:
+  ![Sprint Backlog Sprint#2](docs/diagrams/sprint2_backlog.png)
+
+- The following image is our project board at the end of sprint#1 before the final Sprint review:
+  ![Project Board end of Sprint#2](docs/diagrams/project_board_sprint2.png)
+
 
 [Link to Project Board](https://github.com/orgs/FEUP-LEIC-ES-2023-24/projects/43/)
