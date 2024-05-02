@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:register/Auth/Auth.dart';
@@ -87,13 +86,11 @@ class ProductPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   FutureBuilder<String>(
-                    future: CloudStorageController().getDownloadURL('ProductImages/${product.productID}'),
+                    future: CloudStorageController().getDownloadURL('PFPImages/${product.UserID}'),
                     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
                       } else if (snapshot.hasError) {
-                        return Text("Error: ${snapshot.error}");
-                      } else {
                         return Row(
                           children: [
                             Container(
@@ -101,10 +98,12 @@ class ProductPage extends StatelessWidget {
                               height: 60,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: NetworkImage(snapshot.data!),
-                                  fit: BoxFit.fill,
-                                ),
+                                color: Colors.grey[300],
+                              ),
+                              child: Center(
+                                child: snapshot.hasError || !snapshot.hasData
+                                    ? Icon(Icons.no_photography_outlined)
+                                    : Image.network(snapshot.data!),
                               ),
                             ),
                             const SizedBox(width: 10),
@@ -113,12 +112,12 @@ class ProductPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    product.UserID.substring(0,20),
+                                    product.UserID.substring(0, 20),
                                     style: const TextStyle(
                                       fontSize: 20,
                                     ),
                                   ),
-                                  SizedBox(width: 10),
+                                  const SizedBox(height: 10),
                                   FutureBuilder<double>(
                                     future: FireStoreController().getUserOverallRating(product.UserID),
                                     builder: (BuildContext context, AsyncSnapshot<double> ratingSnapshot) {
@@ -149,12 +148,13 @@ class ProductPage extends StatelessWidget {
                                       }
                                     },
                                   ),
-
                                 ],
                               ),
                             ),
                           ],
                         );
+                      } else {
+                        return const SizedBox(); // Return an empty SizedBox for now
                       }
                     },
                   ),
