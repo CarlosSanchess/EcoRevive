@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:register/Controllers/AddProductController.dart';
 import 'package:register/Functions/CategorySelector.dart';
 import 'package:register/Pages/theme_provider.dart';
-import 'package:register/Pages/Home.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({Key? key}) : super(key: key);
@@ -22,6 +21,7 @@ class _AddProductState extends State<AddProduct> {
 
   TextEditingController descriptionController = TextEditingController();
   TextEditingController productNameController = TextEditingController();
+
 
   Future pickImageFromGallery() async {
     try {
@@ -39,129 +39,110 @@ class _AddProductState extends State<AddProduct> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: themeProvider.getTheme().appBarTheme.backgroundColor,
-        title: Text(
+        title: const Text(
           'Add Product',
           style: TextStyle(
-            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
             fontWeight: FontWeight.bold,
             fontSize: 35,
           ),
         ),
         leading: IconButton(
           onPressed: () {
-            //Navigator.of(context).pushReplacement(
-            //  MaterialPageRoute(builder: (context) => Home()),
-            //);
             Navigator.of(context).pop();
           },
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
           ),
         ),
       ),
-      backgroundColor: themeProvider.getTheme().colorScheme.background,
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              margin: const EdgeInsets.only(
-                  left: 20, right: 20, bottom: 20, top: 0),
-              child: Column(
-                children: [
-                  const Text(
-                    'Fill out the information below to post a product',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                      fontSize: 15,
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  if (selectedImage != null)
-                    imageDisplay(imageHeight, selectedImage)
-                  else
-                    imagePickerContainer(
-                      200,
-                          () => pickImageFromGallery(),
-                      isDarkMode: themeProvider.getTheme().brightness ==
-                          Brightness.dark,
-                    ),
-                  const SizedBox(height: 30),
-                  Card(
-                    color: themeProvider.getTheme().cardColor,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                      child: TextField(
-                        controller: productNameController,
-                        maxLines: 1,
-                        decoration: const InputDecoration.collapsed(
-                          hintText: "Product Name...",
-                          hintStyle: TextStyle(color: Colors.grey),
-                        ),
+      body: Builder(
+        builder: (context) {
+          final themeProvider = Provider.of<ThemeProvider>(context);
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: Center(
+              child: SingleChildScrollView(
+                child: Container(
+                  margin: const EdgeInsets.only(
+                      left: 20, right: 20, bottom: 20, top: 0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Fill out the information below to post a product',
+                        textAlign: TextAlign.left,
                         style: TextStyle(
-                          fontSize: 20,
-                          color: themeProvider
-                              .getTheme()
-                              .textTheme
-                              .bodyLarge!
-                              .color,
                           fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                          fontSize: 15,
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Card(
-                    color: themeProvider.getTheme().cardColor,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                      child: TextField(
-                        controller: descriptionController,
-                        maxLines: 3,
-                        decoration: const InputDecoration.collapsed(
-                          hintText: "Description...",
-                          hintStyle: TextStyle(color: Colors.grey),
+                      const SizedBox(height: 40),
+                      if (selectedImage != null)
+                        imageDisplay(imageHeight, selectedImage)
+                      else
+                        imagePickerContainer(
+                          200,
+                              () => pickImageFromGallery(),
+                          isDarkMode: themeProvider.getTheme().brightness ==
+                              Brightness.dark,
                         ),
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: themeProvider
-                              .getTheme()
-                              .textTheme
-                              .bodyLarge!
-                              .color,
-                          fontWeight: FontWeight.bold,
+                      const SizedBox(height: 30),
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                          child: TextField(
+                            controller: productNameController,
+                            maxLines: 1,
+                            decoration: const InputDecoration.collapsed(
+                              hintText: "Product Name...",
+                              hintStyle: TextStyle(color: Colors.grey),
+                            ),
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  const CategorySelector(),
-                  const SizedBox(height: 40),
-                  GestureDetector(
-                    onTap: () {
-                      AddProductController(
-                        productNameController: productNameController,
-                        descriptionController: descriptionController,
-                        category: const CategorySelector().getCategory(),
-                        image: selectedImage!,
-                      ).addProduct();
+                      const SizedBox(height: 10),
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                          child: TextField(
+                            controller: descriptionController,
+                            maxLines: 3,
+                            decoration: const InputDecoration.collapsed(
+                              hintText: "Description...",
+                              hintStyle: TextStyle(color: Colors.grey),
+                            ),
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const CategorySelector(),
+                      const SizedBox(height: 40),
+                      GestureDetector(
+                        onTap: () {
+                          AddProductController(
+                            productNameController: productNameController,
+                            descriptionController: descriptionController,
+                            category: const CategorySelector().getCategory(),
+                            image: selectedImage!,
+                          ).addProduct();
 
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AddProduct()),
-                      );
-                    },
-                    child: Consumer<ThemeProvider>(
-                      builder: (context, themeProvider, _) {
-                        return Container(
+                          Navigator.of(context).pop();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AddProduct()),
+                          );
+                        },
+                        child: Container(
                           padding: const EdgeInsets.all(25),
                           decoration: BoxDecoration(
                             color: themeProvider.getTheme().primaryColor,
@@ -177,16 +158,16 @@ class _AddProductState extends State<AddProduct> {
                               ),
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      ),
+                      const SizedBox(height: 100)
+                    ],
                   ),
-                  const SizedBox(height: 100)
-                ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
