@@ -98,18 +98,21 @@ class LoginState extends State<Login> {
                       usernameController: usernameController,
                       passwordController: passwordController,
                     ).signIn();
-                    if(usernameController.text == "mod@gmail.com"){
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ModeratorHome()),
-                      );
-                    } else {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Home()),
-                      );
-                    }
-                  },
+                    if(await aux == "Logged In!!"){
+                      if(usernameController.text == "mod@gmail.com") {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ModeratorHome()),
+                        );
+                        }else{
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Home()),
+                          );
+                        }
+                      }
+                    },
                   child: Container(
                     padding: const EdgeInsets.all(25),
                     margin: const EdgeInsets.symmetric(horizontal: 25),
