@@ -22,9 +22,25 @@ In this Sprint #1 our backlog tasks rely on some new technologies that we had to
 - [Added filtering options for the list of recyclable products based on various criteria.](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/4)
 
 ### Sprint#1 Backlog
-![Sprint Backlog Sprint#1](docs/diagrams/sprint1_backlog.png)
+![Sprint Backlog Sprint#2](docs/diagrams/sprint1_backlog.png)
+
+## Sprint #2
+
+### Features:
+- Implementation of Chat system.
+- Implementation of our User Community rating.
+- Moderator able to ban products that don´t follow guidelines.
+
+### Sprint Backlog
+- [Write a feedback comment on other users.](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/16)
+- [Implemented the ability for users to rate in a scale of 0-5 other users.](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/17)
+- [Added Chat system.](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/18)
+- [Moderator banning products that don´t follow guidelines.](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/24)
+
+### Sprint#2 Backlog
+![Sprint Backlog Sprint#2](docs/diagrams/sprint2_backlog.png)
 
 ### Project Board
-![Project Board end of Sprint#1](docs/diagrams/project_board_sprint1.png)
+![Project Board end of Sprint#2](docs/diagrams/project_board_sprint2.png)
 
 [Link to Project Board](https://github.com/orgs/FEUP-LEIC-ES-2023-24/projects/43/)
