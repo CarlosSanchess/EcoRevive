@@ -53,9 +53,10 @@ class _AddProductState extends State<AddProduct> {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => Home()),
-            );
+            //Navigator.of(context).pushReplacement(
+            //  MaterialPageRoute(builder: (context) => Home()),
+            //);
+            Navigator.of(context).pop();
           },
           icon: Icon(
             Icons.arrow_back_ios_new,

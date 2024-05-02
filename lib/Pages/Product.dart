@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:register/Auth/Auth.dart';
 import 'package:register/Controllers/ChatController.dart';
 import 'package:register/Models/ProductInfo.dart';
 import 'package:register/Controllers/CloudStorageController.dart';
 import 'package:register/Controllers/FireStoreController.dart';
+import 'package:register/Pages/theme_provider.dart';
+
 
 import 'Chat.dart';
 import 'Review.dart';
@@ -28,6 +31,8 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(product.productName),
@@ -54,6 +59,7 @@ class ProductPage extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
@@ -123,7 +129,7 @@ class ProductPage extends StatelessWidget {
                                       } else {
                                         final userRating = ratingSnapshot.data;
                                         if (userRating == null || userRating == 0.0) {
-                                          return Text(
+                                          return const Text(
                                             'Rating: No rating yet',
                                             style: TextStyle(
                                               fontSize: 16,
@@ -155,33 +161,66 @@ class ProductPage extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 125),
             Container(
               alignment: Alignment.bottomCenter,
-              child: ElevatedButton(
-                onPressed: () async {
-                  String sender = Auth().currentUser!.uid;
-                  bool flag = await ChatController().chatExists(product.productID, sender, product.UserID);
-                  if (!flag) ChatController().initiateChat(product.productID, sender, product.UserID);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(receiverId: product.UserID, product: product)));
-                },
-                child: const Text('Chat'),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: ElevatedButton.icon(
+                  onPressed: () async {
+                    String sender = Auth().currentUser!.uid;
+                    bool flag = await ChatController().chatExists(product.productID, sender, product.UserID);
+                    if (!flag) ChatController().initiateChat(product.productID, sender, product.UserID);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(receiverId: product.UserID, product: product)));
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        return themeProvider.getTheme().appBarTheme.backgroundColor;
+                      },
+                    ),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                    ),
+                  ),
+                  icon: Icon(Icons.chat, color: themeProvider.getTheme().appBarTheme.iconTheme!.color),
+                  label: Text('Chat', style: TextStyle(color: themeProvider.getTheme().appBarTheme.iconTheme!.color)),
+                ),
               ),
             ),
+            const SizedBox(height: 10),
             Container(
               alignment: Alignment.bottomCenter,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ReviewPage(productId: product.productID, revieweeId: product.UserID),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ReviewPage(productId: product.productID, revieweeId: product.UserID),
+                      ),
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                        return themeProvider.getTheme().primaryColor;
+                      },
                     ),
-                  );
-                },
-                child: const Text('Leave a Review'),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                    ),
+                  ),
+                  icon:  const Icon(Icons.rate_review, color: Colors.white),
+                  label: const Text('Leave a Review', style: TextStyle(color: Colors.white)),
+                ),
               ),
-            )
-
+            ),
           ],
         ),
       ),
