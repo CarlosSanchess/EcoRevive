@@ -74,6 +74,17 @@ class FireStoreController{
     }
   }
 
+  Future<void> deleteProductModerate(ProductInfo product) async {
+    try {
+      CloudStorageController().deleteImage('ProductImages/${product.productID}');
+      DocumentReference productRef = FirebaseFirestore.instance.collection('Products').doc(product.productID);
+      await productRef.delete();
+
+    } catch (error) {
+      print("Error while deleting: $error");
+    }
+  }
+
   Future<List<ProductInfo>> fetchProductsByCategory(String category) async {
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -201,6 +212,73 @@ class FireStoreController{
       print("Error getting overall rating for user: $error");
       throw error;
     }
+  }
+
+
+
+  Future<List<ProductInfo>> fetchProductsBySearchTermAll(String searchTerm) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user!= null) {
+      QuerySnapshot productsSnapshot = await db
+          .collection('Products')
+          .get();
+
+      List<ProductInfo> products = [];
+
+      for (QueryDocumentSnapshot doc in productsSnapshot.docs) {
+        String name = doc['ProductName'];
+        String productCategory = doc['Category'];
+        String description = doc['Description'];
+        String productId = doc.id;
+        String userId = doc['Owner'];
+
+        if (searchTerm.isEmpty || name.toLowerCase().contains(searchTerm.toLowerCase())) {
+          String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
+          products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl, UserID: userId, productID: productId));
+        }
+      }
+
+      return products;
+    } else {
+      throw 'Not logged in.';
+    }
+  }
+
+
+  Future<List<ProductInfo>> fetchProductsAll() async {
+    QuerySnapshot allProducts = await db.collection('Products').get();
+    List<ProductInfo> products = [];
+    for (QueryDocumentSnapshot doc in allProducts.docs) {
+      String name = doc['ProductName'];
+      String productCategory = doc['Category'];
+      String description = doc['Description'];
+      String productId = doc.id;
+      String userId = doc['Owner'];
+
+      String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
+      products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl, UserID: userId, productID: productId));
+    }
+    return products;
+  }
+
+
+  List<String> suspiciousWords = ['gun', 'kill', 'bomb', 'knife'];
+
+  Future<List<ProductInfo>> fetchSuspiciousProducts() async {
+    List<ProductInfo> suspiciousProducts = [];
+    List<Future<List<ProductInfo>>> productFutures = [];
+
+    for (String word in suspiciousWords) {
+      productFutures.add(fetchProductsBySearchTermAll(word));
+    }
+
+    for (Future<List<ProductInfo>> future in productFutures) {
+      List<ProductInfo> products = await future;
+      suspiciousProducts.addAll(products);
+    }
+
+    return suspiciousProducts;
   }
 
 }

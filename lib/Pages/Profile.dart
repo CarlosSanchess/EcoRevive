@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:register/Pages/ChangePassword.dart';
+import 'package:register/Pages/ModeratorHome.dart';
 import 'package:register/Pages/myProducts.dart';
 import 'package:register/Pages/theme_provider.dart';
 import '../Auth/Auth.dart';
@@ -352,6 +353,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               context: context,
                             ),
                           ),
+                          Column(
+                            children: [
+                              if (auth.currentUser?.email != null && auth.currentUser?.email == "mod@gmail.com")
+                                Column(
+                                  children: [
+                                    const SizedBox(height: 16),
+                                    SizedBox(
+                                      width: 300,
+                                      child: _buildButtonWithIcon(
+                                        icon: Icons.admin_panel_settings,
+                                        text: 'Moderator Options',
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => ModeratorHome()),
+                                          );
+                                        },
+                                        context: context,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+
                           const SizedBox(height: 16),
                           SizedBox(
                             width: 300,

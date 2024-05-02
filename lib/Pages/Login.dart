@@ -4,6 +4,7 @@ import 'package:register/Controllers/RegisterLoginControllers.dart';
 import 'package:register/Pages/Home.dart';
 import 'package:register/Pages/Register.dart';
 import 'package:register/Pages/ForgotPassword.dart';
+import 'ModeratorHome.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -97,13 +98,16 @@ class LoginState extends State<Login> {
                       usernameController: usernameController,
                       passwordController: passwordController,
                     ).signIn();
-                    if(await aux == "Logged In!!"){
+                    if(usernameController.text == "mod@gmail.com"){
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ModeratorHome()),
+                      );
+                    } else {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => const Home()),
                       );
-                    }else{
-                      createPopUp(aux, context);
                     }
                   },
                   child: Container(

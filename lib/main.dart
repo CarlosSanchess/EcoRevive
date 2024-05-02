@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:register/Auth/Auth.dart';
 import 'package:register/Pages/Home.dart';
 import 'package:register/Pages/Login.dart';
+import 'package:register/Pages/ModeratorHome.dart';
 import 'package:register/Pages/theme_provider.dart';
 import 'package:register/firebase_options.dart';
 import 'package:register/Controllers/NotificationController.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
           : ThemeData.light(),
       home: themeProvider.isThemeLoaded
           ? auth.currentUser != null
-              ? const Home()
+              ? (auth.currentUser?.email == "mod@gmail.com" ? const ModeratorHome() : const Home())
               : const Login()
           : const Scaffold(
         body: Center(
