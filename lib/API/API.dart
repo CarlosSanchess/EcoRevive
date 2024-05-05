@@ -38,10 +38,10 @@ class API {
     if (response.statusCode == 200) {
         return json.decode(response.body);
     } else {
-        throw Exception('Failed to ban user: ${response.statusCode}');
+        throw Exception('Failed to send message: ${response.statusCode}');
       }
     } catch (error) {
-      throw Exception('Failed to ban user: $error');
+      throw Exception('Failed to send message: $error');
      }
   }
 }
