@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:register/Controllers/FireStoreController.dart';
 
-import 'FireStoreController.dart';
 
 class RegisterLoginControllers {
   final TextEditingController usernameController;
@@ -48,6 +49,11 @@ class RegisterLoginControllers {
 
       if (displayName != null && displayName.isNotEmpty) {
         await userCredential.user!.updateProfile(displayName: displayName);
+      }
+
+      String? token = await FirebaseMessaging.instance.getToken();
+      if (token != null) {
+        FireStoreController().addFCMTokenToCollection(token);
       }
 
       return "Registered !!";

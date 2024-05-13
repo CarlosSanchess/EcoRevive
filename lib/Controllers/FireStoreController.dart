@@ -6,7 +6,6 @@ import 'package:register/Models/ProductInfo.dart';
 
 import '../Models/Feedback.dart';
 import '../Pages/myProducts.dart';
-import '../Pages/filterProduct.dart' as filter;
 
 class FireStoreController{
 
@@ -27,12 +26,11 @@ class FireStoreController{
     return docRef.id;
   }
 
-  Future<String> addFCMTokenToCollection( String FCMtoken) async {
+  Future<String> addFCMTokenToCollection( String fcmToken) async {
 
-    // Create a new user with a first and last name
     final tokenInfo = <String, dynamic>{
       "UserID": await Auth().getUid(),
-      "Token": FCMtoken,
+      "Token": fcmToken,
     };
 
     final DocumentReference docRef = await db.collection("FCMToken").add(
@@ -40,6 +38,22 @@ class FireStoreController{
     return docRef.id;
   }
 
+  Future<String> getFCMTokenFromCollection(String uid) async {
+    QuerySnapshot querySnapshot = await db
+        .collection('FCMToken')
+        .where('UserID', isEqualTo: uid)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      var tokenDocument = querySnapshot.docs.first;
+
+      var fcmToken = (tokenDocument.data() as Map<String, dynamic>)['Token'];
+
+      return fcmToken;
+    } else {
+      return "";
+    }
+  }
   Future<List<info>> getOwnedProducts() async {
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -280,7 +294,6 @@ class FireStoreController{
 
     return suspiciousProducts;
   }
-
   Future<String?> getEmailByUid(String uid) async {
     try {
       DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('Users').doc(uid).get();

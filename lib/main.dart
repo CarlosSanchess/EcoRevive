@@ -7,28 +7,46 @@ import 'package:register/Pages/Login.dart';
 import 'package:register/Pages/ModeratorHome.dart';
 import 'package:register/Pages/theme_provider.dart';
 import 'package:register/firebase_options.dart';
-import 'package:register/Controllers/NotificationController.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:register/Controllers/NotsController.dart';
+import 'package:register/Controllers/NotificationService.dart';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async
+{
+  await Firebase.initializeApp();
+}
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.instance.requestPermission();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
-      child: MyApp(),
+      child: MultiProvider(
+        providers: [
+          Provider<NotificationService>(
+            create: (context) => NotificationService(),
+          ),
+          Provider<FirebaseMessagingService>(
+            create: (context) => FirebaseMessagingService(context.read<NotificationService>()),
+          ),
+        ],
+        child: MyApp(),
+      ),
     ),
   );
+
 }
 
 class MyApp extends StatelessWidget {
 
   Auth auth = Auth();
-  final PushNotificationService _pushNotificationService = PushNotificationService();
-  Future<void> _initPushNotifications() async {
-    await _pushNotificationService.initialise();
-  }
-
   MyApp({Key? key}) : super(key: key);
 
 

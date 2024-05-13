@@ -4,7 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:register/API/API.dart';
+import 'package:register/Auth/Auth.dart';
 import 'package:register/Controllers/CloudStorageController.dart';
+import 'package:register/Controllers/FireStoreController.dart';
 
 import '../Models/Message.dart';
 
@@ -54,6 +57,17 @@ class ChatController{
 
 
     await db.collection('Chats').doc(chatId).collection('Messages').add(message.toMap());
+
+    //send Notification //
+
+    //Get FCM Token userName
+    String FCMtoken = await FireStoreController().getFCMTokenFromCollection(receiverID);
+    String? userName = await FireStoreController().getUsernameByUid(userId);
+    String text = content!.substring(0, content.length < 15 ? content.length : 15);
+    print(text);
+    if(FCMtoken != "" && userName != null){
+      API().sendMessage(FCMtoken, userName, text);
+    }
   }
 
   Stream<QuerySnapshot> getMessages(String productId, String user1Id, String user2Id){
