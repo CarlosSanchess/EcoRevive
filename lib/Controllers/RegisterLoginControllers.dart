@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'FireStoreController.dart';
 
 class RegisterLoginControllers {
   final TextEditingController usernameController;
@@ -36,9 +39,17 @@ class RegisterLoginControllers {
           email: email,
           password: password
       );
+
+      await FirebaseFirestore.instance.collection('Users').doc(userCredential.user!.uid).set({
+        'id': userCredential.user!.uid,
+        'email': email,
+        'username': displayName,
+      });
+
       if (displayName != null && displayName.isNotEmpty) {
         await userCredential.user!.updateProfile(displayName: displayName);
       }
+
       return "Registered !!";
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {

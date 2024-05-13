@@ -160,22 +160,6 @@ class LoginState extends State<Login> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.facebook,
-                      size: 36,
-                      color: theme.brightness == Brightness.light ? Colors.blueAccent : Colors.white,
-                    ),
-                    const SizedBox(width: 25),
-                    Icon(
-                      Icons.apple,
-                      size: 36,
-                      color: theme.brightness == Brightness.light ? Colors.black : Colors.white,
-                    ),
-                  ],
-                ),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
