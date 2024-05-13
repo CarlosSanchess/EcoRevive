@@ -60,9 +60,33 @@ class _ModerateUsersState extends State<ModerateUsers> {
                     subtitle: Text(users[index].email),
                     trailing: IconButton(
                     icon: const Icon(Icons.block), // Icon for banning
-                    onPressed: () {
-                        UserController(userID: users[index].userID);
-                    },
+                      onPressed: () {
+                        // Show confirmation dialog
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Confirm Ban"),
+                              content: Text("Are you sure you want to ban ${users[index].displayName}?"),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("Cancel"),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    UserController(userID: users[index].userID).deleteUser();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("Ban"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                   )
                 );
               },
