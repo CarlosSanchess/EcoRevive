@@ -42,4 +42,22 @@ class API {
       throw Exception('Failed to send message: $error');
     }
   }
+
+  Future<void> sendRating(String fcmToken, String userName, String rating) async {
+    final uri = Uri.parse("$baseUrl/sendRating");
+    try {
+      final response = await http.post(
+        uri,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"fcmToken": fcmToken,"userName": userName, "bodyMessage": rating}),
+      );
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to send message: ${response.statusCode}');
+      }
+    } catch (error) {
+      throw Exception('Failed to send message: $error');
+    }
+  }
 }
