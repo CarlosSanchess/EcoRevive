@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class API {
 
-  static const String baseUrl = 'https://esof-api.onrender.com';
+  static const String baseUrl = "https://esof-api.onrender.com";
 
   Future<void> banUser(String uid) async {
     final uri = Uri.parse("$baseUrl/ban");
@@ -25,23 +25,21 @@ class API {
     }
   }
 
-  Future<void> sendMessage(String fcmToken) async{
+  Future<void> sendMessage(String fcmToken) async {
     final uri = Uri.parse("$baseUrl/send");
-
-    try{
+    try {
       final response = await http.post(
         uri,
-        body: jsonEncode(<String, String>{
-          'fcmToken': fcmToken,
-        }),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"fcmToken": fcmToken}),
       );
-    if (response.statusCode == 200) {
+      if (response.statusCode == 200) {
         return json.decode(response.body);
-    } else {
+      } else {
         throw Exception('Failed to send message: ${response.statusCode}');
       }
     } catch (error) {
       throw Exception('Failed to send message: $error');
-     }
+    }
   }
 }

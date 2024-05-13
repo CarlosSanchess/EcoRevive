@@ -21,14 +21,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  //await PushNotificationService().initialise();
-  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  //FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    // Access specific fields if needed, e.g., message.data['field_name']
-    //print(message.data);
-  //});
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
 
   runApp(

@@ -28,7 +28,6 @@ class FireStoreController{
 
   Future<String> addFCMTokenToCollection( String fcmToken) async {
 
-    // Create a new user with a first and last name
     final tokenInfo = <String, dynamic>{
       "UserID": await Auth().getUid(),
       "Token": fcmToken,
@@ -39,6 +38,22 @@ class FireStoreController{
     return docRef.id;
   }
 
+  Future<String> getFCMTokenFromCollection(String uid) async {
+    QuerySnapshot querySnapshot = await db
+        .collection('FCMToken')
+        .where('UserID', isEqualTo: uid)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      var tokenDocument = querySnapshot.docs.first;
+
+      var fcmToken = (tokenDocument.data() as Map<String, dynamic>)['Token'];
+
+      return fcmToken;
+    } else {
+      return "";
+    }
+  }
   Future<List<info>> getOwnedProducts() async {
     User? user = FirebaseAuth.instance.currentUser;
 
