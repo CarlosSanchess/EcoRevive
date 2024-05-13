@@ -22,8 +22,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  //await FirebaseMessaging.instance.getToken();
-
   //await PushNotificationService().initialise();
   //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -55,11 +53,6 @@ void main() async {
 class MyApp extends StatelessWidget {
 
   Auth auth = Auth();
-  final PushNotificationService _pushNotificationService = PushNotificationService();
-  Future<void> _initPushNotifications() async {
-    await _pushNotificationService.initialise();
-  }
-
   MyApp({Key? key}) : super(key: key);
 
 

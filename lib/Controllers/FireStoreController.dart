@@ -6,7 +6,6 @@ import 'package:register/Models/ProductInfo.dart';
 
 import '../Models/Feedback.dart';
 import '../Pages/myProducts.dart';
-import '../Pages/filterProduct.dart' as filter;
 
 class FireStoreController{
 
@@ -27,12 +26,12 @@ class FireStoreController{
     return docRef.id;
   }
 
-  Future<String> addFCMTokenToCollection( String FCMtoken) async {
+  Future<String> addFCMTokenToCollection( String fcmToken) async {
 
     // Create a new user with a first and last name
     final tokenInfo = <String, dynamic>{
       "UserID": await Auth().getUid(),
-      "Token": FCMtoken,
+      "Token": fcmToken,
     };
 
     final DocumentReference docRef = await db.collection("FCMToken").add(
