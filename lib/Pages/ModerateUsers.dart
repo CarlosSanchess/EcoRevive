@@ -80,8 +80,13 @@ class _ModerateUsersState extends State<ModerateUsers> {
                                     UserController(userID: users[index].userID).deleteUser();
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text("Ban"),
-                                ),
+                                  child: const Text(
+                                      "Ban",
+                                      style: TextStyle(
+                                      color: Colors.red,
+                                      ),
+                                    )
+                                  ),
                               ],
                             );
                           },
