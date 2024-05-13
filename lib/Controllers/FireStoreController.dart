@@ -294,5 +294,24 @@ class FireStoreController{
 
     return suspiciousProducts;
   }
+  Future<String?> getEmailByUid(String uid) async {
+    try {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+      return userDoc.get('email');
+    } catch (e) {
+      print('Error getting email: $e');
+      return null;
+    }
+  }
+
+  Future<String?> getUsernameByUid(String uid) async {
+    try {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+      return userDoc.get('username');
+    } catch (e) {
+      print('Error getting username: $e');
+      return null;
+    }
+  }
 
 }

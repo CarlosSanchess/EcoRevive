@@ -60,14 +60,14 @@ class ChatController{
 
     //send Notification //
 
-    //Get FCM Token
+    //Get FCM Token userName
     String FCMtoken = await FireStoreController().getFCMTokenFromCollection(receiverID);
-
-    //Invoke api endpoint
-    print(FCMtoken);
-    API().sendMessage(FCMtoken);
-
-
+    String? userName = await FireStoreController().getUsernameByUid(userId);
+    String text = content!.substring(0, content.length < 15 ? content.length : 15);
+    print(text);
+    if(FCMtoken != "" && userName != null){
+      API().sendMessage(FCMtoken, userName, text);
+    }
   }
 
   Stream<QuerySnapshot> getMessages(String productId, String user1Id, String user2Id){

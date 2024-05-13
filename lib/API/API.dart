@@ -25,13 +25,13 @@ class API {
     }
   }
 
-  Future<void> sendMessage(String fcmToken) async {
+  Future<void> sendMessage(String fcmToken, String userName, String text) async {
     final uri = Uri.parse("$baseUrl/send");
     try {
       final response = await http.post(
         uri,
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"fcmToken": fcmToken}),
+        body: jsonEncode({"fcmToken": fcmToken,"userName": userName, "bodyMessage": text}),
       );
       if (response.statusCode == 200) {
         return json.decode(response.body);
