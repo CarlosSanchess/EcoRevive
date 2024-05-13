@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
           : ThemeData.light(),
       home: themeProvider.isThemeLoaded
           ? auth.currentUser != null
-              ? (auth.currentUser?.email == "mod@gmail.com" ? const ModeratorHome() : const Home())
+              ? (auth.currentUser?.email == "teste123@gmail.com" ? const ModeratorHome() : const Home())
               : const Login()
           : const Scaffold(
         body: Center(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:register/Pages/ModerateUsers.dart';
 
 import 'Home.dart';
 import 'ModerateProducts.dart';
@@ -43,7 +44,10 @@ class ModeratorHome extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Navigate to moderate users page
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => ModerateUsers()),
+                );
               },
               child: Text('Moderate Users', style: TextStyle(fontSize: 24)),
               style: ElevatedButton.styleFrom(

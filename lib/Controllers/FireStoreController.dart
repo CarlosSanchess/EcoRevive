@@ -1,3 +1,5 @@
+import 'dart:js_interop_unsafe';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:register/Auth/Auth.dart';
@@ -5,6 +7,7 @@ import 'package:register/Controllers/CloudStorageController.dart';
 import 'package:register/Models/ProductInfo.dart';
 
 import '../Models/Feedback.dart';
+import '../Models/userInfo.dart';
 import '../Pages/myProducts.dart';
 
 class FireStoreController{
@@ -314,4 +317,38 @@ class FireStoreController{
     }
   }
 
+  Future<List<userInfo>> getAllUsers() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Users').get();
+
+    List<userInfo> users = [];
+    for (var doc in querySnapshot.docs) {
+      userInfo user =   userInfo(
+          doc['id'],
+          doc['email'],
+          doc['username']
+      );
+      users.add(user);
+    }
+    return users;
+  }
+  void removeUser(String uid) async{
+      try {
+        DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(uid);
+        await userRef.delete();
+        print('User with uid $uid successfully removed.');
+      } catch (error) {
+        print('Error removing user: $error');
+      }
+  }
+  void removeAssociatedProducts(String uid) async {
+    try {
+      QuerySnapshot ownedProducts = await db.collection('Products').where(
+          'Owner', isEqualTo: uid).get();
+      for (QueryDocumentSnapshot doc in ownedProducts.docs) {
+        doc.reference.delete();
+      }
+    } catch(error){
+      print('Error Removing Products: $error');
+    }
+  }
 }
