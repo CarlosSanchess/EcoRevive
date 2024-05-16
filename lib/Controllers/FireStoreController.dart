@@ -373,4 +373,19 @@ class FireStoreController{
       await docToDelete.reference.delete();
     }
   }
+  Future<List<UsersInfo>> getAllDisableUsers() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('TemporaryBans').get();
+
+    List<UsersInfo> users = [];
+    for (var doc in querySnapshot.docs) {
+      UsersInfo user =   UsersInfo(
+          doc['id'],
+          doc['email'],
+          doc['username']
+      );
+      users.add(user);
+    }
+    return users;
+  }
+
 }

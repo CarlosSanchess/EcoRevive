@@ -13,16 +13,20 @@ class ModerateUsers extends StatefulWidget {
 
 class _ModerateUsersState extends State<ModerateUsers> {
   late Future<List<UsersInfo>> _usersFuture;
+  late Future<List<UsersInfo>> _disabledUsersFutures;
 
   @override
   void initState() {
     super.initState();
     _usersFuture = loadUsers();
+    _disabledUsersFutures = loadDisableUsers();
   }
   Future<List<UsersInfo>> loadUsers() async {
     return FireStoreController().getAllUsers();
   }
-
+  Future<List<UsersInfo>> loadDisableUsers(){
+    return FireStoreController().getAllDisableUsers();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
