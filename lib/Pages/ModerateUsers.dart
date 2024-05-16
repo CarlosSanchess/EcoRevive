@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:register/Controllers/UserController.dart';
 import 'package:register/Pages/ModeratorHome.dart';
-import 'package:register/Models/userInfo.dart';
+import 'package:register/Models/UsersInfo.dart';
 import 'package:register/Controllers/FireStoreController.dart';
 
 class ModerateUsers extends StatefulWidget {
@@ -12,14 +12,14 @@ class ModerateUsers extends StatefulWidget {
 }
 
 class _ModerateUsersState extends State<ModerateUsers> {
-  late Future<List<userInfo>> _usersFuture;
+  late Future<List<UsersInfo>> _usersFuture;
 
   @override
   void initState() {
     super.initState();
     _usersFuture = loadUsers();
   }
-  Future<List<userInfo>> loadUsers() async {
+  Future<List<UsersInfo>> loadUsers() async {
     return FireStoreController().getAllUsers();
   }
 
@@ -38,7 +38,7 @@ class _ModerateUsersState extends State<ModerateUsers> {
         ),
         title: Text('Users'),
       ),
-      body: FutureBuilder<List<userInfo>>(
+      body: FutureBuilder<List<UsersInfo>>(
         future: _usersFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -50,7 +50,7 @@ class _ModerateUsersState extends State<ModerateUsers> {
               child: Text('Error loading users: ${snapshot.error}'),
             );
           } else {
-            List<userInfo>? users = snapshot.data;
+            List<UsersInfo>? users = snapshot.data;
             return ListView.builder(
               itemCount: users!.length,
               itemBuilder: (context, index) {
@@ -61,7 +61,6 @@ class _ModerateUsersState extends State<ModerateUsers> {
                     trailing: IconButton(
                     icon: const Icon(Icons.block), // Icon for banning
                       onPressed: () {
-                        // Show confirmation dialog
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -77,7 +76,7 @@ class _ModerateUsersState extends State<ModerateUsers> {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    UserController(userID: users[index].userID).deleteUser();
+                                    UserController(userInfo: users[index]).deleteUser();
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text(

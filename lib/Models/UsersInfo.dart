@@ -1,9 +1,11 @@
-class userInfo { //Consider UserInfo, and using prefixs TODO
+
+
+class UsersInfo { //Consider UserInfo, and using prefixs TODO
   late String _userID;
   late String _email;
   late String _displayName;
 
-  userInfo(String userID, String email, String displayName) {
+  UsersInfo(String userID, String email, String displayName) {
     _userID = userID;
     _email = email;
     _displayName = displayName;

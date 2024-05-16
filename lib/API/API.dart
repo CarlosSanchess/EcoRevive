@@ -11,9 +11,8 @@ class API {
     try {
       final response = await http.post(
         uri,
-        body: jsonEncode(<String, String>{
-          'uid': uid,
-        }),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"uid": uid}),
       );
       if (response.statusCode == 200) {
         return json.decode(response.body);
@@ -58,6 +57,43 @@ class API {
       }
     } catch (error) {
       throw Exception('Failed to send message: $error');
+    }
+  }
+
+  Future<void> disableUser(String uid) async{
+    final uri = Uri.parse("$baseUrl/disable");
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"uid": uid}),
+      );
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to disable user: ${response.statusCode}');
+      }
+    } catch (error) {
+      throw Exception('Failed to disable user: $error');
+    }
+  }
+
+  Future<void> enableUser(String uid) async{
+    final uri = Uri.parse("$baseUrl/enable");
+    try {
+      final response = await http.post(
+        uri,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"uid": uid}),
+      );
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to enable user: ${response.statusCode}');
+      }
+    } catch (error) {
+      throw Exception('Failed to enable user: $error');
     }
   }
 }

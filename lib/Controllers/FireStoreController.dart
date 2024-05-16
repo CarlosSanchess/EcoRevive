@@ -6,7 +6,7 @@ import 'package:register/Controllers/CloudStorageController.dart';
 import 'package:register/Models/ProductInfo.dart';
 
 import '../Models/Feedback.dart';
-import '../Models/userInfo.dart';
+import '../Models/UsersInfo.dart';
 import '../Pages/myProducts.dart';
 
 class FireStoreController{
@@ -316,12 +316,12 @@ class FireStoreController{
     }
   }
 
-  Future<List<userInfo>> getAllUsers() async {
+  Future<List<UsersInfo>> getAllUsers() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Users').get();
 
-    List<userInfo> users = [];
+    List<UsersInfo> users = [];
     for (var doc in querySnapshot.docs) {
-      userInfo user =   userInfo(
+      UsersInfo user =   UsersInfo(
           doc['id'],
           doc['email'],
           doc['username']
@@ -348,6 +348,29 @@ class FireStoreController{
       }
     } catch(error){
       print('Error Removing Products: $error');
+    }
+  }
+
+  void addToDisableCollection(UsersInfo usersInfo) async{
+    final userInfo = <String, dynamic>{
+      "UserID": usersInfo.userID,
+      "Email": usersInfo.email,
+      "DisplayName":usersInfo.displayName
+    };
+
+    final DocumentReference docRef = await db.collection("TemporaryBans").add(
+        userInfo);
+  }
+
+  void removeFromDisableCollection(String uid) async {
+    final QuerySnapshot snapshot = await db
+        .collection("TemporaryBans")
+        .where("UserID", isEqualTo: uid)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      final DocumentSnapshot docToDelete = snapshot.docs.first;
+      await docToDelete.reference.delete();
     }
   }
 }
