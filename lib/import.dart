@@ -11,7 +11,6 @@ void setupFirebaseAuthMocks([Callback? customHandlers]) {
 }
 
 Future<T> neverEndingFuture<T>() async {
-  // ignore: literal_only_boolean_expressions
   while (true) {
     await Future.delayed(const Duration(minutes: 5));
   }

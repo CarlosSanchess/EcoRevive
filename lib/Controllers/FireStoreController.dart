@@ -352,6 +352,7 @@ class FireStoreController{
   }
 
   void addToDisableCollection(UsersInfo usersInfo) async{
+    removeUser(usersInfo.userID);
     final userInfo = <String, dynamic>{
       "UserID": usersInfo.userID,
       "Email": usersInfo.email,
@@ -379,9 +380,9 @@ class FireStoreController{
     List<UsersInfo> users = [];
     for (var doc in querySnapshot.docs) {
       UsersInfo user =   UsersInfo(
-          doc['id'],
-          doc['email'],
-          doc['username']
+          doc['UserID'],
+          doc['Email'],
+          doc['DisplayName']
       );
       users.add(user);
     }
