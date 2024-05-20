@@ -43,7 +43,7 @@ class _ModerateUsersState extends State<ModerateUsers> {
             );
           },
         ),
-        title: const Text('Users'),
+        title: const Text('Manage Users'),
       ),
       body: Column(
         children: [
@@ -72,7 +72,7 @@ class _ModerateUsersState extends State<ModerateUsers> {
                           padding: EdgeInsets.all(8.0),
                           child: Text(
                             'Active Users',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
                           ),
                         ),
                         Expanded(
@@ -193,11 +193,12 @@ class _ModerateUsersState extends State<ModerateUsers> {
                   } else {
                     return Column(
                       children: [
+                        const SizedBox(height: 5),
                         const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: Text(
                             'Disabled Users',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.redAccent),
                           ),
                         ),
                         Expanded(
@@ -228,7 +229,8 @@ class _ModerateUsersState extends State<ModerateUsers> {
                                                 ),
                                                 TextButton(
                                                   onPressed: () {
-                                                    UserController(userInfo: users[index]).disableUser();
+                                                    print("adsa");
+                                                    UserController(userInfo: users[index]).enableUser();
                                                     Navigator.pushReplacement(
                                                       context,
                                                       MaterialPageRoute(builder: (context) => const ModerateUsers()),

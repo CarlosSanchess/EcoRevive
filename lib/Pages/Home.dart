@@ -21,7 +21,7 @@ class Home extends StatelessWidget {
           children: <Widget>[
             IconButton(
               icon: const Icon(Icons.chat_bubble_rounded,
-                  size: 40,
+                  size: 37,
                   color: Colors.black
               ),
               onPressed: () {
@@ -33,7 +33,7 @@ class Home extends StatelessWidget {
             const Spacer(),
             IconButton(
               icon: const Icon(Icons.add_box,
-                size: 42,
+                size: 39,
                 color: Colors.black,
               ),
               onPressed: () {
@@ -46,7 +46,7 @@ class Home extends StatelessWidget {
             IconButton(
               icon: const Icon(
                 Icons.person,
-                size: 40,
+                size: 37,
                 color: Colors.black,
               ),
               onPressed: () {

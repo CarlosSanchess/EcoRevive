@@ -83,7 +83,6 @@ class ModeratorHome extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Navigate to moderate suspicious users page
               },
               child: Text('Moderate Suspicious Users', style: TextStyle(fontSize: 24)),
               style: ElevatedButton.styleFrom(
