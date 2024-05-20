@@ -70,22 +70,58 @@ class _UserChatsState extends State<UserChats>{
                         ProductInfo info = ProductInfo(productName: productName, description: description, category: category, UserID: owner, imageURL: imageUrl, productID: productId);
 
                         return ListTile(
-                          title: Text(productName),
+                          leading: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(imageUrl),
+                              ),
+                            ),
+                          ),
+                          title: Text(
+                            productName,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(description),
+                              SizedBox(height: 4),
+
+                            ],
+                          ),
                           trailing: IconButton(
-                            icon: Icon(Icons.chat),
+                            icon: const Icon(
+                              Icons.chat,
+                              color: Colors.grey,
+                            ),
                             onPressed: () {
                               if (info.UserID == userId) {
-                                String otherUserId = chat['participants'].firstWhere((userId) => userId != info.UserID);
-                                Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) => Chat(receiverId: otherUserId, product: info)));
+                                String otherUserId =
+                                chat['participants'].firstWhere((userId) => userId != info.UserID);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Chat(receiverId: otherUserId, product: info),
+                                  ),
+                                );
                               } else {
-                                Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) => Chat(receiverId: info.UserID, product: info)));
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Chat(receiverId: info.UserID, product: info),
+                                  ),
+                                );
                               }
-                            }
+                            },
                           ),
-                          // Add more details about the chat if needed
                         );
+
                       },
                     );
                   },
