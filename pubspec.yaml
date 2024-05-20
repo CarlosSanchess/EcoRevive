@@ -52,8 +52,8 @@ dependencies:
   firebase_storage_mocks: ^0.6.1
   http: ^1.2.0
   geolocator: ^8.0.0
-  google_maps_flutter: ^2.0.0
-
+  flutter_map: ^5.0.0
+  latlong2: ^0.9.1
 
 
   #firebase_app_check: ^0.2.2+1

@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../Auth/Auth.dart';
 import '../Controllers/ChatController.dart';
@@ -289,69 +290,86 @@ class ChatBubble extends StatelessWidget {
   }
 }
 
-class MapScreen extends StatelessWidget {
+class MapScreen extends StatefulWidget {
   final double latitude;
   final double longitude;
 
   const MapScreen({Key? key, required this.latitude, required this.longitude}) : super(key: key);
 
   @override
+  _MapScreenState createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  final MapController _mapController = MapController();
+  double _currentZoom = 14.0;
+
+  void _zoomIn() {
+    setState(() {
+      _currentZoom += 1;
+      _mapController.move(_mapController.center, _currentZoom);
+    });
+  }
+
+  void _zoomOut() {
+    setState(() {
+      _currentZoom -= 1;
+      _mapController.move(_mapController.center, _currentZoom);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Location"),
+        title: const Text("Map"),
       ),
-      body: FutureBuilder(
-        future: Future.delayed(const Duration(milliseconds: 100)), // Delay to ensure the widget tree is built
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return GoogleMapWidget(latitude: latitude, longitude: longitude);
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+      body: Stack(
+        children: [
+          FlutterMap(
+            mapController: _mapController,
+            options: MapOptions(
+              center: LatLng(widget.latitude, widget.longitude),
+              zoom: _currentZoom,
+            ),
+            children: [
+              TileLayer(
+                urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                subdomains: ['a', 'b', 'c'],
+              ),
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    width: 80.0,
+                    height: 80.0,
+                    point: LatLng(widget.latitude, widget.longitude),
+                    builder: (ctx) => const Icon(Icons.location_on, color: Colors.red, size: 40),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Positioned(
+            top: 10,
+            right: 10,
+            child: Column(
+              children: [
+                FloatingActionButton(
+                  onPressed: _zoomIn,
+                  mini: true,
+                  child: const Icon(Icons.zoom_in),
+                ),
+                const SizedBox(height: 10),
+                FloatingActionButton(
+                  onPressed: _zoomOut,
+                  mini: true,
+                  child: const Icon(Icons.zoom_out),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
-  }
-}
-
-class GoogleMapWidget extends StatefulWidget {
-  final double latitude;
-  final double longitude;
-
-  const GoogleMapWidget({Key? key, required this.latitude, required this.longitude}) : super(key: key);
-
-  @override
-  _GoogleMapWidgetState createState() => _GoogleMapWidgetState();
-}
-
-class _GoogleMapWidgetState extends State<GoogleMapWidget> {
-  late GoogleMapController _controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return GoogleMap(
-      initialCameraPosition: CameraPosition(
-        target: LatLng(widget.latitude, widget.longitude),
-        zoom: 14.0,
-      ),
-      markers: {
-        Marker(
-          markerId: const MarkerId('location'),
-          position: LatLng(widget.latitude, widget.longitude),
-        ),
-      },
-      onMapCreated: (controller) {
-        setState(() {
-          _controller = controller;
-        });
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose(); // Dispose the controller properly
-    super.dispose();
   }
 }
