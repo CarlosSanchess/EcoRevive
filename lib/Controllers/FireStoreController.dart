@@ -330,6 +330,20 @@ class FireStoreController{
     }
     return users;
   }
+  Future<List<UsersInfo>> getNonAdminUsers() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Users').where('email', isNotEqualTo: 'mod@ecorevive.com').get();
+
+    List<UsersInfo> users = [];
+    for (var doc in querySnapshot.docs) {
+      UsersInfo user =   UsersInfo(
+          doc['id'],
+          doc['email'],
+          doc['username']
+      );
+      users.add(user);
+    }
+    return users;
+  }
   void removeUser(String uid) async{
       try {
         DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(uid);

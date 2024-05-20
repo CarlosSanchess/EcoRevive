@@ -125,6 +125,9 @@ class ModeratorHome extends StatelessWidget {
                 color: Colors.black,
               ),
               onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                );
               },
             ),
             const Spacer(),

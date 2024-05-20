@@ -25,7 +25,7 @@ class _ModerateUsersState extends State<ModerateUsers> {
   }
 
   Future<List<UsersInfo>> loadUsers() async {
-    return FireStoreController().getAllUsers();
+    return FireStoreController().getNonAdminUsers();
   }
 
   Future<List<UsersInfo>> loadDisabledUsers() {
