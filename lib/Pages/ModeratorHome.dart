@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:register/Pages/ModerateUsers.dart';
+import 'package:register/Pages/Profile.dart';
 import 'package:register/Pages/theme_provider.dart';
 
 import 'Home.dart';
@@ -24,17 +25,15 @@ class ModeratorHome extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        leading: Navigator.canPop(context)
-            ? IconButton(
+        leading: IconButton(
           onPressed: () {
-            Navigator.of(context).pop();
-          },
+            Navigator.pop(context);
+            },
               icon: Icon(
                 Icons.arrow_back_ios_new,
                 color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
               ),
             )
-            : null,
       ),
       body: Center(
         child: Column(

@@ -293,14 +293,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         children: <Widget>[
-                          if(auth.currentUser!.email != null && auth.currentUser!.email == "mod@ecorevive.com")
+                          if(auth.currentUser != null && auth.currentUser?.email == "mod@ecorevive.com")
                               SizedBox(
                                 width: 300,
                                 child: _buildButtonWithIcon(
                                   icon: Icons.admin_panel_settings,
                                   text: 'Admin Panel',
                                   onPressed: () {
-                                    auth.signOut();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
