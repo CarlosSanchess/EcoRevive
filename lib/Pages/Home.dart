@@ -10,6 +10,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
+
     return Scaffold(
       body: const Padding(
         padding: EdgeInsets.only(top: 50.0),
@@ -20,7 +21,7 @@ class Home extends StatelessWidget {
           children: <Widget>[
             IconButton(
               icon: const Icon(Icons.chat_bubble_rounded,
-                  size: 35,
+                  size: 40,
                   color: Colors.black
               ),
               onPressed: () {
@@ -32,7 +33,7 @@ class Home extends StatelessWidget {
             const Spacer(),
             IconButton(
               icon: const Icon(Icons.add_box,
-                size: 37,
+                size: 42,
                 color: Colors.black,
               ),
               onPressed: () {
@@ -45,7 +46,7 @@ class Home extends StatelessWidget {
             IconButton(
               icon: const Icon(
                 Icons.person,
-                size: 35,
+                size: 40,
                 color: Colors.black,
               ),
               onPressed: () {

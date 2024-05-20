@@ -99,11 +99,11 @@ class LoginState extends State<Login> {
                       passwordController: passwordController,
                     ).signIn();
                     if(await aux == "Logged In!!"){
-                      if(usernameController.text == "mod@gmail.com") {
+                      if(usernameController.text == "mod@ecorevive.com") {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const ModeratorHome()),
+                              builder: (context) =>  ModeratorHome()),
                         );
                         }else{
                           Navigator.pushReplacement(
