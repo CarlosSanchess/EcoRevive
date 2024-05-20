@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../Auth/Auth.dart';
 import '../Controllers/FireStoreController.dart';
 import '../Models/Feedback.dart';
 
 class FeedbackHistoryPage extends StatelessWidget {
   final FireStoreController _fireStoreController = FireStoreController();
+  final Auth _auth = Auth(); // Initialize Auth class
 
   Color _ratingColor(double rating) {
     if (rating < 2.0) {
@@ -106,49 +108,62 @@ class FeedbackHistoryPage extends StatelessWidget {
                       itemCount: feedbackList.length,
                       itemBuilder: (context, index) {
                         final feedback = feedbackList[index];
-                        return Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                          child: Card(
-                            elevation: 4,
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: _ratingColor(feedback.rating),
-                                child: Text(
-                                  feedback.rating.toStringAsFixed(1),
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Reviewer: ${feedback.reviewerId}',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                        return FutureBuilder<String?>(
+                          future: _fireStoreController.getUsernameByUid(feedback.reviewerId),
+                          builder: (context, nameSnapshot) {
+                            if (nameSnapshot.connectionState == ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (nameSnapshot.hasError) {
+                              return Text('Error fetching name');
+                            }
+
+                            final reviewerName = nameSnapshot.data ?? 'Unknown';
+
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                              child: Card(
+                                elevation: 4,
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundColor: _ratingColor(feedback.rating),
+                                    child: Text(
+                                      feedback.rating.toStringAsFixed(1),
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                   ),
-                                  SizedBox(height: 8),
-                                  Card(
-                                    elevation: 2,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    color: Colors.grey[200],
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        feedback.feedback,
+                                  subtitle: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Reviewer: $reviewerName', // Display reviewer's name
                                         style: TextStyle(
-                                          color: Colors.black87,
                                           fontSize: 16,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                    ),
+                                      SizedBox(height: 8),
+                                      Card(
+                                        elevation: 2,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        color: Colors.grey[200],
+                                        child: Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            feedback.feedback,
+                                            style: TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
+                            );
+                          },
                         );
                       },
                     ),

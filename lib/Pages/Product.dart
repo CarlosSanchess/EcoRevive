@@ -7,7 +7,6 @@ import 'package:register/Controllers/CloudStorageController.dart';
 import 'package:register/Controllers/FireStoreController.dart';
 import 'package:register/Pages/theme_provider.dart';
 
-
 import 'Chat.dart';
 import 'Review.dart';
 
@@ -31,6 +30,7 @@ class ProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final _fireStoreController = FireStoreController();
 
     return Scaffold(
       appBar: AppBar(
@@ -108,47 +108,62 @@ class ProductPage extends StatelessWidget {
                             ),
                             const SizedBox(width: 10),
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    product.UserID.substring(0, 20),
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  FutureBuilder<double>(
-                                    future: FireStoreController().getUserOverallRating(product.UserID),
-                                    builder: (BuildContext context, AsyncSnapshot<double> ratingSnapshot) {
-                                      if (ratingSnapshot.connectionState == ConnectionState.waiting) {
-                                        return CircularProgressIndicator();
-                                      } else if (ratingSnapshot.hasError) {
-                                        return Text("Error: ${ratingSnapshot.error}");
-                                      } else {
-                                        final userRating = ratingSnapshot.data;
-                                        if (userRating == null || userRating == 0.0) {
-                                          return const Text(
-                                            'Rating: No rating yet',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          );
-                                        } else {
-                                          return Text(
-                                            'Rating: ${userRating.toStringAsFixed(1)}',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: _ratingColor(userRating),
-                                            ),
-                                          );
-                                        }
-                                      }
-                                    },
-                                  ),
-                                ],
+                              child: FutureBuilder<String?>(
+                                future: _fireStoreController.getUsernameByUid(product.UserID),
+                                builder: (BuildContext context, AsyncSnapshot<String?> nameSnapshot) {
+                                  if (nameSnapshot.connectionState == ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (nameSnapshot.hasError || !nameSnapshot.hasData) {
+                                    return Text(
+                                      'Error loading name',
+                                      style: TextStyle(fontSize: 20),
+                                    );
+                                  } else {
+                                    final ownerName = nameSnapshot.data ?? 'Unknown';
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          ownerName,
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        FutureBuilder<double>(
+                                          future: FireStoreController().getUserOverallRating(product.UserID),
+                                          builder: (BuildContext context, AsyncSnapshot<double> ratingSnapshot) {
+                                            if (ratingSnapshot.connectionState == ConnectionState.waiting) {
+                                              return CircularProgressIndicator();
+                                            } else if (ratingSnapshot.hasError) {
+                                              return Text("Error: ${ratingSnapshot.error}");
+                                            } else {
+                                              final userRating = ratingSnapshot.data;
+                                              if (userRating == null || userRating == 0.0) {
+                                                return const Text(
+                                                  'Rating: No rating yet',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                );
+                                              } else {
+                                                return Text(
+                                                  'Rating: ${userRating.toStringAsFixed(1)}',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: _ratingColor(userRating),
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                },
                               ),
                             ),
                           ],
@@ -216,7 +231,7 @@ class ProductPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  icon:  const Icon(Icons.rate_review, color: Colors.white),
+                  icon: const Icon(Icons.rate_review, color: Colors.white),
                   label: const Text('Leave a Review', style: TextStyle(color: Colors.white)),
                 ),
               ),
