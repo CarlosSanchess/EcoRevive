@@ -30,6 +30,7 @@ class ProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final _fireStoreController = FireStoreController();
 
     return Scaffold(
       appBar: AppBar(
@@ -108,7 +109,7 @@ class ProductPage extends StatelessWidget {
                             const SizedBox(width: 10),
                             Expanded(
                               child: FutureBuilder<String?>(
-                                future: Auth().getDisplayNameById(product.UserID),
+                                future: _fireStoreController.getUsernameByUid(product.UserID),
                                 builder: (BuildContext context, AsyncSnapshot<String?> nameSnapshot) {
                                   if (nameSnapshot.connectionState == ConnectionState.waiting) {
                                     return CircularProgressIndicator();

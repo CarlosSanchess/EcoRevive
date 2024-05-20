@@ -109,7 +109,7 @@ class FeedbackHistoryPage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final feedback = feedbackList[index];
                         return FutureBuilder<String?>(
-                          future: _auth.getDisplayNameById(feedback.reviewerId),
+                          future: _fireStoreController.getUsernameByUid(feedback.reviewerId),
                           builder: (context, nameSnapshot) {
                             if (nameSnapshot.connectionState == ConnectionState.waiting) {
                               return CircularProgressIndicator();
