@@ -12,7 +12,6 @@ import 'package:register/Pages/Login.dart';
 
 import 'ChangeDisplayName.dart';
 import 'FeedbackHistory.dart';
-import 'Home.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -294,6 +293,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         children: <Widget>[
+                          if(auth.currentUser != null && auth.currentUser?.email == "mod@ecorevive.com")
+                              SizedBox(
+                                width: 300,
+                                child: _buildButtonWithIcon(
+                                  icon: Icons.admin_panel_settings,
+                                  text: 'Admin Panel',
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (
+                                              context) =>  ModeratorHome()),
+                                    );
+                                  },
+                                  context: context,
+                                ),
+                              ),
+                          const SizedBox(height: 16),
                           SizedBox(
                             width: 300,
                             child: _buildButtonWithIcon(
@@ -355,7 +372,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           Column(
                             children: [
-                              if (auth.currentUser?.email != null && auth.currentUser?.email == "mod@gmail.com")
+                              if (auth.currentUser?.email != null && auth.currentUser?.email == "test123gmail.com")
                                 Column(
                                   children: [
                                     const SizedBox(height: 16),

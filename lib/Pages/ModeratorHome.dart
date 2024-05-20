@@ -1,15 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:register/Pages/ModerateUsers.dart';
+import 'package:register/Pages/Profile.dart';
+import 'package:register/Pages/theme_provider.dart';
 
 import 'Home.dart';
 import 'ModerateProducts.dart';
 
 class ModeratorHome extends StatelessWidget {
-  const ModeratorHome({super.key});
+  ModeratorHome({super.key});
+  late ThemeProvider themeProvider;
+
 
   @override
   Widget build(BuildContext context) {
+    themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: themeProvider.getTheme().appBarTheme.backgroundColor,
+        title: Text(
+          'Moderate Home',
+          style: TextStyle(
+            color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+            },
+              icon: Icon(
+                Icons.arrow_back_ios_new,
+                color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
+              ),
+            )
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -57,7 +82,6 @@ class ModeratorHome extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Navigate to moderate suspicious users page
               },
               child: Text('Moderate Suspicious Users', style: TextStyle(fontSize: 24)),
               style: ElevatedButton.styleFrom(
@@ -87,6 +111,24 @@ class ModeratorHome extends StatelessWidget {
                 minimumSize: Size(MediaQuery.of(context).size.width * 0.5, 50),
               ),
             ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: <Widget>[
+
+            const Spacer(),
+            IconButton(
+              icon: const Icon(Icons.home,
+                size: 45,
+                color: Colors.black,
+              ),
+              onPressed: () {
+              },
+            ),
+            const Spacer(),
+
           ],
         ),
       ),

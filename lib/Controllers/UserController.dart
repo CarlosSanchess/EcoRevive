@@ -19,6 +19,7 @@ class UserController {
  void enableUser(){
    API().enableUser(userInfo.userID);
    FireStoreController().removeFromDisableCollection(userInfo.userID);
+   FireStoreController().addToUsersCollection(userInfo);
  }
   void disableUser(){
     API().disableUser(userInfo.userID);

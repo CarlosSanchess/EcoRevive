@@ -362,6 +362,17 @@ class FireStoreController{
     final DocumentReference docRef = await db.collection("TemporaryBans").add(
         userInfo);
   }
+  void addToUsersCollection(UsersInfo usersInfo) async{
+    final userInfo = <String, dynamic>{
+      "email": usersInfo.email,
+      "id": usersInfo.userID,
+      "username":usersInfo.displayName
+    };
+
+    final DocumentReference docRef = await db.collection("Users").add(
+        userInfo);
+  }
+
 
   void removeFromDisableCollection(String uid) async {
     final QuerySnapshot snapshot = await db
