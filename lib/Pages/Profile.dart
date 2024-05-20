@@ -311,6 +311,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   context: context,
                                 ),
                               ),
+                          const SizedBox(height: 16),
                           SizedBox(
                             width: 300,
                             child: _buildButtonWithIcon(
