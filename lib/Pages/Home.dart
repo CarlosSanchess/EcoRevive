@@ -9,8 +9,7 @@ class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
-  Widget build(BuildContext context){
-
+  Widget build(BuildContext context) {
     return Scaffold(
       body: const Padding(
         padding: EdgeInsets.only(top: 50.0),
@@ -32,6 +31,7 @@ class Home extends StatelessWidget {
             ),
             const Spacer(),
             IconButton(
+              key: Key('navigate_to_add_product_button'), // Add key here
               icon: const Icon(Icons.add_box,
                 size: 39,
                 color: Colors.black,
