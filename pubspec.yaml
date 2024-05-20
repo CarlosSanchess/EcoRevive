@@ -51,6 +51,8 @@ dependencies:
   flutter_gherkin: ^2.0.0
   firebase_storage_mocks: ^0.6.1
   http: ^1.2.0
+  geolocator: ^8.0.0
+  google_maps_flutter: ^2.0.0
 
 
 

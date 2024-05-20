@@ -88,4 +88,17 @@ class Auth {
     }
   }
 
+  Future<String?> getDisplayNameById(String userId) async {
+    try {
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      return userSnapshot.get('displayName');
+    } catch (e) {
+      print('Error getting user display name: $e');
+      return null;
+    }
+  }
+
 }
