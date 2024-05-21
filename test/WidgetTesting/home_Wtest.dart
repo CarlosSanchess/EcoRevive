@@ -17,7 +17,6 @@ void main() {
   testWidgets(
     'Home Page Test',
         (WidgetTester tester) async {
-      // Build our widget and trigger a frame.
       await tester.pumpWidget(const MaterialApp(
         home: Home(),
       ));

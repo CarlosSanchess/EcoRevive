@@ -176,7 +176,7 @@ By utilizing this project management system, we ensure clear communication and e
 
 - At the conclusion of Sprint #1, we successfully followed the priority defined in the sprint backlog, ensuring that tasks were completed in alignment with their designated importance. By following this prioritization, we effectively tackled essential user stories, such as enabling user registration and login, adding new recyclable products, and providing profile customization options. However, as we transition into Sprint #2, we recognize the need to enhance our development process. To achieve this, we aim to intensify our focus on unit testing throughout the software development lifecycle. By incorporating rigorous testing procedures, we aspire to identify and address potential issues early on, ensuring the delivery of a more robust and reliable product. Additionally, we intend to improve our integration practices by merging divergent features into the product more frequently. This approach will allow us to detect and rectify any bugs or inconsistencies promptly, fostering a smoother and more cohesive development cycle. We are also looking forward to integrate each individual feature into the whole product more often in order to find conflicting bugs.
 
-- The following image is our Sprint#1 backlog at the start of the project development:
+- The following image is our Sprint#1 backlog at the start of the sprint development:
 ![Sprint Backlog Sprint#1](docs/diagrams/sprint1_backlog.png)
 
 - The following image is our project board at the end of sprint#1 before the final Sprint review:
@@ -184,11 +184,58 @@ By utilizing this project management system, we ensure clear communication and e
 
 #### Sprint #2
 
-- The following image is our Sprint#2 backlog at the start of the project development:
+- The following image is our Sprint#2 backlog at the start of the sprint development:
   ![Sprint Backlog Sprint#2](docs/diagrams/sprint2_backlog.png)
 
 - The following image is our project board at the end of sprint#1 before the final Sprint review:
   ![Project Board end of Sprint#2](docs/diagrams/project_board_sprint2.png)
 
+#### Sprint #2 Retrospective
+
+- Feedback from the team:
+  - **What went well:**
+    - Successfully implemented the chat system.
+    - Implemented the user community rating feature.
+    - Moderator functionality to ban products that don't follow guidelines.
+  - **What could be improved:**
+    - Integration testing could be more robust.
+    - More frequent feature merges to detect bugs.
+    - Enhance the user experience with more interactive features.
+  - **Action items for the next sprint:**
+    - Focus on improving integration testing.
+    - Implement additional functionalities to enhance the platform.
+
+#### Sprint #3
+
+- The following image is our Sprint#3 backlog at the start of the sprint development (we focused on improving already implemented features and testing)
+  ![Sprint Backlog Sprint#3](docs/diagrams/project_board_sprint3.png)
+- The following image is our project board at the end of sprint#3 before the final Sprint review:
+  ![Project Board end of Sprint#3](docs/diagrams/project_board_sprint3.png)
+- In this sprint the project board apparently didn´t chance much acrros the sprint, because we focused on improving already implemented features and testing.
+
+#### Sprint #3 Retrospective
+
+- Feedback from the team:
+  - **What went well:**
+    - Successfully implemented all planned features.
+    - Added extra functionalities to enhance user experience.
+    - Managed to deliver a robust final product.
+  - **What could be improved:**
+    - Time management due to overlapping commitments.
+    - Enhance testing procedures for future projects.
+    - Implement more advanced features to further engage users.
+  - **Action items for future sprints/projects:**
+    - Focus on improving time management.
+    - Enhance testing procedures for future projects.
+    - Implement more advanced features to further engage users.
+
+
+#### Future App Improvements
+- Enhanced User Analytics: Implement advanced analytics to better understand user behavior and improve user experience.
+- Expanded Community Features: Introduce more community-driven features, such as user groups and event organization tools.
+- Mobile App Optimization: Optimize the app for better performance on a wider range of devices and operating systems.
+- Gamification: Incorporate gamification elements to increase user engagement and incentivize recycling activities.
+- Integration with IoT Devices: Explore integration with IoT devices for real-time tracking of recycling habits and environmental impact.
+- Personalized Recommendations: Implement machine learning algorithms to provide personalized product and recycling tips based on user preferences and behaviors.
 
 [Link to Project Board](https://github.com/orgs/FEUP-LEIC-ES-2023-24/projects/43/)

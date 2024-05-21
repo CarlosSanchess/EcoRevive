@@ -26,6 +26,9 @@ In this Sprint #1 our backlog tasks rely on some new technologies that we had to
 
 ## Sprint #2
 
+### Overview
+At the conclusion of Sprint #2, we continued to build on our initial features and tackled more complex functionalities. We faced some challenges, particularly with implementing integration tests, but we were able to make significant progress in other areas. We aim to refine our integration testing approach moving forward to ensure smoother feature merges and more reliable deployments.
+
 ### Features:
 - Implementation of Chat system.
 - Implementation of our User Community rating.
@@ -42,5 +45,25 @@ In this Sprint #1 our backlog tasks rely on some new technologies that we had to
 
 ### Project Board
 ![Project Board end of Sprint#2](docs/diagrams/project_board_sprint2.png)
+
+## Sprint #3
+
+### Overview
+At the conclusion of Sprint #3 (final sprint), we successfully implemented all planned features and added some extra functionalities to enhance user experience. Key additions included location services and notification services based on a server with the admin SDK integrated. The most significant challenge during this sprint was managing time effectively due to overlapping commitments with other projects. Despite this, we maintained our development momentum and delivered a robust final product.
+### Features:
+- Implementation of Location Services.
+- Notification Services.
+- Integration of the Admin SDK.
+- Added soft bans
+- Added temporary bans
+
+### Sprint Backlog
+- [Local and External Notification Services](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/25)
+- - [Chat system Location (improvements).](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/18)
+- [Moderator banning products that don´t follow guidelines.(improvements)](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/24)
+
+### Sprint#3 Backlog
+![Project Board end of Sprint#3](docs/diagrams/project_board_sprint3.png)
+
 
 [Link to Project Board](https://github.com/orgs/FEUP-LEIC-ES-2023-24/projects/43/)

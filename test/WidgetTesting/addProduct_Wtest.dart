@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -11,19 +10,18 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<ThemeProvider>(
-          create: (_) => ThemeProvider(), // Provide an instance of ThemeProvider
+          create: (_) => ThemeProvider(),
           child: MaterialApp(
             home: Builder(
               builder: (context) {
                 final themeProvider = Provider.of<ThemeProvider>(context);
-                return AddProduct(); // Return AddProduct widget
+                return AddProduct();
               },
             ),
           ),
         ),
       );
 
-      // Ensure that the 'Add Image' text is found
       expect(find.text('Add Image'), findsOneWidget);
     },
   );
