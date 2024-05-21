@@ -116,12 +116,17 @@ The physical architecture section provides an overview of the high-level physica
 - **ExpressJS**: Web framework for Node.js that supports web and mobile applications, APIs, and middleware.
 - **Cors**: Cross-Origin Resource Sharing is an HTTP-header based mechanism that allows a server to indicate which origins other than its own are permitted to access its resources.
 
+![DeploymentView](docs/diagrams/physical_arch.png)
+
 ### Local Storage
 - **Local App Storage**: Utilized for storing user preferences, such as the chosen app theme and device login status.
 - **Device Gallery Access**: Enabled for uploading photos within the app.
 
-![DeploymentView](docs/diagrams/physical_arch.png)
+### API integration
+The API was built using Express.js and CORS, it provides endpoins to interact with the Firebase Admin Sdk providing powerful functionalities for managing user interactions. Key features include:
 
+- **Sending Notifications:** Effortlessly push notifications to users through Firebase Cloud Messaging (FCM), ensuring timely and effective communication.
+- **User Management:** Soft ban and unban users, controlling their access.Or permanent ban an user.
 ### Vertical prototype
 For this initial prototype, we've implemented a basic entry page that serves as the starting point for users accessing the EcoRevive app. Additionally, the entry page offers links to the registration and login pages, enabling users to create accounts or sign in to access EcoRevive's functionalities. These registration and login functionalities are connected to Firebase, ensuring secure user authentication and data management.
 
