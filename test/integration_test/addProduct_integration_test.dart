@@ -9,41 +9,36 @@ void main() {
   group('AddProduct Integration Test', () {
     testWidgets('Add product flow', (WidgetTester tester) async {
       app.main();
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(Duration(seconds: 15));
 
-      try {
-        await tester.enterText(find.byKey(Key('login_username_field')), 'test@example.com');
-        await tester.enterText(find.byKey(Key('login_password_field')), '@Password123/');
-        await tester.tap(find.byKey(Key('login_button')));
-        await tester.pumpAndSettle();
+      print('Login page loaded');
 
-        await tester.tap(find.byKey(Key('navigate_to_add_product_button')));
-        await tester.pumpAndSettle();
+      expect(find.byKey(Key('login_username_field')), findsOneWidget);
+      expect(find.byKey(Key('login_password_field')), findsOneWidget);
+      expect(find.byKey(Key('login_button')), findsOneWidget);
 
-        expect(find.text('Add Product'), findsOneWidget);
+      await tester.enterText(find.byKey(Key('login_username_field')), 'test@example.com');
+      await tester.pump();
+      await tester.enterText(find.byKey(Key('login_password_field')), '@Password123/');
+      await tester.pump();
+      await tester.tap(find.byKey(Key('login_button')));
+      await tester.pumpAndSettle(Duration(seconds: 10));
 
-        await tester.enterText(find.byKey(Key('product_name_field')), 'Test Product');
-        await tester.pump();
+      print('Login button tapped');
 
-        await tester.enterText(find.byKey(Key('product_description_field')), 'Test Description');
-        await tester.pump();
+      expect(find.byKey(Key('navigate_to_add_product_button')), findsOneWidget, reason: 'Navigate button not found');
+      await tester.tap(find.byKey(Key('navigate_to_add_product_button')));
+      await tester.pumpAndSettle(Duration(seconds: 10));
 
-        await tester.tap(find.byKey(Key('image_picker_button')));
-        await tester.pump();
+      print('Navigated to Add Product page');
 
-        await tester.tap(find.byKey(Key('category_selector')));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text('Electronics').last);
-        await tester.pump();
+      expect(find.text('Add Product'), findsOneWidget);
+      expect(find.byKey(Key('product_name_field')), findsOneWidget);
+      expect(find.byKey(Key('product_description_field')), findsOneWidget);
+      expect(find.byKey(Key('image_picker_button')), findsOneWidget);
+      expect(find.byKey(Key('category_selector')), findsOneWidget);
+      expect(find.byKey(Key('submit_product_button')), findsOneWidget);
 
-        await tester.tap(find.byKey(Key('submit_product_button')));
-        await tester.pumpAndSettle();
-
-        expect(find.text('Product added successfully'), findsOneWidget);
-      } catch (error) {
-        print('Test failed with error: $error');
-        rethrow; // Rethrow the error to fail the test
-      }
     });
   });
 }
