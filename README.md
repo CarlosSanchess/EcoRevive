@@ -28,15 +28,19 @@ You can find here details about our implementation, from a high-level vision to 
 
 #### Main Features
 
-1. Product Listing: Explore a diverse array of items available, starting with electronic waste and expanding to encompass a wide range of recyclable materials. Our intuitive interface ensures easy navigation.
+- User registration and login functionality (local storage to keep user logged).
+- Ability for users to add new recyclable products.
+- Profile customization options, including password change and theme selection (local storage for theme).
+- Management functionality for listed recyclable products.
+- Filtering options for the list of recyclable products.
+- Chat system implementation.
+- User Community rating system and feedbacks (where each user has his community rating).
+- Moderator ability to ban products that don't follow guidelines.
+- Location Services for chat.
+- Notification Services (local and external).
+- Integration of the Admin SDK.
+- Soft bans/temporary bans for user moderation.
 
-2. Advanced Product Filtering: Search with precision using our filtering system. Whether you're seeking specific conditions or items, robust filters help you find exactly what you need efficiently.
-
-3. Secure Login Registration: Join our community through a secure registration process. Your personal information is safeguarded, ensuring a trusted environment for all users to engage in sustainable exchange.
-
-4. Interactive User Chat: Foster meaningful connections and facilitate smooth transactions through our integrated chat feature. Engage in real-time conversations with fellow users to negotiate terms, ask questions, and coordinate exchanges, all within the convenience of our platform.
-
-5. User-Friendly App: ensuring inclusivity for individuals with disabilities that still want to take part on this community.
 
 #### Assumptions
 - Firebase database to store the users credentials aswell as products listing and others...
@@ -45,7 +49,6 @@ You can find here details about our implementation, from a high-level vision to 
 
 - For environmentally conscious individuals tired of the hassle of recycling, the "EcoRevive" app is a sustainable solution. It's a recycling platform that simplifies the process of finding, listing, and discussing recyclable products matching people that want to discard those products, with people looking for them. Unlike other recycling apps that focus solely on listings, our app emphasizes community engagement and social interaction around sustainability. With features like chat functionality and user ratings, EcoRevive fosters meaningful connections between users, making recycling both simple and social.
 
-
 ## Requirements
 
 ### Domain model
@@ -53,7 +56,7 @@ You can find here details about our implementation, from a high-level vision to 
 Each user can list multiple products of various categories on the application.
 Whenever a user sees a product that he's interested in, he can start a chat with the owner of said product, where they can message each other.
 The application will send notifications to the user whenever a new message is received.
-After chatting and acquiring the product, the chat participants can rate each other and leave feedback to improve user experience.
+The chat participants can rate each other and leave feedback to improve user experience.
 The application has moderatores that unsure guidelines are being respected, being able to ban user that don't respect them.
 
  <p align="center" justify="center">
