@@ -56,21 +56,22 @@ class FireStoreController{
       return "";
     }
   }
-  Future<List<info>> getOwnedProducts() async {
+  Future<List<ProductInfo>> getOwnedProducts() async {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
       QuerySnapshot ownedProducts = await db.collection('Products').where('Owner', isEqualTo: user.uid).get();
-      List<info> products = [];
+      List<ProductInfo> products = [];
       for (QueryDocumentSnapshot doc in ownedProducts.docs) {
         String name = doc['ProductName'];
         String category = doc['Category'];
         String description = doc['Description'];
         String productId = doc.id;
+        String userId = doc['Owner'];
 
         String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
 
-        products.add(info(productID: productId, productName: name, description: description, category: category, imageURL: imageUrl));
+        products.add(ProductInfo(productName: name, description: description, category: category, imageURL: imageUrl, UserID: userId, productID: productId));
       }
       return products;
     } else {
@@ -79,12 +80,30 @@ class FireStoreController{
   }
 
 
-  Future<void> deleteProduct(info product) async {
+  Future<void> deleteProduct(ProductInfo product) async {
     try {
-      CloudStorageController().deleteImage('ProductImages/${product.productID}');
-      DocumentReference productRef = FirebaseFirestore.instance.collection('Products').doc(product.productID);
-      await productRef.delete();
+      // Check if there exists a chat about this product
+      QuerySnapshot chatSnapshot = await db
+          .collection('Chats')
+          .where('productId', isEqualTo: product.productID)
+          .get();
 
+      if (chatSnapshot.docs.isNotEmpty) {
+        // If there exists a chat about this product, create a new product with the same info
+        Map<String, dynamic> productData = {
+          'ProductName': product.productName,
+          'Description': product.description,
+          'Category': product.category,
+          'Owner': product.UserID,
+        };
+
+        await db.collection('DeletedProducts').doc(product.productID).set(productData);
+        await db.collection('Products').doc(product.productID).delete();
+      } else {
+        // Otherwise, delete both the product and the image
+        await CloudStorageController().deleteImage('ProductImages/${product.productID}');
+        await db.collection('Products').doc(product.productID).delete();
+      }
     } catch (error) {
       print("Error while deleting: $error");
     }

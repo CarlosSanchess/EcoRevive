@@ -8,6 +8,11 @@ import '../Controllers/CloudStorageController.dart';
 import 'Chat.dart';
 
 class UserChats extends StatefulWidget{
+  final String productId;
+  final String productName;
+  final String collection;
+
+  UserChats({Key? key, required this.productId, required this.productName, required this.collection}) : super(key: key);
   @override
   _UserChatsState createState() => _UserChatsState();
 }
@@ -20,7 +25,7 @@ class _UserChatsState extends State<UserChats>{
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your chats'),
+        title: Text(widget.productName),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: chatController.getUserChats(userId),
@@ -36,10 +41,13 @@ class _UserChatsState extends State<UserChats>{
                 DocumentSnapshot chat = snapshot.data!.docs[index];
                 String chatId = chat.id;
                 String productId = chat['productId'];
-                Future<String> imageUrl = CloudStorageController().getDownloadURL('ProductImages/$productId');
+
+                if(productId != widget.productId){
+                  return Container();
+                }
 
                 return FutureBuilder<DocumentSnapshot>(
-                  future: FirebaseFirestore.instance.collection('Products').doc(productId).get(),
+                  future: FirebaseFirestore.instance.collection(widget.collection).doc(productId).get(),
                   builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> productSnapshot) {
                     if (productSnapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
