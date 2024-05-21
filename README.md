@@ -95,7 +95,6 @@ The logical architecture of EcoRevive outlines its core components and their int
 #### EcoRevive
 - **GUI**: User interface for interacting with the system.
 - **Logic**: Core functionality and processing.
-- **Database**: Stores and manages system data.
 
 #### External Services
 - **Firebase Server**: Integrated for features like authentication or data storage.
