@@ -58,7 +58,7 @@ class LoginState extends State<Login> {
                 const SizedBox(height: 50),
                 TextContainer(
                   key: Key('login_username_field'), // Added key here
-                  hintText: "UserName",
+                  hintText: "Email",
                   obscureText: false,
                   icon: const Icon(Icons.mail),
                   textEditingController: usernameController,

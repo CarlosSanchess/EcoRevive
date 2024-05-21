@@ -10,13 +10,12 @@ import 'package:register/firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:register/Controllers/NotsController.dart';
 import 'package:register/Controllers/NotificationService.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 @pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async
-{
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +23,7 @@ void main() async {
   FirebaseMessaging.instance.requestPermission();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
+  await _requestLocationPermission();
 
   runApp(
     ChangeNotifierProvider(
@@ -41,17 +41,28 @@ void main() async {
       ),
     ),
   );
+}
 
+Future<void> _requestLocationPermission() async {
+  PermissionStatus status = await Permission.location.request();
+
+  if (status.isGranted) {
+    // Permission granted
+  } else if (status.isDenied) {
+    // Permission denied
+    print('Location permission denied');
+  } else if (status.isPermanentlyDenied) {
+    // Permission permanently denied, take the user to the settings
+    openAppSettings();
+  }
 }
 
 class MyApp extends StatelessWidget {
-
   Auth auth = Auth();
   MyApp({Key? key}) : super(key: key);
 
-
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return MaterialApp(
@@ -62,8 +73,8 @@ class MyApp extends StatelessWidget {
           : ThemeData.light(),
       home: themeProvider.isThemeLoaded
           ? auth.currentUser != null
-              ? (auth.currentUser?.email == "mod@ecorevive.com" ?  ModeratorHome() : const Home())
-              : const Login()
+          ? (auth.currentUser?.email == "mod@ecorevive.com" ? ModeratorHome() : const Home())
+          : const Login()
           : const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
