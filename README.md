@@ -99,6 +99,7 @@ The logical architecture of EcoRevive outlines its core components and their int
 
 #### External Services
 - **Firebase Server**: Integrated for features like authentication or data storage.
+- **Web Server**: Integrated to enable the use of the Firebase Admin SDK, in order to be able to interact with Firebase Authentication and Firebase Messaging from an admin perspective.
 
 #### Relationships
 - User interactions pass from GUI to Logic.
@@ -113,6 +114,8 @@ The physical architecture section provides an overview of the high-level physica
 #### Technologies Considered:
 - **Flutter**: A cross-platform framework for building mobile applications.
 - **Firebase**: A Backend-as-a-Service (BaaS) platform providing services like authentication, database, and storage.
+- **ExpressJS**: Web framework for Node.js that supports web and mobile applications, APIs, and middleware.
+- **Cors**: Cross-Origin Resource Sharing is an HTTP-header based mechanism that allows a server to indicate which origins other than its own are permitted to access its resources.
 
 ![DeploymentView](docs/diagrams/physical_arch.png)
 

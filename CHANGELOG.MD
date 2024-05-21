@@ -49,18 +49,20 @@ At the conclusion of Sprint #2, we continued to build on our initial features an
 ## Sprint #3
 
 ### Overview
-At the conclusion of Sprint #3 (final sprint), we successfully implemented all planned features and added some extra functionalities to enhance user experience. Key additions included location services and notification services based on a server with the admin SDK integrated. The most significant challenge during this sprint was managing time effectively due to overlapping commitments with other projects. Despite this, we maintained our development momentum and delivered a robust final product.
+At the conclusion of Sprint #3 (final sprint), we successfully implemented all planned features and added some extra functionalities to enhance user experience. Key additions included location services and notification services sent by a server with the admin SDK integrated. The most significant challenge during this sprint was managing time effectively due to overlapping commitments with other projects. Despite this, we maintained our development momentum and delivered a robust final product.
+(* in the feature list means that interact with the new Web Server.)
 ### Features:
 - Implementation of Location Services.
-- Notification Services.
-- Integration of the Admin SDK.
-- Added soft bans
-- Added temporary bans
+- Notification Services.*
+- Added Soft/Temporary and Permanent bans.*
+- Integration of the new API.
+
 
 ### Sprint Backlog
-- [Local and External Notification Services](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/25)
-- - [Chat system Location (improvements).](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/18)
-- [Moderator banning products that don´t follow guidelines.(improvements)](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/24)
+- [Local and External Notification Services.](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/25)
+- [Moderator banning users, that don´t follow guidelines.](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/15)
+- [Chat system Location.(improvements)](https://github.com/FEUP-LEIC-ES-2023-24/2leic12T3/issues/18)
+
 
 ### Sprint#3 Backlog
 ![Project Board end of Sprint#3](docs/diagrams/project_board_sprint3.png)
