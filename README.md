@@ -117,6 +117,10 @@ The physical architecture section provides an overview of the high-level physica
 - **ExpressJS**: Web framework for Node.js that supports web and mobile applications, APIs, and middleware.
 - **Cors**: Cross-Origin Resource Sharing is an HTTP-header based mechanism that allows a server to indicate which origins other than its own are permitted to access its resources.
 
+### Local Storage
+- **Local App Storage**: Utilized for storing user preferences, such as the chosen app theme and device login status.
+- **Device Gallery Access**: Enabled for uploading photos within the app.
+
 ![DeploymentView](docs/diagrams/physical_arch.png)
 
 ### Vertical prototype
