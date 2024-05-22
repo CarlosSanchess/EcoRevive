@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:register/Auth/Auth.dart';
 import 'package:register/Pages/Home.dart';
-
 import 'package:register/Pages/theme_provider.dart';
 import 'package:register/firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -24,7 +24,7 @@ void main() async {
   FirebaseMessaging.instance.requestPermission();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  await _requestLocationPermission();
+  await _checkAndRequestLocationPermission();
 
   runApp(
     ChangeNotifierProvider(
@@ -44,17 +44,22 @@ void main() async {
   );
 }
 
-Future<void> _requestLocationPermission() async {
-  PermissionStatus status = await Permission.location.request();
+Future<void> _checkAndRequestLocationPermission() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool? isLocationPermissionGranted = prefs.getBool('isLocationPermissionGranted');
 
-  if (status.isGranted) {
-    // Permission granted
-  } else if (status.isDenied) {
-    // Permission denied
-    print('Location permission denied');
-  } else if (status.isPermanentlyDenied) {
-    // Permission permanently denied, take the user to the settings
-    openAppSettings();
+  if (isLocationPermissionGranted == null || !isLocationPermissionGranted) {
+    PermissionStatus status = await Permission.location.request();
+
+    if (status.isGranted) {
+      await prefs.setBool('isLocationPermissionGranted', true);
+    } else if (status.isDenied) {
+      await prefs.setBool('isLocationPermissionGranted', false);
+      print('Location permission denied');
+    } else if (status.isPermanentlyDenied) {
+      await prefs.setBool('isLocationPermissionGranted', false);
+      openAppSettings();
+    }
   }
 }
 
@@ -68,14 +73,13 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'EcoRevive',
-      // Check if the theme is loaded, if not, show a loading indicator
       theme: themeProvider.isThemeLoaded
           ? themeProvider.getTheme()
           : ThemeData.light(),
       home: themeProvider.isThemeLoaded
           ? auth.currentUser != null
-              ? const Home()
-              : const Login()
+          ? const Home()
+          : const Login()
           : const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
