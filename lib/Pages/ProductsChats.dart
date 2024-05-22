@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../Controllers/ChatController.dart';
 import 'UserChats.dart';
+import 'package:register/Models/ProductInfo.dart';
+import 'package:register/Controllers/CloudStorageController.dart';
 
 class ProductsChats extends StatefulWidget {
   @override
@@ -76,12 +78,65 @@ class _ProductsChatState extends State<ProductsChats> {
                     }
 
                     String productName = productSnapshot.data!['ProductName'];
+                    String description = productSnapshot.data!['Description'];
+                    String category = productSnapshot.data!['Category'];
+                    String owner = productSnapshot.data!['Owner'];
 
-                    return ListTile(
-                      title: Text(productName),
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => UserChats(productId: productId, productName: productName, collection: collectionName)));
+                    return FutureBuilder<String>(
+                      future: CloudStorageController().getDownloadURL('ProductImages/$productId'),
+                      builder: (BuildContext context, AsyncSnapshot<String> imageSnapshot) {
+                        if (imageSnapshot.connectionState == ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        }
+
+                        if (imageSnapshot.hasError) {
+                          return Text('Something went wrong');
+                        }
+
+                        String imageUrl = imageSnapshot.data!;
+
+                        ProductInfo info = ProductInfo(productName: productName, description: description, category: category, UserID: owner, imageURL: imageUrl, productID: productId);
+
+                        return ListTile(
+                          leading: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(imageUrl),
+                              ),
+                            ),
+                          ),
+                          title: Text(
+                            productName,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(description),
+                              SizedBox(height: 4),
+                            ],
+                          ),
+                          trailing: IconButton(
+                            icon: const Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UserChats(productId: productId, productName: productName, collection: collectionName),
+                                ),
+                              );
+                            },
+                          ),
+                        );
                       },
                     );
                   },
