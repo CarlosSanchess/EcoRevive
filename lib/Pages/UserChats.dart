@@ -101,47 +101,63 @@ class _UserChatsState extends State<UserChats> {
 
                                 ProductInfo info = ProductInfo(productName: productName, description: description, category: category, UserID: owner, imageURL: productImageUrl, productID: productId);
 
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 5.0),
-                                  child: ListTile(
-                                  leading: Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.grey[300],
-                                      image: imageUrl.isNotEmpty
-                                          ? DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(imageUrl),
-                                      )
-                                          : null,
-                                    ),
-                                    child: imageUrl.isNotEmpty
-                                        ? null
-                                        : Icon(Icons.no_photography_outlined),
-                                  ),
-                                  title: Text(
-                                    username,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  trailing: IconButton(
-                                    icon: const Icon(
-                                      Icons.chat,
-                                      color: Colors.grey,
-                                    ),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => Chat(receiverId: otherUserId, product: info),
+                                return FutureBuilder<QuerySnapshot>(
+                                  future: FirebaseFirestore.instance.collection('Chats').doc(chatId).collection('Messages').orderBy('time', descending: true).limit(1).get(),
+                                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> messageSnapshot) {
+                                    if (messageSnapshot.connectionState == ConnectionState.waiting) {
+                                      return CircularProgressIndicator();
+                                    }
+
+                                    if (messageSnapshot.hasError) {
+                                      return Text('Something went wrong e');
+                                    }
+
+                                    String lastMessage = messageSnapshot.data!.docs.first['message'];
+                                    String displayMessage = lastMessage.length > 20 ? lastMessage.substring(0, 20) + '...' : lastMessage;
+
+                                    displayMessage = userId == messageSnapshot.data!.docs.first['senderID'] ? 'You: ' + displayMessage : username + ": " + displayMessage;
+
+                                    return ListTile(
+                                      leading: Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.grey[300],
+                                          image: imageUrl.isNotEmpty
+                                              ? DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: NetworkImage(imageUrl),
+                                          )
+                                              : null,
                                         ),
-                                      );
-                                    },
-                                  ),
-                                ),
+                                        child: imageUrl.isNotEmpty
+                                            ? null
+                                            : Icon(Icons.no_photography_outlined),
+                                      ),
+                                      title: Text(
+                                        username,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      subtitle: Text(displayMessage),
+                                      trailing: IconButton(
+                                        icon: const Icon(
+                                          Icons.chat,
+                                          color: Colors.grey,
+                                        ),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => Chat(receiverId: otherUserId, product: info),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  },
                                 );
                               },
                             );
