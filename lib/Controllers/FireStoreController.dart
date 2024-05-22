@@ -490,21 +490,29 @@ class FireStoreController {
     return users;
   }
 
-  Future<String?> getProductNameByID(String id) async {
-    try {
+  Future<ProductInfo?> getProductInfoByID(String id) async {
+
       DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
           .collection('Products').doc(id).get();
 
       if (documentSnapshot.exists) {
+        String description = documentSnapshot.get('Description');
+        String category = documentSnapshot.get('Category');
+        String imageURL = 'gs://vertical-prototype-70c6c.appspot.com/ProductImages/$id';
+        String UserID = documentSnapshot.get('Owner');
+        String productID = id;
         String productName = documentSnapshot.get('ProductName');
-        print('Product found: $productName');
-        return productName;
-      } else {
-        print('No product found with ID: $id');
-        return null;
-      }
-    } catch (e) {
-      print('Error getting product name by ID: $e');
+
+        return ProductInfo(
+          productName: productName,
+          description: description,
+          category: category,
+          imageURL: imageURL,
+          UserID: UserID,
+          productID: productID,
+        );
+    } else {
+      print('No product found with ID: $id');
       return null;
     }
   }
@@ -533,14 +541,16 @@ class FireStoreController {
       for (var doc in querySnapshot.docs) {
         String? name1 = await getUsernameByUidUser(doc['participants'][0]);
         String? name2 = await getUsernameByUidUser(doc['participants'][1]);
-        String? product = await getProductNameByID(doc['productId']);
+        ProductInfo? product = await getProductInfoByID(doc['productId']);
 
         if (name1 != null && name2 != null && product != null) {
           ChatInfo chat = ChatInfo(
               chatId: doc.id,
+              senderId: doc['participants'][0],
+              receiverId:doc['participants'][1],
               nameID1: name1,
               nameID2: name2,
-              nameProduct: product
+              productInfo: product
           );
           chatInfo.add(chat);
         }

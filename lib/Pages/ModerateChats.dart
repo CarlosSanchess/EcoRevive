@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:register/Controllers/FireStoreController.dart';
 import 'package:register/Models/ChatInfo.dart';
+import 'package:register/Pages/ModerateChatsSeeMsgs.dart';
 import 'package:register/Pages/ModeratorHome.dart';
 
 class ModerateChats extends StatefulWidget {
@@ -88,52 +89,74 @@ class _ModerateChatsState extends State<ModerateChats> {
                         children: [
                           _buildTitle('Chat Messages', Colors.green, Colors.teal),
                           Expanded(
-                            child: ListView.builder(
-                              itemCount: chats.length,
-                              itemBuilder: (context, index) {
-                                return Card(
+                              child: ListView.builder(
+                            itemCount: chats.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator
+                                      .pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                        ModerateChatsSeeMsgs(senderId: chats[index].senderId, receiverId: chats[index].receiverId, product: chats[index].productInfo, senderName: chats[index].nameID1)
+                                    )
+                                  );
+                                },
+                                child: Card(
                                   elevation: 4.0,
-                                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
                                   child: ListTile(
                                     contentPadding: const EdgeInsets.all(9.0),
                                     title: Text(
                                       'Chat: ${chats[index].nameID1} and ${chats[index].nameID2}',
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                    subtitle: Text(chats[index].nameProduct),
+                                    subtitle: Text(chats[index].productInfo.productName),
                                     trailing: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-
                                         IconButton(
-                                          icon: const Icon(Icons.delete, color: Colors.redAccent),
+                                          icon: const Icon(Icons.delete,
+                                              color: Colors.redAccent),
                                           onPressed: () {
                                             showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return AlertDialog(
-                                                  title: const Text("Confirm Delete"),
-                                                  content: Text("Are you sure you want to delete this chat? (It can't be reverted)"),
+                                                  title: const Text(
+                                                      "Confirm Delete"),
+                                                  content: const Text(
+                                                      "Are you sure you want to delete this chat? (It can't be reverted)"),
                                                   actions: <Widget>[
                                                     TextButton(
                                                       onPressed: () {
-                                                        Navigator.of(context).pop();
+                                                        Navigator.of(context)
+                                                            .pop();
                                                       },
-                                                      child: const Text("Cancel"),
+                                                      child:
+                                                          const Text("Cancel"),
                                                     ),
                                                     TextButton(
                                                       onPressed: () {
-                                                        FireStoreController().removeChat(chats[index].chatId);
-                                                        Navigator.pushReplacement(
+                                                        FireStoreController()
+                                                            .removeChat(
+                                                                chats[index]
+                                                                    .chatId);
+                                                        Navigator
+                                                            .pushReplacement(
                                                           context,
-                                                          MaterialPageRoute(builder: (context) => const ModerateChats()),
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  const ModerateChats()),
                                                         );
                                                       },
                                                       child: const Text(
                                                         "Delete",
                                                         style: TextStyle(
-                                                          color: Colors.red,
-                                                        ),
+                                                            color: Colors.red),
                                                       ),
                                                     ),
                                                   ],
@@ -145,10 +168,10 @@ class _ModerateChatsState extends State<ModerateChats> {
                                       ],
                                     ),
                                   ),
-                                );
-                              },
-                            ),
-                          ),
+                                ),
+                              );
+                            },
+                          )),
                         ],
                       );
                     }
