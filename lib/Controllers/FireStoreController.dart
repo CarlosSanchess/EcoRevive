@@ -7,15 +7,16 @@ import 'package:register/Models/ProductInfo.dart';
 
 import '../Models/Feedback.dart';
 import '../Models/UsersInfo.dart';
+import '../Models/ChatInfo.dart';
 import '../Pages/myProducts.dart';
 
-class FireStoreController{
+class FireStoreController {
 
   final db = FirebaseFirestore.instance;
 
 
-  Future<String> addToProductsCollection(String productName, String description, String? category) async {
-
+  Future<String> addToProductsCollection(String productName, String description,
+      String? category) async {
     final product = <String, dynamic>{
       "ProductName": productName,
       "Description": description,
@@ -28,8 +29,7 @@ class FireStoreController{
     return docRef.id;
   }
 
-  Future<String> addFCMTokenToCollection( String fcmToken) async {
-
+  Future<String> addFCMTokenToCollection(String fcmToken) async {
     final tokenInfo = <String, dynamic>{
       "UserID": await Auth().getUid(),
       "Token": fcmToken,
@@ -56,11 +56,13 @@ class FireStoreController{
       return "";
     }
   }
+
   Future<List<info>> getOwnedProducts() async {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      QuerySnapshot ownedProducts = await db.collection('Products').where('Owner', isEqualTo: user.uid).get();
+      QuerySnapshot ownedProducts = await db.collection('Products').where(
+          'Owner', isEqualTo: user.uid).get();
       List<info> products = [];
       for (QueryDocumentSnapshot doc in ownedProducts.docs) {
         String name = doc['ProductName'];
@@ -68,9 +70,14 @@ class FireStoreController{
         String description = doc['Description'];
         String productId = doc.id;
 
-        String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
+        String imageUrl = await CloudStorageController().getDownloadURL(
+            'ProductImages/$productId');
 
-        products.add(info(productID: productId, productName: name, description: description, category: category, imageURL: imageUrl));
+        products.add(info(productID: productId,
+            productName: name,
+            description: description,
+            category: category,
+            imageURL: imageUrl));
       }
       return products;
     } else {
@@ -81,10 +88,11 @@ class FireStoreController{
 
   Future<void> deleteProduct(info product) async {
     try {
-      CloudStorageController().deleteImage('ProductImages/${product.productID}');
-      DocumentReference productRef = FirebaseFirestore.instance.collection('Products').doc(product.productID);
+      CloudStorageController().deleteImage(
+          'ProductImages/${product.productID}');
+      DocumentReference productRef = FirebaseFirestore.instance.collection(
+          'Products').doc(product.productID);
       await productRef.delete();
-
     } catch (error) {
       print("Error while deleting: $error");
     }
@@ -92,10 +100,11 @@ class FireStoreController{
 
   Future<void> deleteProductModerate(ProductInfo product) async {
     try {
-      CloudStorageController().deleteImage('ProductImages/${product.productID}');
-      DocumentReference productRef = FirebaseFirestore.instance.collection('Products').doc(product.productID);
+      CloudStorageController().deleteImage(
+          'ProductImages/${product.productID}');
+      DocumentReference productRef = FirebaseFirestore.instance.collection(
+          'Products').doc(product.productID);
       await productRef.delete();
-
     } catch (error) {
       print("Error while deleting: $error");
     }
@@ -107,9 +116,14 @@ class FireStoreController{
     if (user != null) {
       QuerySnapshot categoryProducts;
       if (category == "all") {
-        categoryProducts = await db.collection('Products').where('Owner', isNotEqualTo: user.uid).get();
+        categoryProducts = await db.collection('Products')
+            .where('Owner', isNotEqualTo: user.uid)
+            .get();
       } else {
-        categoryProducts = await db.collection('Products').where('Category', isEqualTo: category).where('Owner', isNotEqualTo: user.uid).get();
+        categoryProducts =
+        await db.collection('Products').where('Category', isEqualTo: category)
+            .where('Owner', isNotEqualTo: user.uid)
+            .get();
       }
       List<ProductInfo> products = [];
       for (QueryDocumentSnapshot doc in categoryProducts.docs) {
@@ -119,8 +133,14 @@ class FireStoreController{
         String productId = doc.id;
         String userId = doc['Owner'];
 
-        String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
-        products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl, UserID: userId, productID: productId));
+        String imageUrl = await CloudStorageController().getDownloadURL(
+            'ProductImages/$productId');
+        products.add(ProductInfo(productName: name,
+            description: description,
+            category: productCategory,
+            imageURL: imageUrl,
+            UserID: userId,
+            productID: productId));
       }
       return products;
     } else {
@@ -128,14 +148,15 @@ class FireStoreController{
     }
   }
 
-  Future<List<ProductInfo>> fetchProductsBySearchTerm(String searchTerm, String category) async {
+  Future<List<ProductInfo>> fetchProductsBySearchTerm(String searchTerm,
+      String category) async {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
       if (searchTerm.isEmpty) {
         return fetchProductsByCategory(category);
       } else {
-        if(category == "all"){
+        if (category == "all") {
           QuerySnapshot productsSnapshot = await db
               .collection('Products')
               .where('Owner', isNotEqualTo: user.uid)
@@ -149,9 +170,16 @@ class FireStoreController{
             String description = doc['Description'];
             String productId = doc.id;
 
-            if (searchTerm.isEmpty || name.toLowerCase().contains(searchTerm.toLowerCase())) {
-              String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
-              products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl, UserID: user.uid, productID: productId));
+            if (searchTerm.isEmpty ||
+                name.toLowerCase().contains(searchTerm.toLowerCase())) {
+              String imageUrl = await CloudStorageController().getDownloadURL(
+                  'ProductImages/$productId');
+              products.add(ProductInfo(productName: name,
+                  description: description,
+                  category: productCategory,
+                  imageURL: imageUrl,
+                  UserID: user.uid,
+                  productID: productId));
             }
           }
 
@@ -171,9 +199,16 @@ class FireStoreController{
           String description = doc['Description'];
           String productId = doc.id;
 
-          if (searchTerm.isEmpty || name.toLowerCase().contains(searchTerm.toLowerCase())) {
-            String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
-            products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl, UserID: user.uid, productID: productId));
+          if (searchTerm.isEmpty ||
+              name.toLowerCase().contains(searchTerm.toLowerCase())) {
+            String imageUrl = await CloudStorageController().getDownloadURL(
+                'ProductImages/$productId');
+            products.add(ProductInfo(productName: name,
+                description: description,
+                category: productCategory,
+                imageURL: imageUrl,
+                UserID: user.uid,
+                productID: productId));
           }
         }
 
@@ -182,7 +217,6 @@ class FireStoreController{
     } else {
       throw 'Not logged in.';
     }
-
   }
 
   Future<List<FeedbackData>> getFeedbackForUser(String userId) async {
@@ -231,11 +265,11 @@ class FireStoreController{
   }
 
 
-
-  Future<List<ProductInfo>> fetchProductsBySearchTermAll(String searchTerm) async {
+  Future<List<ProductInfo>> fetchProductsBySearchTermAll(
+      String searchTerm) async {
     User? user = FirebaseAuth.instance.currentUser;
 
-    if (user!= null) {
+    if (user != null) {
       QuerySnapshot productsSnapshot = await db
           .collection('Products')
           .get();
@@ -249,9 +283,16 @@ class FireStoreController{
         String productId = doc.id;
         String userId = doc['Owner'];
 
-        if (searchTerm.isEmpty || name.toLowerCase().contains(searchTerm.toLowerCase())) {
-          String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
-          products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl, UserID: userId, productID: productId));
+        if (searchTerm.isEmpty ||
+            name.toLowerCase().contains(searchTerm.toLowerCase())) {
+          String imageUrl = await CloudStorageController().getDownloadURL(
+              'ProductImages/$productId');
+          products.add(ProductInfo(productName: name,
+              description: description,
+              category: productCategory,
+              imageURL: imageUrl,
+              UserID: userId,
+              productID: productId));
         }
       }
 
@@ -272,8 +313,14 @@ class FireStoreController{
       String productId = doc.id;
       String userId = doc['Owner'];
 
-      String imageUrl = await CloudStorageController().getDownloadURL('ProductImages/$productId');
-      products.add(ProductInfo(productName: name, description: description, category: productCategory, imageURL: imageUrl, UserID: userId, productID: productId));
+      String imageUrl = await CloudStorageController().getDownloadURL(
+          'ProductImages/$productId');
+      products.add(ProductInfo(productName: name,
+          description: description,
+          category: productCategory,
+          imageURL: imageUrl,
+          UserID: userId,
+          productID: productId));
     }
     return products;
   }
@@ -296,9 +343,11 @@ class FireStoreController{
 
     return suspiciousProducts;
   }
+
   Future<String?> getEmailByUid(String uid) async {
     try {
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection(
+          'Users').doc(uid).get();
       return userDoc.get('email');
     } catch (e) {
       print('Error getting email: $e');
@@ -308,7 +357,8 @@ class FireStoreController{
 
   Future<String?> getUsernameByUid(String uid) async {
     try {
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection(
+          'Users').doc(uid).get();
       return userDoc.get('username');
     } catch (e) {
       print('Error getting username: $e');
@@ -317,11 +367,12 @@ class FireStoreController{
   }
 
   Future<List<UsersInfo>> getAllUsers() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Users').get();
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection(
+        'Users').get();
 
     List<UsersInfo> users = [];
     for (var doc in querySnapshot.docs) {
-      UsersInfo user =   UsersInfo(
+      UsersInfo user = UsersInfo(
           doc['id'],
           doc['email'],
           doc['username']
@@ -330,12 +381,14 @@ class FireStoreController{
     }
     return users;
   }
+
   Future<List<UsersInfo>> getNonAdminUsers() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Users').where('email', isNotEqualTo: 'mod@ecorevive.com').get();
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection(
+        'Users').where('email', isNotEqualTo: 'mod@ecorevive.com').get();
 
     List<UsersInfo> users = [];
     for (var doc in querySnapshot.docs) {
-      UsersInfo user =   UsersInfo(
+      UsersInfo user = UsersInfo(
           doc['id'],
           doc['email'],
           doc['username']
@@ -344,15 +397,18 @@ class FireStoreController{
     }
     return users;
   }
-  void removeUser(String uid) async{
-      try {
-        DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(uid);
-        await userRef.delete();
-        print('User with uid $uid successfully removed.');
-      } catch (error) {
-        print('Error removing user: $error');
-      }
+
+  void removeUser(String uid) async {
+    try {
+      DocumentReference userRef = FirebaseFirestore.instance.collection('Users')
+          .doc(uid);
+      await userRef.delete();
+      print('User with uid $uid successfully removed.');
+    } catch (error) {
+      print('Error removing user: $error');
+    }
   }
+
   void removeAssociatedProducts(String uid) async {
     try {
       QuerySnapshot ownedProducts = await db.collection('Products').where(
@@ -360,27 +416,28 @@ class FireStoreController{
       for (QueryDocumentSnapshot doc in ownedProducts.docs) {
         doc.reference.delete();
       }
-    } catch(error){
+    } catch (error) {
       print('Error Removing Products: $error');
     }
   }
 
-  void addToDisableCollection(UsersInfo usersInfo) async{
+  void addToDisableCollection(UsersInfo usersInfo) async {
     removeUser(usersInfo.userID);
     final userInfo = <String, dynamic>{
       "UserID": usersInfo.userID,
       "Email": usersInfo.email,
-      "DisplayName":usersInfo.displayName
+      "DisplayName": usersInfo.displayName
     };
 
     final DocumentReference docRef = await db.collection("TemporaryBans").add(
         userInfo);
   }
-  void addToUsersCollection(UsersInfo usersInfo) async{
+
+  void addToUsersCollection(UsersInfo usersInfo) async {
     final userInfo = <String, dynamic>{
       "email": usersInfo.email,
       "id": usersInfo.userID,
-      "username":usersInfo.displayName
+      "username": usersInfo.displayName
     };
 
     final DocumentReference docRef = await db.collection("Users").add(
@@ -399,12 +456,13 @@ class FireStoreController{
       await docToDelete.reference.delete();
     }
   }
+
   Future<List<UsersInfo>> getAllDisableUsers() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('TemporaryBans').get();
+    QuerySnapshot querySnapshot = await db.collection('TemporaryBans').get();
 
     List<UsersInfo> users = [];
     for (var doc in querySnapshot.docs) {
-      UsersInfo user =   UsersInfo(
+      UsersInfo user = UsersInfo(
           doc['UserID'],
           doc['Email'],
           doc['DisplayName']
@@ -414,4 +472,58 @@ class FireStoreController{
     return users;
   }
 
+  Future<String?> getProductNamebyId(String id) async {
+    try {
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('products').doc(id).get();
+
+      if (documentSnapshot.exists) {
+        return documentSnapshot.get('ProductName');
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error getting product name by ID: $e');
+      return null;
+    }
+  }
+  Future<String?> getUsernameByUidUser(String uid) async {
+    try {
+      print(uid);
+      QuerySnapshot userQuery = await FirebaseFirestore.instance.collection('Users').where('id', isEqualTo: uid).get();
+
+      if (userQuery.docs.isNotEmpty) {
+        DocumentSnapshot userDoc = userQuery.docs.first;
+        return userDoc.get('username');
+      } else {
+        print('No user found with uid: $uid');
+        return null;
+      }
+    } catch (e) {
+      print('Error getting username: $e');
+      return null;
+    }
+  }
+
+  Future<List<ChatInfo>> getAllChatInfo() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection(
+        'Chats').get();
+
+    List<ChatInfo> chatInfo = [];
+      for (var doc in querySnapshot.docs) {
+        String? name1 = await getUsernameByUidUser(doc['participants'][0]);
+        String? name2 = await getUsernameByUidUser(doc['participants'][1]);
+        String? product = await getProductNamebyId(doc['productId']);
+        print(product);
+        if (name1 != null && name2 != null && product != null) {
+          ChatInfo chat = ChatInfo(
+              nameID1: name1,
+              nameID2: name2,
+              nameProduct: product
+          );
+          chatInfo.add(chat);
+        }
+      }
+      return chatInfo;
+    }
 }
