@@ -439,6 +439,32 @@ class FireStoreController {
     }
   }
 
+  Future<void> removeAssociatedRatings(String uid) async {
+
+    final ratingsCollection = db.collection('Feedbacks');
+
+    WriteBatch batch = db.batch();
+
+    try {
+      QuerySnapshot reviewerQuerySnapshot = await ratingsCollection
+          .where('reviewerId', isEqualTo: uid)
+          .get();
+      for (QueryDocumentSnapshot doc in reviewerQuerySnapshot.docs) {
+        batch.delete(doc.reference);
+      }
+
+      QuerySnapshot reviewedQuerySnapshot = await ratingsCollection
+          .where('revieweeId', isEqualTo: uid)
+          .get();
+      for (QueryDocumentSnapshot doc in reviewedQuerySnapshot.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+    } catch (e) {
+      print('Error deleting documents: $e');
+    }
+  }
+
   void addToDisableCollection(UsersInfo usersInfo) async {
     removeUser(usersInfo.userID);
     final userInfo = <String, dynamic>{

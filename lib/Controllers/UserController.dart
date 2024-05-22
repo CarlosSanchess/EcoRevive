@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:register/API/API.dart';
+import 'package:register/Controllers/CloudStorageController.dart';
 import 'package:register/Controllers/FireStoreController.dart';
 
 import '../Models/UsersInfo.dart';
@@ -13,6 +14,9 @@ class UserController {
 
  void deleteUser(){
     FireStoreController().removeAssociatedProducts(userInfo.userID);
+    FireStoreController().removeAssociatedRatings(userInfo.userID);
+    CloudStorageController().deleteImage("PFPImages/${userInfo.userID}");
+
     FireStoreController().removeUser(userInfo.userID);
     API().banUser(userInfo.userID);
  }
