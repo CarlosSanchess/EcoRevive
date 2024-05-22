@@ -56,6 +56,7 @@ At the conclusion of Sprint #3 (final sprint), we successfully implemented all p
 - Notification Services.*
 - Added Soft/Temporary and Permanent bans.*
 - Integration of the new API.
+- Moderators are now able to view and manage chats within the app.
 
 
 ### Sprint Backlog
