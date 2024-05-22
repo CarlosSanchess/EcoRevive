@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:register/Pages/addProduct.dart';
 import 'package:register/Pages/Profile.dart';
 
+import 'ProductsChats.dart';
 import 'UserChats.dart';
 import 'filterProduct.dart';
 
@@ -9,8 +10,7 @@ class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
-  Widget build(BuildContext context){
-
+  Widget build(BuildContext context) {
     return Scaffold(
       body: const Padding(
         padding: EdgeInsets.only(top: 50.0),
@@ -27,11 +27,12 @@ class Home extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => UserChats()),);
+                  MaterialPageRoute(builder: (context) => ProductsChats()),);
               },
             ),
             const Spacer(),
             IconButton(
+              key: Key('navigate_to_add_product_button'), // Add key here
               icon: const Icon(Icons.add_box,
                 size: 39,
                 color: Colors.black,

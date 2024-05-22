@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,7 +20,6 @@ class _AddProductState extends State<AddProduct> {
 
   TextEditingController descriptionController = TextEditingController();
   TextEditingController productNameController = TextEditingController();
-
 
   Future pickImageFromGallery() async {
     try {
@@ -87,12 +85,14 @@ class _AddProductState extends State<AddProduct> {
                               () => pickImageFromGallery(),
                           isDarkMode: themeProvider.getTheme().brightness ==
                               Brightness.dark,
+                          key: Key('image_picker_button'), // Add key here
                         ),
                       const SizedBox(height: 30),
                       Card(
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                           child: TextField(
+                            key: Key('product_name_field'), // Add key here
                             controller: productNameController,
                             maxLines: 1,
                             decoration: const InputDecoration.collapsed(
@@ -111,6 +111,7 @@ class _AddProductState extends State<AddProduct> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                           child: TextField(
+                            key: Key('product_description_field'), // Add key here
                             controller: descriptionController,
                             maxLines: 3,
                             decoration: const InputDecoration.collapsed(
@@ -125,9 +126,10 @@ class _AddProductState extends State<AddProduct> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      const CategorySelector(),
+                      const CategorySelector(key: Key('category_selector')), // Add key here
                       const SizedBox(height: 40),
                       GestureDetector(
+                        key: Key('submit_product_button'), // Add key here
                         onTap: () {
                           AddProductController(
                             productNameController: productNameController,
@@ -175,9 +177,10 @@ class _AddProductState extends State<AddProduct> {
 
 Widget imagePickerContainer(
     double height, Future<void> Function() onPressed,
-    {required bool isDarkMode}) {
+    {required bool isDarkMode, required Key key}) {
   final color = isDarkMode ? Colors.grey[800] : Colors.grey[200];
   return Container(
+    key: key,
     width: double.infinity,
     height: height,
     color: color,

@@ -57,6 +57,7 @@ class LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 50),
                 TextContainer(
+                  key: Key('login_username_field'), // Added key here
                   hintText: "Email",
                   obscureText: false,
                   icon: const Icon(Icons.mail),
@@ -64,6 +65,7 @@ class LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 15),
                 TextContainer(
+                  key: Key('login_password_field'), // Added key here
                   hintText: "Password",
                   obscureText: true,
                   icon: const Icon(Icons.lock),
@@ -93,6 +95,7 @@ class LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 25),
                 GestureDetector(
+                  key: Key('login_button'), // Added key here
                   onTap: () async {
                     Future<String> aux = RegisterLoginControllers(
                       usernameController: usernameController,
@@ -105,14 +108,14 @@ class LoginState extends State<Login> {
                           MaterialPageRoute(
                               builder: (context) =>  ModeratorHome()),
                         );
-                        }else{
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const Home()),
-                          );
-                        }
+                      } else {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Home()),
+                        );
                       }
-                    },
+                    }
+                  },
                   child: Container(
                     padding: const EdgeInsets.all(25),
                     margin: const EdgeInsets.symmetric(horizontal: 25),
@@ -171,6 +174,7 @@ class LoginState extends State<Login> {
                       ),
                     ),
                     GestureDetector(
+                      key: Key('navigate_to_register_button'), // Added key here
                       onTap: () {
                         Navigator.push(
                           context,

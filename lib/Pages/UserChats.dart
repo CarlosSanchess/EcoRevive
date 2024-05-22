@@ -8,11 +8,16 @@ import '../Controllers/CloudStorageController.dart';
 import 'Chat.dart';
 
 class UserChats extends StatefulWidget{
+  final String productId;
+  final String productName;
+  final String collection;
+
+  UserChats({Key? key, required this.productId, required this.productName, required this.collection}) : super(key: key);
   @override
   _UserChatsState createState() => _UserChatsState();
 }
 
-class _UserChatsState extends State<UserChats>{
+class _UserChatsState extends State<UserChats> {
   final ChatController chatController = ChatController();
   final String userId = FirebaseAuth.instance.currentUser!.uid;
 
@@ -20,7 +25,7 @@ class _UserChatsState extends State<UserChats>{
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your chats'),
+        title: Text(widget.productName),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: chatController.getUserChats(userId),
@@ -36,92 +41,128 @@ class _UserChatsState extends State<UserChats>{
                 DocumentSnapshot chat = snapshot.data!.docs[index];
                 String chatId = chat.id;
                 String productId = chat['productId'];
-                Future<String> imageUrl = CloudStorageController().getDownloadURL('ProductImages/$productId');
+
+                if(productId != widget.productId){
+                  return Container();
+                }
+
+                String otherUserId = chat['participants'].firstWhere((id) => id != userId);
 
                 return FutureBuilder<DocumentSnapshot>(
-                  future: FirebaseFirestore.instance.collection('Products').doc(productId).get(),
-                  builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> productSnapshot) {
-                    if (productSnapshot.connectionState == ConnectionState.waiting) {
+                  future: FirebaseFirestore.instance.collection('Users').doc(otherUserId).get(),
+                  builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> userSnapshot) {
+                    if (userSnapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
                     }
 
-                    if (productSnapshot.hasError) {
-                      return Text('Something went wrong');
+                    if (userSnapshot.hasError) {
+                      return Text('Something went wrong a');
                     }
 
-                    String productName = productSnapshot.data!['ProductName'];
-                    String description = productSnapshot.data!['Description'];
-                    String category = productSnapshot.data!['Category'];
-                    String owner = productSnapshot.data!['Owner'];
+                    String username = userSnapshot.data!['username'];
 
                     return FutureBuilder<String>(
-                      future: CloudStorageController().getDownloadURL('ProductImages/$productId'),
+                      future: CloudStorageController().getDownloadURL('PFPImages/$otherUserId'),
                       builder: (BuildContext context, AsyncSnapshot<String> imageSnapshot) {
                         if (imageSnapshot.connectionState == ConnectionState.waiting) {
                           return CircularProgressIndicator();
                         }
 
-                        if (imageSnapshot.hasError) {
-                          return Text('Something went wrong');
-                        }
+                        String imageUrl = imageSnapshot.data ?? '';
 
-                        String imageUrl = imageSnapshot.data!;
+                        return FutureBuilder<DocumentSnapshot>(
+                          future: FirebaseFirestore.instance.collection(widget.collection).doc(productId).get(),
+                          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> productSnapshot) {
+                            if (productSnapshot.connectionState == ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            }
 
-                        ProductInfo info = ProductInfo(productName: productName, description: description, category: category, UserID: owner, imageURL: imageUrl, productID: productId);
+                            if (productSnapshot.hasError) {
+                              return Text('Something went wrong c');
+                            }
 
-                        return ListTile(
-                          leading: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(imageUrl),
-                              ),
-                            ),
-                          ),
-                          title: Text(
-                            productName,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(description),
-                              SizedBox(height: 4),
+                            String productName = productSnapshot.data!['ProductName'];
+                            String description = productSnapshot.data!['Description'];
+                            String category = productSnapshot.data!['Category'];
+                            String owner = productSnapshot.data!['Owner'];
 
-                            ],
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(
-                              Icons.chat,
-                              color: Colors.grey,
-                            ),
-                            onPressed: () {
-                              if (info.UserID == userId) {
-                                String otherUserId =
-                                chat['participants'].firstWhere((userId) => userId != info.UserID);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Chat(receiverId: otherUserId, product: info),
-                                  ),
+                            return FutureBuilder<String>(
+                              future: CloudStorageController().getDownloadURL('ProductImages/$productId'),
+                              builder: (BuildContext context, AsyncSnapshot<String> imageSnapshot) {
+                                if (imageSnapshot.connectionState == ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                }
+
+                                if (imageSnapshot.hasError) {
+                                  return Text('Something went wrong d');
+                                }
+
+                                String productImageUrl = imageSnapshot.data!;
+
+                                ProductInfo info = ProductInfo(productName: productName, description: description, category: category, UserID: owner, imageURL: productImageUrl, productID: productId);
+
+                                return FutureBuilder<QuerySnapshot>(
+                                  future: FirebaseFirestore.instance.collection('Chats').doc(chatId).collection('Messages').orderBy('time', descending: true).limit(1).get(),
+                                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> messageSnapshot) {
+                                    if (messageSnapshot.connectionState == ConnectionState.waiting) {
+                                      return CircularProgressIndicator();
+                                    }
+
+                                    if (messageSnapshot.hasError) {
+                                      return Text('Something went wrong e');
+                                    }
+
+                                    String lastMessage = messageSnapshot.data!.docs.first['message'];
+                                    String displayMessage = lastMessage.length > 20 ? lastMessage.substring(0, 20) + '...' : lastMessage;
+
+                                    displayMessage = userId == messageSnapshot.data!.docs.first['senderID'] ? 'You: ' + displayMessage : username + ": " + displayMessage;
+
+                                    return ListTile(
+                                      leading: Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.grey[300],
+                                          image: imageUrl.isNotEmpty
+                                              ? DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: NetworkImage(imageUrl),
+                                          )
+                                              : null,
+                                        ),
+                                        child: imageUrl.isNotEmpty
+                                            ? null
+                                            : Icon(Icons.no_photography_outlined),
+                                      ),
+                                      title: Text(
+                                        username,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      subtitle: Text(displayMessage),
+                                      trailing: IconButton(
+                                        icon: const Icon(
+                                          Icons.chat,
+                                          color: Colors.grey,
+                                        ),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => Chat(receiverId: otherUserId, product: info),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  },
                                 );
-                              } else {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Chat(receiverId: info.UserID, product: info),
-                                  ),
-                                );
-                              }
-                            },
-                          ),
+                              },
+                            );
+                          },
                         );
-
                       },
                     );
                   },

@@ -1,21 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Controllers/FireStoreController.dart';
-
-class info{
-  final String productID;
-  final String productName;
-  final String description;
-  final String category;
-  final String imageURL;
-
-  info({
-    required this.productID,
-    required this.productName,
-    required this.description,
-    required this.category,
-    required this.imageURL
-  });
-}
+import '../Models/ProductInfo.dart';
 
 class myProducts extends StatefulWidget{
 
@@ -34,7 +19,7 @@ class _myProductsState extends State<myProducts> {
       ),
       body: FutureBuilder(
         future: FireStoreController().getOwnedProducts(),
-        builder: (BuildContext context, AsyncSnapshot<List<info>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<ProductInfo>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
@@ -43,7 +28,7 @@ class _myProductsState extends State<myProducts> {
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (BuildContext context, int index) {
-                info product = snapshot.data![index];
+                ProductInfo product = snapshot.data![index];
                 return Listing(product: product, onDelete: () {
                   setState(() {});
                 });
@@ -57,7 +42,7 @@ class _myProductsState extends State<myProducts> {
 }
 
 class Listing extends StatelessWidget {
-  final info product;
+  final ProductInfo product;
   final VoidCallback onDelete;
 
   const Listing({required this.product, required this.onDelete});
@@ -86,7 +71,7 @@ class Listing extends StatelessWidget {
   }
 }
 
-void deleteProductOption(BuildContext context, info product, VoidCallback onDelete) async{
+void deleteProductOption(BuildContext context, ProductInfo product, VoidCallback onDelete) async{
   showDialog(
     context: context,
     builder: (BuildContext context) {

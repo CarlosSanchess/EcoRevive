@@ -28,15 +28,19 @@ You can find here details about our implementation, from a high-level vision to 
 
 #### Main Features
 
-1. Product Listing: Explore a diverse array of items available, starting with electronic waste and expanding to encompass a wide range of recyclable materials. Our intuitive interface ensures easy navigation.
+- User registration and login functionality (local storage to keep user logged).
+- Ability for users to add new recyclable products.
+- Profile customization options, including password change and theme selection (local storage for theme).
+- Management functionality for listed recyclable products.
+- Filtering options for the list of recyclable products.
+- Chat system implementation.
+- User Community rating system and feedbacks (where each user has his community rating).
+- Moderator ability to ban products that don't follow guidelines.
+- Location Services for chat.
+- Notification Services (local and external).
+- Integration of the Admin SDK.
+- Soft bans/temporary bans for user moderation.
 
-2. Advanced Product Filtering: Search with precision using our filtering system. Whether you're seeking specific conditions or items, robust filters help you find exactly what you need efficiently.
-
-3. Secure Login Registration: Join our community through a secure registration process. Your personal information is safeguarded, ensuring a trusted environment for all users to engage in sustainable exchange.
-
-4. Interactive User Chat: Foster meaningful connections and facilitate smooth transactions through our integrated chat feature. Engage in real-time conversations with fellow users to negotiate terms, ask questions, and coordinate exchanges, all within the convenience of our platform.
-
-5. User-Friendly App: ensuring inclusivity for individuals with disabilities that still want to take part on this community.
 
 #### Assumptions
 - Firebase database to store the users credentials aswell as products listing and others...
@@ -45,7 +49,6 @@ You can find here details about our implementation, from a high-level vision to 
 
 - For environmentally conscious individuals tired of the hassle of recycling, the "EcoRevive" app is a sustainable solution. It's a recycling platform that simplifies the process of finding, listing, and discussing recyclable products matching people that want to discard those products, with people looking for them. Unlike other recycling apps that focus solely on listings, our app emphasizes community engagement and social interaction around sustainability. With features like chat functionality and user ratings, EcoRevive fosters meaningful connections between users, making recycling both simple and social.
 
-
 ## Requirements
 
 ### Domain model
@@ -53,7 +56,7 @@ You can find here details about our implementation, from a high-level vision to 
 Each user can list multiple products of various categories on the application.
 Whenever a user sees a product that he's interested in, he can start a chat with the owner of said product, where they can message each other.
 The application will send notifications to the user whenever a new message is received.
-After chatting and acquiring the product, the chat participants can rate each other and leave feedback to improve user experience.
+The chat participants can rate each other and leave feedback to improve user experience.
 The application has moderatores that unsure guidelines are being respected, being able to ban user that don't respect them.
 
  <p align="center" justify="center">
@@ -92,10 +95,10 @@ The logical architecture of EcoRevive outlines its core components and their int
 #### EcoRevive
 - **GUI**: User interface for interacting with the system.
 - **Logic**: Core functionality and processing.
-- **Database**: Stores and manages system data.
 
 #### External Services
 - **Firebase Server**: Integrated for features like authentication or data storage.
+- **Web Server**: Integrated to enable the use of the Firebase Admin SDK, in order to be able to interact with Firebase Authentication and Firebase Messaging from an admin perspective.
 
 #### Relationships
 - User interactions pass from GUI to Logic.
@@ -110,9 +113,20 @@ The physical architecture section provides an overview of the high-level physica
 #### Technologies Considered:
 - **Flutter**: A cross-platform framework for building mobile applications.
 - **Firebase**: A Backend-as-a-Service (BaaS) platform providing services like authentication, database, and storage.
+- **ExpressJS**: Web framework for Node.js that supports web and mobile applications, APIs, and middleware.
+- **Cors**: Cross-Origin Resource Sharing is an HTTP-header based mechanism that allows a server to indicate which origins other than its own are permitted to access its resources.
 
 ![DeploymentView](docs/diagrams/physical_arch.png)
 
+### Local Storage
+- **Local App Storage**: Utilized for storing user preferences, such as the chosen app theme and device login status.
+- **Device Gallery Access**: Enabled for uploading photos within the app.
+
+### API integration
+The API was built using Express.js and CORS, it provides endpoins to interact with the Firebase Admin Sdk providing powerful functionalities for managing user interactions. Key features include:
+
+- **Sending Notifications:** Effortlessly push notifications to users through Firebase Cloud Messaging (FCM), ensuring timely and effective communication.
+- **User Management:** Soft ban and unban users, controlling their access.Or permanent ban an user.
 ### Vertical prototype
 For this initial prototype, we've implemented a basic entry page that serves as the starting point for users accessing the EcoRevive app. Additionally, the entry page offers links to the registration and login pages, enabling users to create accounts or sign in to access EcoRevive's functionalities. These registration and login functionalities are connected to Firebase, ensuring secure user authentication and data management.
 
@@ -176,7 +190,7 @@ By utilizing this project management system, we ensure clear communication and e
 
 - At the conclusion of Sprint #1, we successfully followed the priority defined in the sprint backlog, ensuring that tasks were completed in alignment with their designated importance. By following this prioritization, we effectively tackled essential user stories, such as enabling user registration and login, adding new recyclable products, and providing profile customization options. However, as we transition into Sprint #2, we recognize the need to enhance our development process. To achieve this, we aim to intensify our focus on unit testing throughout the software development lifecycle. By incorporating rigorous testing procedures, we aspire to identify and address potential issues early on, ensuring the delivery of a more robust and reliable product. Additionally, we intend to improve our integration practices by merging divergent features into the product more frequently. This approach will allow us to detect and rectify any bugs or inconsistencies promptly, fostering a smoother and more cohesive development cycle. We are also looking forward to integrate each individual feature into the whole product more often in order to find conflicting bugs.
 
-- The following image is our Sprint#1 backlog at the start of the project development:
+- The following image is our Sprint#1 backlog at the start of the sprint development:
 ![Sprint Backlog Sprint#1](docs/diagrams/sprint1_backlog.png)
 
 - The following image is our project board at the end of sprint#1 before the final Sprint review:
@@ -184,11 +198,58 @@ By utilizing this project management system, we ensure clear communication and e
 
 #### Sprint #2
 
-- The following image is our Sprint#2 backlog at the start of the project development:
+- The following image is our Sprint#2 backlog at the start of the sprint development:
   ![Sprint Backlog Sprint#2](docs/diagrams/sprint2_backlog.png)
 
 - The following image is our project board at the end of sprint#1 before the final Sprint review:
   ![Project Board end of Sprint#2](docs/diagrams/project_board_sprint2.png)
 
+#### Sprint #2 Retrospective
+
+- Feedback from the team:
+  - **What went well:**
+    - Successfully implemented the chat system.
+    - Implemented the user community rating feature.
+    - Moderator functionality to ban products that don't follow guidelines.
+  - **What could be improved:**
+    - Integration testing could be more robust.
+    - More frequent feature merges to detect bugs.
+    - Enhance the user experience with more interactive features.
+  - **Action items for the next sprint:**
+    - Focus on improving integration testing.
+    - Implement additional functionalities to enhance the platform.
+
+#### Sprint #3
+
+- The following image is our Sprint#3 backlog at the start of the sprint development (we focused on improving already implemented features and testing)
+  ![Sprint Backlog Sprint#3](docs/diagrams/project_board_sprint3.png)
+- The following image is our project board at the end of sprint#3 before the final Sprint review:
+  ![Project Board end of Sprint#3](docs/diagrams/project_board_sprint3.png)
+- In this sprint the project board apparently didn´t chance much acrros the sprint, because we focused on improving already implemented features and testing.
+
+#### Sprint #3 Retrospective
+
+- Feedback from the team:
+  - **What went well:**
+    - Successfully implemented all planned features.
+    - Added extra functionalities to enhance user experience.
+    - Managed to deliver a robust final product.
+  - **What could be improved:**
+    - Time management due to overlapping commitments.
+    - Enhance testing procedures for future projects.
+    - Implement more advanced features to further engage users.
+  - **Action items for future sprints/projects:**
+    - Focus on improving time management.
+    - Enhance testing procedures for future projects.
+    - Implement more advanced features to further engage users.
+
+
+#### Future App Improvements
+- Enhanced User Analytics: Implement advanced analytics to better understand user behavior and improve user experience.
+- Expanded Community Features: Introduce more community-driven features, such as user groups and event organization tools.
+- Mobile App Optimization: Optimize the app for better performance on a wider range of devices and operating systems.
+- Gamification: Incorporate gamification elements to increase user engagement and incentivize recycling activities.
+- Integration with IoT Devices: Explore integration with IoT devices for real-time tracking of recycling habits and environmental impact.
+- Personalized Recommendations: Implement machine learning algorithms to provide personalized product and recycling tips based on user preferences and behaviors.
 
 [Link to Project Board](https://github.com/orgs/FEUP-LEIC-ES-2023-24/projects/43/)
