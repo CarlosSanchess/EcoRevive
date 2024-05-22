@@ -490,14 +490,17 @@ class FireStoreController {
     return users;
   }
 
-  Future<String?> getProductNamebyId(String id) async {
+  Future<String?> getProductNameByID(String id) async {
     try {
       DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-          .collection('products').doc(id).get();
+          .collection('Products').doc(id).get();
 
       if (documentSnapshot.exists) {
-        return documentSnapshot.get('ProductName');
+        String productName = documentSnapshot.get('ProductName');
+        print('Product found: $productName');
+        return productName;
       } else {
+        print('No product found with ID: $id');
         return null;
       }
     } catch (e) {
@@ -507,7 +510,6 @@ class FireStoreController {
   }
   Future<String?> getUsernameByUidUser(String uid) async {
     try {
-      print(uid);
       QuerySnapshot userQuery = await FirebaseFirestore.instance.collection('Users').where('id', isEqualTo: uid).get();
 
       if (userQuery.docs.isNotEmpty) {
@@ -531,10 +533,11 @@ class FireStoreController {
       for (var doc in querySnapshot.docs) {
         String? name1 = await getUsernameByUidUser(doc['participants'][0]);
         String? name2 = await getUsernameByUidUser(doc['participants'][1]);
-        String? product = await getProductNamebyId(doc['productId']);
-        print(product);
+        String? product = await getProductNameByID(doc['productId']);
+
         if (name1 != null && name2 != null && product != null) {
           ChatInfo chat = ChatInfo(
+              chatId: doc.id,
               nameID1: name1,
               nameID2: name2,
               nameProduct: product
@@ -544,4 +547,15 @@ class FireStoreController {
       }
       return chatInfo;
     }
+
+  void removeChat(String id) async {
+    try {
+      DocumentReference chatRef = FirebaseFirestore.instance.collection('Chats')
+          .doc(id);
+      await chatRef.delete();
+    } catch (error) {
+      print('Error removing user: $error');
+    }
+  }
+
 }

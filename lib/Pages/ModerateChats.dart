@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:register/Controllers/FireStoreController.dart';
 import 'package:register/Models/ChatInfo.dart';
 import 'package:register/Pages/ModeratorHome.dart';
-import 'package:register/Controllers/ChatController.dart';
 
 class ModerateChats extends StatefulWidget {
   const ModerateChats({Key? key}) : super(key: key);
@@ -89,7 +86,7 @@ class _ModerateChatsState extends State<ModerateChats> {
                     } else {
                       return Column(
                         children: [
-                          _buildTitle('Chat Messages', Colors.blue, Colors.blueAccent),
+                          _buildTitle('Chat Messages', Colors.green, Colors.teal),
                           Expanded(
                             child: ListView.builder(
                               itemCount: chats.length,
@@ -100,49 +97,14 @@ class _ModerateChatsState extends State<ModerateChats> {
                                   child: ListTile(
                                     contentPadding: const EdgeInsets.all(9.0),
                                     title: Text(
-                                      chats[index].nameID1,
+                                      'Chat: ${chats[index].nameID1} and ${chats[index].nameID2}',
                                       style: const TextStyle(fontWeight: FontWeight.bold),
                                     ),
                                     subtitle: Text(chats[index].nameProduct),
                                     trailing: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        IconButton(
-                                          icon: const Icon(Icons.flag, color: Colors.orange),
-                                          onPressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: const Text("Confirm Flag"),
-                                                  content: Text("Are you sure you want to flag this message from }?"),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                      child: const Text("Cancel"),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.pushReplacement(
-                                                          context,
-                                                          MaterialPageRoute(builder: (context) => const ModerateChats()),
-                                                        );
-                                                      },
-                                                      child: const Text(
-                                                        "Flag",
-                                                        style: TextStyle(
-                                                          color: Colors.orange,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                        ),
+
                                         IconButton(
                                           icon: const Icon(Icons.delete, color: Colors.redAccent),
                                           onPressed: () {
@@ -151,7 +113,7 @@ class _ModerateChatsState extends State<ModerateChats> {
                                               builder: (BuildContext context) {
                                                 return AlertDialog(
                                                   title: const Text("Confirm Delete"),
-                                                  content: Text("Are you sure you want to delete this message ? (It can't be reverted)"),
+                                                  content: Text("Are you sure you want to delete this chat? (It can't be reverted)"),
                                                   actions: <Widget>[
                                                     TextButton(
                                                       onPressed: () {
@@ -161,6 +123,7 @@ class _ModerateChatsState extends State<ModerateChats> {
                                                     ),
                                                     TextButton(
                                                       onPressed: () {
+                                                        FireStoreController().removeChat(chats[index].chatId);
                                                         Navigator.pushReplacement(
                                                           context,
                                                           MaterialPageRoute(builder: (context) => const ModerateChats()),
