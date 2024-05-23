@@ -25,8 +25,11 @@ class ModeratorHome extends StatelessWidget {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
-          },
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
+            },
           icon: Icon(
             Icons.arrow_back_ios_new,
             color: themeProvider.getTheme().appBarTheme.iconTheme!.color,
