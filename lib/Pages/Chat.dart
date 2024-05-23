@@ -26,6 +26,7 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
   final Auth auth = Auth();
   FocusNode focusNode = FocusNode();
   File? image;
+  String? status;
 
   @override
   void initState() {
@@ -38,10 +39,19 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
                 () => scrollDown(duration: const Duration(milliseconds: 400)));
       }
     });
+    getChatStatus();
 
     Future.delayed(
         const Duration(milliseconds: 200),
             () => scrollDown(duration: const Duration(milliseconds: 400)));
+  }
+  Future<void> getChatStatus() async {
+    List<String> buildId = [widget.product.productID, auth.currentUser!.uid, widget.receiverId]..sort();
+    String chatId = buildId.join("-");
+    DocumentSnapshot chat = await FirebaseFirestore.instance.collection('Chats').doc(chatId).get();
+    setState(() {
+      status = chat['status'];
+    });
   }
 
   @override
@@ -122,6 +132,51 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
             ),
           ],
         ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: status != 'finished' ? [
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Confirm Transaction'),
+                    content: const Text('Are you sure you want to confirm this transaction?'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Yes'),
+                        onPressed: () async {
+                          List<String> buildId = [widget.product.productID, auth.currentUser!.uid, widget.receiverId]..sort();
+                          String chatId = buildId.join("-");
+                          try {
+                            await chatController.verifyTransaction(chatId);
+                            getChatStatus();
+                          } catch (e) {
+                            print('Error verifying transaction: $e');
+                          }
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('No'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ] : [],
       ),
       body: Column(children: [
         const SizedBox(height: 8),
