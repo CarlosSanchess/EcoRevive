@@ -10,6 +10,7 @@ import 'package:register/Pages/ProductsChats.dart';
 import '../Auth/Auth.dart';
 import '../Controllers/ChatController.dart';
 import '../Models/ProductInfo.dart';
+import 'Home.dart';
 
 class Chat extends StatefulWidget {
   final String receiverId;
