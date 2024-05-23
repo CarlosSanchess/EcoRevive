@@ -113,6 +113,15 @@ class _UserChatsState extends State<UserChats> {
                                     }
 
                                     String lastMessage = messageSnapshot.data!.docs.first['message'];
+                                    String? sentImage = messageSnapshot.data!.docs.first['imageURL'];
+
+                                    if(sentImage != null && sentImage.isNotEmpty && lastMessage.isEmpty){
+                                      lastMessage = 'Sent an image.';
+                                    }
+                                    else if(lastMessage.startsWith("Location:")){
+                                      lastMessage = 'Shared a location.';
+                                    }
+
                                     String displayMessage = lastMessage.length > 20 ? lastMessage.substring(0, 20) + '...' : lastMessage;
 
                                     displayMessage = userId == messageSnapshot.data!.docs.first['senderID'] ? 'You: ' + displayMessage : username + ": " + displayMessage;
