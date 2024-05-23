@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:register/Pages/ProductsChats.dart';
 
 import '../Auth/Auth.dart';
 import '../Controllers/ChatController.dart';
@@ -134,14 +135,16 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-            Navigator.of(context).pop();
-          },
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ProductsChats()),
+              );
+            }
         ),
         actions: status != 'finished' ? [
           IconButton(
-            icon: const Icon(Icons.check),
+            icon: const Icon(Icons.check_box),
             onPressed: () {
               showDialog(
                 context: context,
