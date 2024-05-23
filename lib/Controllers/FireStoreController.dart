@@ -439,6 +439,19 @@ class FireStoreController {
     }
   }
 
+  void removeAssociatedDeletedProducts(String uid) async{
+    try {
+      QuerySnapshot ownedProducts = await db.collection('DeletedProducts').where(
+          'Owner', isEqualTo: uid).get();
+      for (QueryDocumentSnapshot doc in ownedProducts.docs) {
+        doc.reference.delete();
+      }
+    } catch (error) {
+      print('Error Removing Products: $error');
+    }
+
+  }
+
   Future<void> removeAssociatedRatings(String uid) async {
 
     final ratingsCollection = db.collection('Feedbacks');
@@ -464,6 +477,33 @@ class FireStoreController {
       print('Error deleting documents: $e');
     }
   }
+
+  Future<void> removeAssociatedChats(String uid) async{
+    final ratingsCollection = db.collection('Chats');
+
+    WriteBatch batch = db.batch();
+
+    try {
+      QuerySnapshot reviewerQuerySnapshot = await ratingsCollection
+          .where('participants'[0], isEqualTo: uid)
+          .get();
+      for (QueryDocumentSnapshot doc in reviewerQuerySnapshot.docs) {
+        batch.delete(doc.reference);
+      }
+
+      QuerySnapshot reviewedQuerySnapshot = await ratingsCollection
+          .where('participants'[1], isEqualTo: uid)
+          .get();
+      for (QueryDocumentSnapshot doc in reviewedQuerySnapshot.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+    } catch (e) {
+      print('Error deleting documents: $e');
+    }
+
+  }
+
 
   void addToDisableCollection(UsersInfo usersInfo) async {
     removeUser(usersInfo.userID);

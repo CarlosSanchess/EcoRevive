@@ -15,8 +15,9 @@ class UserController {
  void deleteUser(){
     FireStoreController().removeAssociatedProducts(userInfo.userID);
     FireStoreController().removeAssociatedRatings(userInfo.userID);
+    FireStoreController().removeAssociatedChats(userInfo.userID);
+    FireStoreController().removeAssociatedDeletedProducts(userInfo.userID);
     CloudStorageController().deleteImage("PFPImages/${userInfo.userID}");
-
     FireStoreController().removeUser(userInfo.userID);
     API().banUser(userInfo.userID);
  }
