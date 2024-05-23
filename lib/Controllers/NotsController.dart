@@ -41,9 +41,11 @@ class FirebaseMessagingService {
         );
       }
     });
+    FirebaseMessaging.onMessageOpenedApp.listen(( RemoteMessage message) {
+      print("Notification");
+    });
   }
 
-  _onMessageOpenedApp() {
+  void _onMessageOpenedApp() {
   }
-
 }

@@ -115,11 +115,29 @@ class FireStoreController {
       print("Error while deleting: $error");
     }
   }
+  Future<void> removeAssociatedChatsProduct(String id) async{
+    final ratingsCollection = db.collection('Chats');
+    WriteBatch batch = db.batch();
+    try {
+      QuerySnapshot reviewerQuerySnapshot = await ratingsCollection
+          .where('productId', isEqualTo: id)
+          .get();
+      for (QueryDocumentSnapshot doc in reviewerQuerySnapshot.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+    } catch (e) {
+      print('Error deleting documents: $e');
+    }
+
+  }
 
   Future<void> deleteProductModerate(ProductInfo product) async {
     try {
       CloudStorageController().deleteImage(
           'ProductImages/${product.productID}');
+
+      FireStoreController().removeAssociatedChatsProduct(product.productID);
       DocumentReference productRef = FirebaseFirestore.instance.collection(
           'Products').doc(product.productID);
       await productRef.delete();

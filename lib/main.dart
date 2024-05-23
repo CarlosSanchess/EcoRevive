@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:register/Auth/Auth.dart';
 import 'package:register/Pages/Home.dart';
-
 import 'package:register/Pages/theme_provider.dart';
 import 'package:register/firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -48,12 +47,9 @@ Future<void> _requestLocationPermission() async {
   PermissionStatus status = await Permission.location.request();
 
   if (status.isGranted) {
-    // Permission granted
   } else if (status.isDenied) {
-    // Permission denied
     print('Location permission denied');
   } else if (status.isPermanentlyDenied) {
-    // Permission permanently denied, take the user to the settings
     openAppSettings();
   }
 }
