@@ -9,6 +9,7 @@ import 'package:latlong2/latlong.dart';
 import '../Auth/Auth.dart';
 import '../Controllers/ChatController.dart';
 import '../Models/ProductInfo.dart';
+import 'Home.dart';
 
 class Chat extends StatefulWidget {
   final String receiverId;
@@ -135,8 +136,10 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pop();
-            Navigator.of(context).pop();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            );
           },
         ),
         actions: status != 'finished' ? [
